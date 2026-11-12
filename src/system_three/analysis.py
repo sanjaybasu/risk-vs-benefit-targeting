@@ -18,7 +18,7 @@ SEED = 20261112
 # Pre-specified contrast arm for multi-arm trials (the published headline arm).
 ARM = {"voter": "neighbors", "hillstrom": "mens_email", "sf_email": "registrar_email"}
 ALL_BINARY = ["gusto", "ist", "synbiotic", "elaia1", "elaia2", "voter", "sf_email", "karlan_list",
-              "stepup", "oregon", "hillstrom"]
+              "stepup", "oregon", "hillstrom", "sixcity", "newhaven", "lenta", "x5"]
 # Oregon is outside the confirmatory set (F07): the published ITT shows the action raises ED use.
 CANDIDATES = [t for t in ALL_BINARY if t != "oregon"]
 CAP = {"criteo": (1_000_000, 500_000)}

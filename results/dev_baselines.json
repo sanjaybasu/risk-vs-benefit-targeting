@@ -1,0 +1,4397 @@
+{
+ "gusto": {
+  "dataset": "gusto",
+  "n_context": 15409,
+  "n_dev": 5986,
+  "better": "lower",
+  "ate_dev_aipw_per_1000": 18.573261008754805,
+  "scale_beta_logodds": -0.17529006995131963,
+  "control_rate_context": 0.07385524372230429,
+  "rank_corr_risk_benefit": 0.21947267034618534,
+  "seconds": 131.3,
+  "table": [
+   {
+    "ranking": "risk",
+    "metric": "per_1000",
+    "budget": 0.1,
+    "estimate": 56.69285040071096,
+    "lo95": -21.952034836014192,
+    "hi95": 120.47720995067849
+   },
+   {
+    "ranking": "risk",
+    "metric": "per_1000",
+    "budget": 0.2,
+    "estimate": 43.98656814144341,
+    "lo95": -1.0805767763534035,
+    "hi95": 85.08035135262988
+   },
+   {
+    "ranking": "risk",
+    "metric": "per_1000",
+    "budget": 0.3,
+    "estimate": 35.88663903728984,
+    "lo95": 5.487902845192598,
+    "hi95": 67.25074023082664
+   },
+   {
+    "ranking": "risk",
+    "metric": "rate_autoc",
+    "budget": NaN,
+    "estimate": 0.014320044822116771,
+    "lo95": -0.007665593222480992,
+    "hi95": 0.033177961923210805
+   },
+   {
+    "ranking": "risk",
+    "metric": "rate_qini",
+    "budget": NaN,
+    "estimate": 0.003548787445274411,
+    "lo95": -0.00025879202150766857,
+    "hi95": 0.007119499403294678
+   },
+   {
+    "ranking": "scale",
+    "metric": "per_1000",
+    "budget": 0.1,
+    "estimate": 56.69285040071096,
+    "lo95": -21.952034836014192,
+    "hi95": 120.47720995067846
+   },
+   {
+    "ranking": "scale",
+    "metric": "per_1000",
+    "budget": 0.2,
+    "estimate": 43.98656814144341,
+    "lo95": -1.0805767763534087,
+    "hi95": 85.08035135262989
+   },
+   {
+    "ranking": "scale",
+    "metric": "per_1000",
+    "budget": 0.3,
+    "estimate": 35.88663903728984,
+    "lo95": 5.487902845192597,
+    "hi95": 67.25074023082664
+   },
+   {
+    "ranking": "scale",
+    "metric": "rate_autoc",
+    "budget": NaN,
+    "estimate": 0.014695203708336758,
+    "lo95": -0.006492272884496423,
+    "hi95": 0.03259778658109458
+   },
+   {
+    "ranking": "scale",
+    "metric": "rate_qini",
+    "budget": NaN,
+    "estimate": 0.0035410475199225545,
+    "lo95": -0.0002517463647738355,
+    "hi95": 0.007113115695804553
+   },
+   {
+    "ranking": "benefit",
+    "metric": "per_1000",
+    "budget": 0.1,
+    "estimate": 53.329524151095164,
+    "lo95": -10.906013596583993,
+    "hi95": 101.55950211452341
+   },
+   {
+    "ranking": "benefit",
+    "metric": "per_1000",
+    "budget": 0.2,
+    "estimate": 42.149392622637784,
+    "lo95": 1.6974937027941546,
+    "hi95": 76.48312440672514
+   },
+   {
+    "ranking": "benefit",
+    "metric": "per_1000",
+    "budget": 0.3,
+    "estimate": 26.928582443949075,
+    "lo95": 1.0599724847685865,
+    "hi95": 55.29213685083697
+   },
+   {
+    "ranking": "benefit",
+    "metric": "rate_autoc",
+    "budget": NaN,
+    "estimate": 0.008261370048926851,
+    "lo95": -0.007069751909828233,
+    "hi95": 0.02647797592929893
+   },
+   {
+    "ranking": "benefit",
+    "metric": "rate_qini",
+    "budget": NaN,
+    "estimate": 0.002200165028538998,
+    "lo95": -0.002332879830726914,
+    "hi95": 0.006865302231058958
+   },
+   {
+    "ranking": "random",
+    "metric": "per_1000",
+    "budget": 0.1,
+    "estimate": 37.56575905695814,
+    "lo95": -21.69230663406965,
+    "hi95": 55.201231475719595
+   },
+   {
+    "ranking": "random",
+    "metric": "per_1000",
+    "budget": 0.2,
+    "estimate": 35.642562718982674,
+    "lo95": -12.372364746763616,
+    "hi95": 46.26827960951777
+   },
+   {
+    "ranking": "random",
+    "metric": "per_1000",
+    "budget": 0.3,
+    "estimate": 34.6425645766517,
+    "lo95": -6.181780220771619,
+    "hi95": 40.685764369493704
+   },
+   {
+    "ranking": "random",
+    "metric": "rate_autoc",
+    "budget": NaN,
+    "estimate": 0.00757631575960566,
+    "lo95": -0.013816479970429207,
+    "hi95": 0.010628258129795285
+   },
+   {
+    "ranking": "random",
+    "metric": "rate_qini",
+    "budget": NaN,
+    "estimate": 0.002771117493891373,
+    "lo95": -0.0035819120884214278,
+    "hi95": 0.0033290350972853618
+   },
+   {
+    "ranking": "benefit-minus-risk",
+    "metric": "per_1000",
+    "budget": 0.1,
+    "estimate": -3.3633262496157954,
+    "lo95": -67.23618123547396,
+    "hi95": 53.370576973932074
+   },
+   {
+    "ranking": "benefit-minus-risk",
+    "metric": "per_1000",
+    "budget": 0.2,
+    "estimate": -1.8371755188056298,
+    "lo95": -38.11917183347125,
+    "hi95": 34.25938693382654
+   },
+   {
+    "ranking": "benefit-minus-risk",
+    "metric": "per_1000",
+    "budget": 0.3,
+    "estimate": -8.958056593340764,
+    "lo95": -33.91522928776754,
+    "hi95": 15.878648097471753
+   },
+   {
+    "ranking": "benefit-minus-risk",
+    "metric": "rate_autoc",
+    "budget": NaN,
+    "estimate": -0.00605867477318992,
+    "lo95": -0.02540136539995832,
+    "hi95": 0.014740735272676017
+   },
+   {
+    "ranking": "benefit-minus-risk",
+    "metric": "rate_qini",
+    "budget": NaN,
+    "estimate": -0.001348622416735413,
+    "lo95": -0.006809658325709161,
+    "hi95": 0.004353959650633963
+   },
+   {
+    "ranking": "scale-minus-risk",
+    "metric": "per_1000",
+    "budget": 0.1,
+    "estimate": 0.0,
+    "lo95": -2.842170943040401e-14,
+    "hi95": 1.4210854715202004e-14
+   },
+   {
+    "ranking": "scale-minus-risk",
+    "metric": "per_1000",
+    "budget": 0.2,
+    "estimate": 0.0,
+    "lo95": -1.4210854715202004e-14,
+    "hi95": 1.4210854715202004e-14
+   },
+   {
+    "ranking": "scale-minus-risk",
+    "metric": "per_1000",
+    "budget": 0.3,
+    "estimate": 0.0,
+    "lo95": -7.105427357601002e-15,
+    "hi95": 7.105427357601002e-15
+   },
+   {
+    "ranking": "scale-minus-risk",
+    "metric": "rate_autoc",
+    "budget": NaN,
+    "estimate": 0.0003751588862199867,
+    "lo95": -0.006417896098865864,
+    "hi95": 0.006281222861039642
+   },
+   {
+    "ranking": "scale-minus-risk",
+    "metric": "rate_qini",
+    "budget": NaN,
+    "estimate": -7.739925351856435e-06,
+    "lo95": -7.132783988511533e-05,
+    "hi95": 3.86410176341151e-05
+   },
+   {
+    "ranking": "benefit-minus-scale",
+    "metric": "per_1000",
+    "budget": 0.1,
+    "estimate": -3.3633262496157954,
+    "lo95": -67.23618123547398,
+    "hi95": 53.370576973932074
+   },
+   {
+    "ranking": "benefit-minus-scale",
+    "metric": "per_1000",
+    "budget": 0.2,
+    "estimate": -1.8371755188056298,
+    "lo95": -38.11917183347124,
+    "hi95": 34.25938693382654
+   },
+   {
+    "ranking": "benefit-minus-scale",
+    "metric": "per_1000",
+    "budget": 0.3,
+    "estimate": -8.958056593340764,
+    "lo95": -33.91522928776754,
+    "hi95": 15.878648097471759
+   },
+   {
+    "ranking": "benefit-minus-scale",
+    "metric": "rate_autoc",
+    "budget": NaN,
+    "estimate": -0.006433833659409907,
+    "lo95": -0.02462568802945273,
+    "hi95": 0.012848549665033737
+   },
+   {
+    "ranking": "benefit-minus-scale",
+    "metric": "rate_qini",
+    "budget": NaN,
+    "estimate": -0.0013408824913835565,
+    "lo95": -0.006792006955830858,
+    "hi95": 0.00435754559256115
+   }
+  ]
+ },
+ "ist": {
+  "dataset": "ist",
+  "n_context": 9589,
+  "n_dev": 3869,
+  "better": "lower",
+  "ate_dev_aipw_per_1000": 35.14905734219995,
+  "scale_beta_logodds": -0.05468812963799111,
+  "control_rate_context": 0.6342928142472561,
+  "rank_corr_risk_benefit": 0.2991689762177367,
+  "seconds": 134.0,
+  "table": [
+   {
+    "ranking": "risk",
+    "metric": "per_1000",
+    "budget": 0.1,
+    "estimate": 2.8476843714209386,
+    "lo95": -76.03415402297605,
+    "hi95": 72.4115140257844
+   },
+   {
+    "ranking": "risk",
+    "metric": "per_1000",
+    "budget": 0.2,
+    "estimate": -7.384536610410296,
+    "lo95": -68.69985876649271,
+    "hi95": 44.898468223218764
+   },
+   {
+    "ranking": "risk",
+    "metric": "per_1000",
+    "budget": 0.3,
+    "estimate": 8.313258312009438,
+    "lo95": -43.66846933159991,
+    "hi95": 49.1296076874369
+   },
+   {
+    "ranking": "risk",
+    "metric": "rate_autoc",
+    "budget": NaN,
+    "estimate": -0.017945263469942983,
+    "lo95": -0.045450366175156,
+    "hi95": 0.0077167162556069395
+   },
+   {
+    "ranking": "risk",
+    "metric": "rate_qini",
+    "budget": NaN,
+    "estimate": -0.007128991141184385,
+    "lo95": -0.01463201511980189,
+    "hi95": 0.00133653624923105
+   },
+   {
+    "ranking": "scale",
+    "metric": "per_1000",
+    "budget": 0.1,
+    "estimate": 119.41967033635116,
+    "lo95": 12.876165789223364,
+    "hi95": 208.79964273283838
+   },
+   {
+    "ranking": "scale",
+    "metric": "per_1000",
+    "budget": 0.2,
+    "estimate": 75.28260463992606,
+    "lo95": 14.017317429506278,
+    "hi95": 144.5096712300926
+   },
+   {
+    "ranking": "scale",
+    "metric": "per_1000",
+    "budget": 0.3,
+    "estimate": 76.20864817383693,
+    "lo95": 22.969322689680492,
+    "hi95": 129.86887029714347
+   },
+   {
+    "ranking": "scale",
+    "metric": "rate_autoc",
+    "budget": NaN,
+    "estimate": 0.0342115458238787,
+    "lo95": 0.002666543765239497,
+    "hi95": 0.05930310007330098
+   },
+   {
+    "ranking": "scale",
+    "metric": "rate_qini",
+    "budget": NaN,
+    "estimate": 0.008977457995247731,
+    "lo95": 0.001251458346313428,
+    "hi95": 0.017315875035069754
+   },
+   {
+    "ranking": "benefit",
+    "metric": "per_1000",
+    "budget": 0.1,
+    "estimate": -7.060465449865586,
+    "lo95": -94.52680062927686,
+    "hi95": 102.0650503235928
+   },
+   {
+    "ranking": "benefit",
+    "metric": "per_1000",
+    "budget": 0.2,
+    "estimate": 12.270348070227461,
+    "lo95": -58.548031282619135,
+    "hi95": 76.89463682180845
+   },
+   {
+    "ranking": "benefit",
+    "metric": "per_1000",
+    "budget": 0.3,
+    "estimate": 43.52531991577267,
+    "lo95": -20.199394196503338,
+    "hi95": 97.20635530751345
+   },
+   {
+    "ranking": "benefit",
+    "metric": "rate_autoc",
+    "budget": NaN,
+    "estimate": 0.010451301478899578,
+    "lo95": -0.025641208353543873,
+    "hi95": 0.04152761637521248
+   },
+   {
+    "ranking": "benefit",
+    "metric": "rate_qini",
+    "budget": NaN,
+    "estimate": 0.0025490637311206448,
+    "lo95": -0.006532256720743928,
+    "hi95": 0.01132205410083864
+   },
+   {
+    "ranking": "random",
+    "metric": "per_1000",
+    "budget": 0.1,
+    "estimate": 23.53469779216296,
+    "lo95": -57.670611507941324,
+    "hi95": 121.75439238229004
+   },
+   {
+    "ranking": "random",
+    "metric": "per_1000",
+    "budget": 0.2,
+    "estimate": 34.88436883237594,
+    "lo95": -40.31343501042286,
+    "hi95": 93.49400824052263
+   },
+   {
+    "ranking": "random",
+    "metric": "per_1000",
+    "budget": 0.3,
+    "estimate": 36.091914664150984,
+    "lo95": -14.640752582734537,
+    "hi95": 89.565174799966
+   },
+   {
+    "ranking": "random",
+    "metric": "rate_autoc",
+    "budget": NaN,
+    "estimate": 0.00211035251026141,
+    "lo95": -0.02966834677404303,
+    "hi95": 0.028756122691588434
+   },
+   {
+    "ranking": "random",
+    "metric": "rate_qini",
+    "budget": NaN,
+    "estimate": -0.00035030552358349386,
+    "lo95": -0.007650952561554139,
+    "hi95": 0.007947527875673925
+   },
+   {
+    "ranking": "benefit-minus-risk",
+    "metric": "per_1000",
+    "budget": 0.1,
+    "estimate": -9.908149821286525,
+    "lo95": -100.10256203698499,
+    "hi95": 99.5398851972785
+   },
+   {
+    "ranking": "benefit-minus-risk",
+    "metric": "per_1000",
+    "budget": 0.2,
+    "estimate": 19.654884680637757,
+    "lo95": -52.174395497860466,
+    "hi95": 83.06596161871218
+   },
+   {
+    "ranking": "benefit-minus-risk",
+    "metric": "per_1000",
+    "budget": 0.3,
+    "estimate": 35.21206160376323,
+    "lo95": -15.721903094600622,
+    "hi95": 85.73273743107806
+   },
+   {
+    "ranking": "benefit-minus-risk",
+    "metric": "rate_autoc",
+    "budget": NaN,
+    "estimate": 0.02839656494884256,
+    "lo95": -0.008425414943764253,
+    "hi95": 0.059160349184895565
+   },
+   {
+    "ranking": "benefit-minus-risk",
+    "metric": "rate_qini",
+    "budget": NaN,
+    "estimate": 0.009678054872305029,
+    "lo95": -0.00018391014380227875,
+    "hi95": 0.018856569242674374
+   },
+   {
+    "ranking": "scale-minus-risk",
+    "metric": "per_1000",
+    "budget": 0.1,
+    "estimate": 116.57198596493022,
+    "lo95": -17.433987657454068,
+    "hi95": 230.92973665460664
+   },
+   {
+    "ranking": "scale-minus-risk",
+    "metric": "per_1000",
+    "budget": 0.2,
+    "estimate": 82.66714125033636,
+    "lo95": -4.722498365484605,
+    "hi95": 175.03758492440457
+   },
+   {
+    "ranking": "scale-minus-risk",
+    "metric": "per_1000",
+    "budget": 0.3,
+    "estimate": 67.8953898618275,
+    "lo95": -5.147243432370247,
+    "hi95": 145.76215017528068
+   },
+   {
+    "ranking": "scale-minus-risk",
+    "metric": "rate_autoc",
+    "budget": NaN,
+    "estimate": 0.05215680929382168,
+    "lo95": 0.0010878421167486768,
+    "hi95": 0.10155934629811607
+   },
+   {
+    "ranking": "scale-minus-risk",
+    "metric": "rate_qini",
+    "budget": NaN,
+    "estimate": 0.016106449136432117,
+    "lo95": 0.0004408859712576297,
+    "hi95": 0.03199820484134085
+   },
+   {
+    "ranking": "benefit-minus-scale",
+    "metric": "per_1000",
+    "budget": 0.1,
+    "estimate": -126.48013578621675,
+    "lo95": -243.05983745343434,
+    "hi95": 29.501738679357768
+   },
+   {
+    "ranking": "benefit-minus-scale",
+    "metric": "per_1000",
+    "budget": 0.2,
+    "estimate": -63.0122565696986,
+    "lo95": -159.61865617107668,
+    "hi95": 16.14031708202834
+   },
+   {
+    "ranking": "benefit-minus-scale",
+    "metric": "per_1000",
+    "budget": 0.3,
+    "estimate": -32.683328258064265,
+    "lo95": -106.11088185386456,
+    "hi95": 31.91367440756719
+   },
+   {
+    "ranking": "benefit-minus-scale",
+    "metric": "rate_autoc",
+    "budget": NaN,
+    "estimate": -0.02376024434497912,
+    "lo95": -0.07018350228760152,
+    "hi95": 0.020518948027298263
+   },
+   {
+    "ranking": "benefit-minus-scale",
+    "metric": "rate_qini",
+    "budget": NaN,
+    "estimate": -0.006428394264127086,
+    "lo95": -0.019474699157818232,
+    "hi95": 0.0067637575539223685
+   }
+  ]
+ },
+ "synbiotic": {
+  "dataset": "synbiotic",
+  "n_context": 2278,
+  "n_dev": 915,
+  "better": "lower",
+  "ate_dev_aipw_per_1000": 45.13227674620942,
+  "scale_beta_logodds": -0.5651013768667335,
+  "control_rate_context": 0.08771929824561403,
+  "rank_corr_risk_benefit": 0.656166542500162,
+  "seconds": 43.3,
+  "table": [
+   {
+    "ranking": "risk",
+    "metric": "per_1000",
+    "budget": 0.1,
+    "estimate": 32.84134657801601,
+    "lo95": -61.15131128611997,
+    "hi95": 138.60639390734028
+   },
+   {
+    "ranking": "risk",
+    "metric": "per_1000",
+    "budget": 0.2,
+    "estimate": 75.92831341509368,
+    "lo95": -9.813939028377494,
+    "hi95": 176.27583870357577
+   },
+   {
+    "ranking": "risk",
+    "metric": "per_1000",
+    "budget": 0.3,
+    "estimate": 53.15368966387547,
+    "lo95": -20.81362498533213,
+    "hi95": 134.09311549166614
+   },
+   {
+    "ranking": "risk",
+    "metric": "rate_autoc",
+    "budget": NaN,
+    "estimate": -0.001486150423019256,
+    "lo95": -0.034485863231047,
+    "hi95": 0.040085115985079085
+   },
+   {
+    "ranking": "risk",
+    "metric": "rate_qini",
+    "budget": NaN,
+    "estimate": 0.0004434560213674398,
+    "lo95": -0.009306234817945618,
+    "hi95": 0.011846048326978432
+   },
+   {
+    "ranking": "scale",
+    "metric": "per_1000",
+    "budget": 0.1,
+    "estimate": 32.84134657801601,
+    "lo95": -61.15131128611997,
+    "hi95": 138.60639390734028
+   },
+   {
+    "ranking": "scale",
+    "metric": "per_1000",
+    "budget": 0.2,
+    "estimate": 75.92831341509368,
+    "lo95": -9.813939028377494,
+    "hi95": 176.27583870357577
+   },
+   {
+    "ranking": "scale",
+    "metric": "per_1000",
+    "budget": 0.3,
+    "estimate": 53.15368966387547,
+    "lo95": -20.81362498533213,
+    "hi95": 134.09311549166614
+   },
+   {
+    "ranking": "scale",
+    "metric": "rate_autoc",
+    "budget": NaN,
+    "estimate": -0.001486150423019256,
+    "lo95": -0.034485863231047,
+    "hi95": 0.040085115985079085
+   },
+   {
+    "ranking": "scale",
+    "metric": "rate_qini",
+    "budget": NaN,
+    "estimate": 0.0004434560213674398,
+    "lo95": -0.009306234817945618,
+    "hi95": 0.011846048326978432
+   },
+   {
+    "ranking": "benefit",
+    "metric": "per_1000",
+    "budget": 0.1,
+    "estimate": 57.404432336253755,
+    "lo95": -58.79150516598776,
+    "hi95": 167.0305876099018
+   },
+   {
+    "ranking": "benefit",
+    "metric": "per_1000",
+    "budget": 0.2,
+    "estimate": 28.280729382878906,
+    "lo95": -45.39144326944279,
+    "hi95": 106.58433102613515
+   },
+   {
+    "ranking": "benefit",
+    "metric": "per_1000",
+    "budget": 0.3,
+    "estimate": 19.949987618576746,
+    "lo95": -35.48576145717886,
+    "hi95": 89.00760195365406
+   },
+   {
+    "ranking": "benefit",
+    "metric": "rate_autoc",
+    "budget": NaN,
+    "estimate": -0.008246457322735115,
+    "lo95": -0.036982774884853825,
+    "hi95": 0.025118982229525695
+   },
+   {
+    "ranking": "benefit",
+    "metric": "rate_qini",
+    "budget": NaN,
+    "estimate": -0.004948784466718638,
+    "lo95": -0.014530501969211318,
+    "hi95": 0.005671490900875096
+   },
+   {
+    "ranking": "random",
+    "metric": "per_1000",
+    "budget": 0.1,
+    "estimate": 53.74623229824592,
+    "lo95": -60.96625917853847,
+    "hi95": 168.82365314422026
+   },
+   {
+    "ranking": "random",
+    "metric": "per_1000",
+    "budget": 0.2,
+    "estimate": 32.160798130405,
+    "lo95": -29.91758550964005,
+    "hi95": 127.43479698266862
+   },
+   {
+    "ranking": "random",
+    "metric": "per_1000",
+    "budget": 0.3,
+    "estimate": 53.53593130051716,
+    "lo95": -12.194933844074088,
+    "hi95": 119.03388217506664
+   },
+   {
+    "ranking": "random",
+    "metric": "rate_autoc",
+    "budget": NaN,
+    "estimate": 0.008997778523182108,
+    "lo95": -0.03351741600528342,
+    "hi95": 0.03988996557859153
+   },
+   {
+    "ranking": "random",
+    "metric": "rate_qini",
+    "budget": NaN,
+    "estimate": 0.003973330999418463,
+    "lo95": -0.01010657563360615,
+    "hi95": 0.010013396504430177
+   },
+   {
+    "ranking": "benefit-minus-risk",
+    "metric": "per_1000",
+    "budget": 0.1,
+    "estimate": 24.563085758237747,
+    "lo95": -119.92033409078999,
+    "hi95": 118.57457946428023
+   },
+   {
+    "ranking": "benefit-minus-risk",
+    "metric": "per_1000",
+    "budget": 0.2,
+    "estimate": -47.64758403221478,
+    "lo95": -122.53113299894929,
+    "hi95": 23.2544520615603
+   },
+   {
+    "ranking": "benefit-minus-risk",
+    "metric": "per_1000",
+    "budget": 0.3,
+    "estimate": -33.203702045298726,
+    "lo95": -91.35851525913004,
+    "hi95": 18.27412346569618
+   },
+   {
+    "ranking": "benefit-minus-risk",
+    "metric": "rate_autoc",
+    "budget": NaN,
+    "estimate": -0.006760306899715859,
+    "lo95": -0.03527541464741174,
+    "hi95": 0.01925031651851281
+   },
+   {
+    "ranking": "benefit-minus-risk",
+    "metric": "rate_qini",
+    "budget": NaN,
+    "estimate": -0.005392240488086078,
+    "lo95": -0.013943986914977188,
+    "hi95": 0.003741101549718154
+   },
+   {
+    "ranking": "scale-minus-risk",
+    "metric": "per_1000",
+    "budget": 0.1,
+    "estimate": 0.0,
+    "lo95": 0.0,
+    "hi95": 0.0
+   },
+   {
+    "ranking": "scale-minus-risk",
+    "metric": "per_1000",
+    "budget": 0.2,
+    "estimate": 0.0,
+    "lo95": 0.0,
+    "hi95": 0.0
+   },
+   {
+    "ranking": "scale-minus-risk",
+    "metric": "per_1000",
+    "budget": 0.3,
+    "estimate": 0.0,
+    "lo95": 0.0,
+    "hi95": 0.0
+   },
+   {
+    "ranking": "scale-minus-risk",
+    "metric": "rate_autoc",
+    "budget": NaN,
+    "estimate": 0.0,
+    "lo95": 0.0,
+    "hi95": 0.0
+   },
+   {
+    "ranking": "scale-minus-risk",
+    "metric": "rate_qini",
+    "budget": NaN,
+    "estimate": 0.0,
+    "lo95": 0.0,
+    "hi95": 0.0
+   },
+   {
+    "ranking": "benefit-minus-scale",
+    "metric": "per_1000",
+    "budget": 0.1,
+    "estimate": 24.563085758237747,
+    "lo95": -119.92033409078999,
+    "hi95": 118.57457946428023
+   },
+   {
+    "ranking": "benefit-minus-scale",
+    "metric": "per_1000",
+    "budget": 0.2,
+    "estimate": -47.64758403221478,
+    "lo95": -122.53113299894929,
+    "hi95": 23.2544520615603
+   },
+   {
+    "ranking": "benefit-minus-scale",
+    "metric": "per_1000",
+    "budget": 0.3,
+    "estimate": -33.203702045298726,
+    "lo95": -91.35851525913004,
+    "hi95": 18.27412346569618
+   },
+   {
+    "ranking": "benefit-minus-scale",
+    "metric": "rate_autoc",
+    "budget": NaN,
+    "estimate": -0.006760306899715859,
+    "lo95": -0.03527541464741174,
+    "hi95": 0.01925031651851281
+   },
+   {
+    "ranking": "benefit-minus-scale",
+    "metric": "rate_qini",
+    "budget": NaN,
+    "estimate": -0.005392240488086078,
+    "lo95": -0.013943986914977188,
+    "hi95": 0.003741101549718154
+   }
+  ]
+ },
+ "elaia1": {
+  "dataset": "elaia1",
+  "n_context": 3012,
+  "n_dev": 1228,
+  "better": "lower",
+  "ate_dev_aipw_per_1000": 25.03508870195508,
+  "scale_beta_logodds": 0.1008055528848143,
+  "control_rate_context": 0.2004034969737727,
+  "rank_corr_risk_benefit": 0.21391767346429857,
+  "seconds": 44.2,
+  "table": [
+   {
+    "ranking": "risk",
+    "metric": "per_1000",
+    "budget": 0.1,
+    "estimate": 1.1554559302541785,
+    "lo95": -145.34904783469042,
+    "hi95": 175.19503852993495
+   },
+   {
+    "ranking": "risk",
+    "metric": "per_1000",
+    "budget": 0.2,
+    "estimate": 12.68844631098997,
+    "lo95": -90.85321990703693,
+    "hi95": 122.63271485642532
+   },
+   {
+    "ranking": "risk",
+    "metric": "per_1000",
+    "budget": 0.3,
+    "estimate": 46.925738747023686,
+    "lo95": -39.64645912949069,
+    "hi95": 138.25315720634495
+   },
+   {
+    "ranking": "risk",
+    "metric": "rate_autoc",
+    "budget": NaN,
+    "estimate": 0.017758606703308095,
+    "lo95": -0.021582892224733682,
+    "hi95": 0.05600487050173417
+   },
+   {
+    "ranking": "risk",
+    "metric": "rate_qini",
+    "budget": NaN,
+    "estimate": 0.0036123066123385306,
+    "lo95": -0.008045473199091767,
+    "hi95": 0.014719986379419472
+   },
+   {
+    "ranking": "scale",
+    "metric": "per_1000",
+    "budget": 0.1,
+    "estimate": 56.23812286945952,
+    "lo95": -11.507274616187686,
+    "hi95": 126.43135405204305
+   },
+   {
+    "ranking": "scale",
+    "metric": "per_1000",
+    "budget": 0.2,
+    "estimate": 26.90580240781224,
+    "lo95": -30.682957365233392,
+    "hi95": 72.79338926618982
+   },
+   {
+    "ranking": "scale",
+    "metric": "per_1000",
+    "budget": 0.3,
+    "estimate": 2.5114824188240283,
+    "lo95": -43.62691855579325,
+    "hi95": 54.71641315451744
+   },
+   {
+    "ranking": "scale",
+    "metric": "rate_autoc",
+    "budget": NaN,
+    "estimate": 0.0005126756090375606,
+    "lo95": -0.03073951992716277,
+    "hi95": 0.03606889124582811
+   },
+   {
+    "ranking": "scale",
+    "metric": "rate_qini",
+    "budget": NaN,
+    "estimate": -0.0026128779762965085,
+    "lo95": -0.013741384262540186,
+    "hi95": 0.009197967028432
+   },
+   {
+    "ranking": "benefit",
+    "metric": "per_1000",
+    "budget": 0.1,
+    "estimate": -13.69310196694267,
+    "lo95": -193.90104391969956,
+    "hi95": 121.53650160889936
+   },
+   {
+    "ranking": "benefit",
+    "metric": "per_1000",
+    "budget": 0.2,
+    "estimate": 5.018989311601758,
+    "lo95": -112.17649421298599,
+    "hi95": 107.98778381512786
+   },
+   {
+    "ranking": "benefit",
+    "metric": "per_1000",
+    "budget": 0.3,
+    "estimate": 44.01411378431926,
+    "lo95": -42.19958238117085,
+    "hi95": 111.99853092498566
+   },
+   {
+    "ranking": "benefit",
+    "metric": "rate_autoc",
+    "budget": NaN,
+    "estimate": -0.004311310077558661,
+    "lo95": -0.058129019324043074,
+    "hi95": 0.0368864591268229
+   },
+   {
+    "ranking": "benefit",
+    "metric": "rate_qini",
+    "budget": NaN,
+    "estimate": -0.003264399360030415,
+    "lo95": -0.017374185502643996,
+    "hi95": 0.008728789142303744
+   },
+   {
+    "ranking": "random",
+    "metric": "per_1000",
+    "budget": 0.1,
+    "estimate": 28.60226260007972,
+    "lo95": -110.68917796460077,
+    "hi95": 156.23272845800741
+   },
+   {
+    "ranking": "random",
+    "metric": "per_1000",
+    "budget": 0.2,
+    "estimate": -5.43795560367782,
+    "lo95": -63.617694440973054,
+    "hi95": 110.89824016207764
+   },
+   {
+    "ranking": "random",
+    "metric": "per_1000",
+    "budget": 0.3,
+    "estimate": 52.87745274392074,
+    "lo95": -48.17024852660908,
+    "hi95": 94.13040226149523
+   },
+   {
+    "ranking": "random",
+    "metric": "rate_autoc",
+    "budget": NaN,
+    "estimate": 0.0018163282162907634,
+    "lo95": -0.03942625520595137,
+    "hi95": 0.037844592301458285
+   },
+   {
+    "ranking": "random",
+    "metric": "rate_qini",
+    "budget": NaN,
+    "estimate": 0.005663258747005428,
+    "lo95": -0.012444496514664494,
+    "hi95": 0.010486194341953893
+   },
+   {
+    "ranking": "benefit-minus-risk",
+    "metric": "per_1000",
+    "budget": 0.1,
+    "estimate": -14.848557897196848,
+    "lo95": -253.9191001326428,
+    "hi95": 138.5927140826972
+   },
+   {
+    "ranking": "benefit-minus-risk",
+    "metric": "per_1000",
+    "budget": 0.2,
+    "estimate": -7.6694569993882125,
+    "lo95": -129.74685016897783,
+    "hi95": 126.47272981622483
+   },
+   {
+    "ranking": "benefit-minus-risk",
+    "metric": "per_1000",
+    "budget": 0.3,
+    "estimate": -2.9116249627044297,
+    "lo95": -102.6525653654269,
+    "hi95": 81.08267898208501
+   },
+   {
+    "ranking": "benefit-minus-risk",
+    "metric": "rate_autoc",
+    "budget": NaN,
+    "estimate": -0.022069916780866755,
+    "lo95": -0.08452297966728385,
+    "hi95": 0.03030289713323961
+   },
+   {
+    "ranking": "benefit-minus-risk",
+    "metric": "rate_qini",
+    "budget": NaN,
+    "estimate": -0.006876705972368946,
+    "lo95": -0.022555952990349185,
+    "hi95": 0.009913863936563364
+   },
+   {
+    "ranking": "scale-minus-risk",
+    "metric": "per_1000",
+    "budget": 0.1,
+    "estimate": 55.08266693920534,
+    "lo95": -129.33351240865082,
+    "hi95": 227.48172927703635
+   },
+   {
+    "ranking": "scale-minus-risk",
+    "metric": "per_1000",
+    "budget": 0.2,
+    "estimate": 14.217356096822268,
+    "lo95": -116.28980295976287,
+    "hi95": 139.63294613177507
+   },
+   {
+    "ranking": "scale-minus-risk",
+    "metric": "per_1000",
+    "budget": 0.3,
+    "estimate": -44.414256328199656,
+    "lo95": -148.91568463293802,
+    "hi95": 59.67659814218313
+   },
+   {
+    "ranking": "scale-minus-risk",
+    "metric": "rate_autoc",
+    "budget": NaN,
+    "estimate": -0.017245931094270535,
+    "lo95": -0.07987509360340003,
+    "hi95": 0.049229041367473476
+   },
+   {
+    "ranking": "scale-minus-risk",
+    "metric": "rate_qini",
+    "budget": NaN,
+    "estimate": -0.006225184588635039,
+    "lo95": -0.02838120336888682,
+    "hi95": 0.017370729829181024
+   },
+   {
+    "ranking": "benefit-minus-scale",
+    "metric": "per_1000",
+    "budget": 0.1,
+    "estimate": -69.93122483640218,
+    "lo95": -264.7153809068714,
+    "hi95": 74.88543753972631
+   },
+   {
+    "ranking": "benefit-minus-scale",
+    "metric": "per_1000",
+    "budget": 0.2,
+    "estimate": -21.88681309621048,
+    "lo95": -131.39898129514702,
+    "hi95": 91.54941499249708
+   },
+   {
+    "ranking": "benefit-minus-scale",
+    "metric": "per_1000",
+    "budget": 0.3,
+    "estimate": 41.502631365495226,
+    "lo95": -55.16346304904108,
+    "hi95": 119.57126629902392
+   },
+   {
+    "ranking": "benefit-minus-scale",
+    "metric": "rate_autoc",
+    "budget": NaN,
+    "estimate": -0.004823985686596222,
+    "lo95": -0.06797714891658523,
+    "hi95": 0.05287259901497014
+   },
+   {
+    "ranking": "benefit-minus-scale",
+    "metric": "rate_qini",
+    "budget": NaN,
+    "estimate": -0.0006515213837339066,
+    "lo95": -0.020381396081514444,
+    "hi95": 0.01612549174718761
+   }
+  ]
+ },
+ "elaia2": {
+  "dataset": "elaia2",
+  "n_context": 2528,
+  "n_dev": 1059,
+  "better": "lower",
+  "ate_dev_aipw_per_1000": 9.55914240978536,
+  "scale_beta_logodds": -0.07632488083551829,
+  "control_rate_context": 0.25477707006369427,
+  "rank_corr_risk_benefit": 0.2667142599201925,
+  "seconds": 39.5,
+  "table": [
+   {
+    "ranking": "risk",
+    "metric": "per_1000",
+    "budget": 0.1,
+    "estimate": 32.12891097471536,
+    "lo95": -152.07761953152564,
+    "hi95": 195.61358943396783
+   },
+   {
+    "ranking": "risk",
+    "metric": "per_1000",
+    "budget": 0.2,
+    "estimate": 43.32734699390924,
+    "lo95": -75.8497490537656,
+    "hi95": 163.85793498924804
+   },
+   {
+    "ranking": "risk",
+    "metric": "per_1000",
+    "budget": 0.3,
+    "estimate": -13.95579532373904,
+    "lo95": -99.37491035830531,
+    "hi95": 91.9306817484326
+   },
+   {
+    "ranking": "risk",
+    "metric": "rate_autoc",
+    "budget": NaN,
+    "estimate": 0.006324271218223415,
+    "lo95": -0.03130118073650328,
+    "hi95": 0.047862166007080535
+   },
+   {
+    "ranking": "risk",
+    "metric": "rate_qini",
+    "budget": NaN,
+    "estimate": 0.0026233771620801966,
+    "lo95": -0.00745254079702049,
+    "hi95": 0.01486176400169183
+   },
+   {
+    "ranking": "scale",
+    "metric": "per_1000",
+    "budget": 0.1,
+    "estimate": 65.62375923516895,
+    "lo95": -110.31745791094882,
+    "hi95": 262.4215209982338
+   },
+   {
+    "ranking": "scale",
+    "metric": "per_1000",
+    "budget": 0.2,
+    "estimate": 47.19840898643879,
+    "lo95": -79.65272337242266,
+    "hi95": 158.23619021445458
+   },
+   {
+    "ranking": "scale",
+    "metric": "per_1000",
+    "budget": 0.3,
+    "estimate": -21.61797935642505,
+    "lo95": -113.15379249253755,
+    "hi95": 85.51754030746275
+   },
+   {
+    "ranking": "scale",
+    "metric": "rate_autoc",
+    "budget": NaN,
+    "estimate": 0.015551837924872301,
+    "lo95": -0.031943115759111816,
+    "hi95": 0.06749696772523354
+   },
+   {
+    "ranking": "scale",
+    "metric": "rate_qini",
+    "budget": NaN,
+    "estimate": 0.0030805226224965556,
+    "lo95": -0.007470663205881821,
+    "hi95": 0.0155117596790251
+   },
+   {
+    "ranking": "benefit",
+    "metric": "per_1000",
+    "budget": 0.1,
+    "estimate": 41.25138227089133,
+    "lo95": -135.91261047888142,
+    "hi95": 210.17626089081102
+   },
+   {
+    "ranking": "benefit",
+    "metric": "per_1000",
+    "budget": 0.2,
+    "estimate": 0.12154453462958448,
+    "lo95": -97.48891482101114,
+    "hi95": 128.15633376517025
+   },
+   {
+    "ranking": "benefit",
+    "metric": "per_1000",
+    "budget": 0.3,
+    "estimate": 18.45717044026735,
+    "lo95": -69.05029272391982,
+    "hi95": 107.20134402870586
+   },
+   {
+    "ranking": "benefit",
+    "metric": "rate_autoc",
+    "budget": NaN,
+    "estimate": -0.010734985354888354,
+    "lo95": -0.06408850766708937,
+    "hi95": 0.0428007832472621
+   },
+   {
+    "ranking": "benefit",
+    "metric": "rate_qini",
+    "budget": NaN,
+    "estimate": 0.0006230674207687024,
+    "lo95": -0.013602173296429114,
+    "hi95": 0.014109827560119127
+   },
+   {
+    "ranking": "random",
+    "metric": "per_1000",
+    "budget": 0.1,
+    "estimate": 11.179525124426172,
+    "lo95": -126.04994285977357,
+    "hi95": 132.63309669795737
+   },
+   {
+    "ranking": "random",
+    "metric": "per_1000",
+    "budget": 0.2,
+    "estimate": 86.00476478879509,
+    "lo95": -90.86930668813629,
+    "hi95": 90.50491048880228
+   },
+   {
+    "ranking": "random",
+    "metric": "per_1000",
+    "budget": 0.3,
+    "estimate": 81.39383947887988,
+    "lo95": -68.16809410443655,
+    "hi95": 82.61066595780112
+   },
+   {
+    "ranking": "random",
+    "metric": "rate_autoc",
+    "budget": NaN,
+    "estimate": 0.016858884944885306,
+    "lo95": -0.044424283332679136,
+    "hi95": 0.041288800354445564
+   },
+   {
+    "ranking": "random",
+    "metric": "rate_qini",
+    "budget": NaN,
+    "estimate": 0.006595777630499667,
+    "lo95": -0.013238363741287163,
+    "hi95": 0.012177071998461155
+   },
+   {
+    "ranking": "benefit-minus-risk",
+    "metric": "per_1000",
+    "budget": 0.1,
+    "estimate": 9.122471296175966,
+    "lo95": -199.16938786961782,
+    "hi95": 210.0023237967797
+   },
+   {
+    "ranking": "benefit-minus-risk",
+    "metric": "per_1000",
+    "budget": 0.2,
+    "estimate": -43.20580245927965,
+    "lo95": -165.1055123883823,
+    "hi95": 73.31281233245525
+   },
+   {
+    "ranking": "benefit-minus-risk",
+    "metric": "per_1000",
+    "budget": 0.3,
+    "estimate": 32.41296576400639,
+    "lo95": -60.75988662351141,
+    "hi95": 119.26532697126099
+   },
+   {
+    "ranking": "benefit-minus-risk",
+    "metric": "rate_autoc",
+    "budget": NaN,
+    "estimate": -0.017059256573111768,
+    "lo95": -0.07380685878544344,
+    "hi95": 0.039187104655889926
+   },
+   {
+    "ranking": "benefit-minus-risk",
+    "metric": "rate_qini",
+    "budget": NaN,
+    "estimate": -0.0020003097413114944,
+    "lo95": -0.016775011234860367,
+    "hi95": 0.01356954604368274
+   },
+   {
+    "ranking": "scale-minus-risk",
+    "metric": "per_1000",
+    "budget": 0.1,
+    "estimate": 33.49484826045359,
+    "lo95": -128.11277681443948,
+    "hi95": 212.47950049440027
+   },
+   {
+    "ranking": "scale-minus-risk",
+    "metric": "per_1000",
+    "budget": 0.2,
+    "estimate": 3.8710619925295546,
+    "lo95": -62.484445952693676,
+    "hi95": 44.82089849074967
+   },
+   {
+    "ranking": "scale-minus-risk",
+    "metric": "per_1000",
+    "budget": 0.3,
+    "estimate": -7.66218403268601,
+    "lo95": -30.79027139320239,
+    "hi95": 4.924111511654087
+   },
+   {
+    "ranking": "scale-minus-risk",
+    "metric": "rate_autoc",
+    "budget": NaN,
+    "estimate": 0.009227566706648885,
+    "lo95": -0.02625026835972989,
+    "hi95": 0.04644444699357145
+   },
+   {
+    "ranking": "scale-minus-risk",
+    "metric": "rate_qini",
+    "budget": NaN,
+    "estimate": 0.00045714546041635907,
+    "lo95": -0.001995680368411798,
+    "hi95": 0.0028372289280899415
+   },
+   {
+    "ranking": "benefit-minus-scale",
+    "metric": "per_1000",
+    "budget": 0.1,
+    "estimate": -24.37237696427762,
+    "lo95": -253.12048460169055,
+    "hi95": 187.39875701469643
+   },
+   {
+    "ranking": "benefit-minus-scale",
+    "metric": "per_1000",
+    "budget": 0.2,
+    "estimate": -47.07686445180921,
+    "lo95": -141.65507258503698,
+    "hi95": 89.28274302252034
+   },
+   {
+    "ranking": "benefit-minus-scale",
+    "metric": "per_1000",
+    "budget": 0.3,
+    "estimate": 40.0751497966924,
+    "lo95": -50.618947178323324,
+    "hi95": 130.10257980609134
+   },
+   {
+    "ranking": "benefit-minus-scale",
+    "metric": "rate_autoc",
+    "budget": NaN,
+    "estimate": -0.026286823279760653,
+    "lo95": -0.09687971413227275,
+    "hi95": 0.03745180022670627
+   },
+   {
+    "ranking": "benefit-minus-scale",
+    "metric": "rate_qini",
+    "budget": NaN,
+    "estimate": -0.002457455201727853,
+    "lo95": -0.017666273862374987,
+    "hi95": 0.013620460793008073
+   }
+  ]
+ },
+ "voter": {
+  "dataset": "voter",
+  "n_context": 114283,
+  "n_dev": 46149,
+  "better": "higher",
+  "ate_dev_aipw_per_1000": 77.60959730399762,
+  "scale_beta_logodds": 0.4052318567640184,
+  "control_rate_context": 0.2956140442896556,
+  "rank_corr_risk_benefit": -0.377588306252843,
+  "seconds": 602.8,
+  "table": [
+   {
+    "ranking": "risk",
+    "metric": "per_1000",
+    "budget": 0.1,
+    "estimate": 26.19527885190581,
+    "lo95": 3.2108713064281775,
+    "hi95": 55.13106649475976
+   },
+   {
+    "ranking": "risk",
+    "metric": "per_1000",
+    "budget": 0.2,
+    "estimate": 40.57188894808867,
+    "lo95": 22.105384168423683,
+    "hi95": 63.61185259620077
+   },
+   {
+    "ranking": "risk",
+    "metric": "per_1000",
+    "budget": 0.3,
+    "estimate": 46.320061125528824,
+    "lo95": 27.26722986747239,
+    "hi95": 65.46813722217567
+   },
+   {
+    "ranking": "risk",
+    "metric": "rate_autoc",
+    "budget": NaN,
+    "estimate": -0.02141618889881567,
+    "lo95": -0.03161481299548919,
+    "hi95": -0.012794051916416948
+   },
+   {
+    "ranking": "risk",
+    "metric": "rate_qini",
+    "budget": NaN,
+    "estimate": -0.004629166298965476,
+    "lo95": -0.007767581041073985,
+    "hi95": -0.0015894906529160399
+   },
+   {
+    "ranking": "scale",
+    "metric": "per_1000",
+    "budget": 0.1,
+    "estimate": 101.45231909781995,
+    "lo95": 65.77422407795629,
+    "hi95": 146.64463240235162
+   },
+   {
+    "ranking": "scale",
+    "metric": "per_1000",
+    "budget": 0.2,
+    "estimate": 98.85579347836314,
+    "lo95": 74.65667976257438,
+    "hi95": 131.61974687858248
+   },
+   {
+    "ranking": "scale",
+    "metric": "per_1000",
+    "budget": 0.3,
+    "estimate": 88.48515860112018,
+    "lo95": 67.79124284647253,
+    "hi95": 115.53781735926574
+   },
+   {
+    "ranking": "scale",
+    "metric": "rate_autoc",
+    "budget": NaN,
+    "estimate": 0.011431826037245511,
+    "lo95": -0.00011271997394544266,
+    "hi95": 0.0238863711680156
+   },
+   {
+    "ranking": "scale",
+    "metric": "rate_qini",
+    "budget": NaN,
+    "estimate": 0.005432977750194517,
+    "lo95": 0.0025281364705380155,
+    "hi95": 0.008646368627161177
+   },
+   {
+    "ranking": "benefit",
+    "metric": "per_1000",
+    "budget": 0.1,
+    "estimate": 96.47729632765576,
+    "lo95": 56.678228572093865,
+    "hi95": 143.5301115680155
+   },
+   {
+    "ranking": "benefit",
+    "metric": "per_1000",
+    "budget": 0.2,
+    "estimate": 96.25258526723665,
+    "lo95": 69.13836331382775,
+    "hi95": 127.01419893545636
+   },
+   {
+    "ranking": "benefit",
+    "metric": "per_1000",
+    "budget": 0.3,
+    "estimate": 99.36321028209515,
+    "lo95": 78.23903463430376,
+    "hi95": 123.624311331663
+   },
+   {
+    "ranking": "benefit",
+    "metric": "rate_autoc",
+    "budget": NaN,
+    "estimate": 0.01801269271027081,
+    "lo95": 0.006038213695198897,
+    "hi95": 0.03011330443870845
+   },
+   {
+    "ranking": "benefit",
+    "metric": "rate_qini",
+    "budget": NaN,
+    "estimate": 0.0066026560669548,
+    "lo95": 0.003235148825013329,
+    "hi95": 0.010003293383815597
+   },
+   {
+    "ranking": "random",
+    "metric": "per_1000",
+    "budget": 0.1,
+    "estimate": 81.42498354684008,
+    "lo95": 41.26443480741873,
+    "hi95": 111.21577016191095
+   },
+   {
+    "ranking": "random",
+    "metric": "per_1000",
+    "budget": 0.2,
+    "estimate": 80.1114658332361,
+    "lo95": 53.35638898395098,
+    "hi95": 100.75006457421651
+   },
+   {
+    "ranking": "random",
+    "metric": "per_1000",
+    "budget": 0.3,
+    "estimate": 87.60178258110703,
+    "lo95": 56.42291938800066,
+    "hi95": 100.9449617148046
+   },
+   {
+    "ranking": "random",
+    "metric": "rate_autoc",
+    "budget": NaN,
+    "estimate": 0.0077919370793802685,
+    "lo95": -0.010645049738851579,
+    "hi95": 0.01070916182137926
+   },
+   {
+    "ranking": "random",
+    "metric": "rate_qini",
+    "budget": NaN,
+    "estimate": 0.002277955196443269,
+    "lo95": -0.003370954210582369,
+    "hi95": 0.00267222981229555
+   },
+   {
+    "ranking": "benefit-minus-risk",
+    "metric": "per_1000",
+    "budget": 0.1,
+    "estimate": 70.28201747574995,
+    "lo95": 23.16676606346633,
+    "hi95": 118.40802891508997
+   },
+   {
+    "ranking": "benefit-minus-risk",
+    "metric": "per_1000",
+    "budget": 0.2,
+    "estimate": 55.680696319147984,
+    "lo95": 23.621103218735744,
+    "hi95": 87.94718298635621
+   },
+   {
+    "ranking": "benefit-minus-risk",
+    "metric": "per_1000",
+    "budget": 0.3,
+    "estimate": 53.04314915656633,
+    "lo95": 25.496859363957803,
+    "hi95": 78.1430120036562
+   },
+   {
+    "ranking": "benefit-minus-risk",
+    "metric": "rate_autoc",
+    "budget": NaN,
+    "estimate": 0.03942888160908648,
+    "lo95": 0.02278049076226742,
+    "hi95": 0.05547107346994564
+   },
+   {
+    "ranking": "benefit-minus-risk",
+    "metric": "rate_qini",
+    "budget": NaN,
+    "estimate": 0.011231822365920276,
+    "lo95": 0.006218207643782837,
+    "hi95": 0.01610409900172156
+   },
+   {
+    "ranking": "scale-minus-risk",
+    "metric": "per_1000",
+    "budget": 0.1,
+    "estimate": 75.25704024591414,
+    "lo95": 26.764388830558314,
+    "hi95": 127.99199493859638
+   },
+   {
+    "ranking": "scale-minus-risk",
+    "metric": "per_1000",
+    "budget": 0.2,
+    "estimate": 58.28390453027447,
+    "lo95": 28.167653144950155,
+    "hi95": 94.82788032484919
+   },
+   {
+    "ranking": "scale-minus-risk",
+    "metric": "per_1000",
+    "budget": 0.3,
+    "estimate": 42.16509747559135,
+    "lo95": 16.09422398999995,
+    "hi95": 72.95690287132159
+   },
+   {
+    "ranking": "scale-minus-risk",
+    "metric": "rate_autoc",
+    "budget": NaN,
+    "estimate": 0.03284801493606118,
+    "lo95": 0.013858012028360492,
+    "hi95": 0.0528136141746453
+   },
+   {
+    "ranking": "scale-minus-risk",
+    "metric": "rate_qini",
+    "budget": NaN,
+    "estimate": 0.010062144049159994,
+    "lo95": 0.004597633377739212,
+    "hi95": 0.01617639861031244
+   },
+   {
+    "ranking": "benefit-minus-scale",
+    "metric": "per_1000",
+    "budget": 0.1,
+    "estimate": -4.975022770164188,
+    "lo95": -60.580217840958895,
+    "hi95": 43.27068863319022
+   },
+   {
+    "ranking": "benefit-minus-scale",
+    "metric": "per_1000",
+    "budget": 0.2,
+    "estimate": -2.6032082111264856,
+    "lo95": -34.384695420300666,
+    "hi95": 23.83810698538775
+   },
+   {
+    "ranking": "benefit-minus-scale",
+    "metric": "per_1000",
+    "budget": 0.3,
+    "estimate": 10.878051680974977,
+    "lo95": -14.026023014212731,
+    "hi95": 31.970132066921256
+   },
+   {
+    "ranking": "benefit-minus-scale",
+    "metric": "rate_autoc",
+    "budget": NaN,
+    "estimate": 0.0065808666730253,
+    "lo95": -0.011503467204453973,
+    "hi95": 0.02085580104468265
+   },
+   {
+    "ranking": "benefit-minus-scale",
+    "metric": "rate_qini",
+    "budget": NaN,
+    "estimate": 0.0011696783167602833,
+    "lo95": -0.0030136184032687322,
+    "hi95": 0.004428093613190909
+   }
+  ]
+ },
+ "sf_email": {
+  "dataset": "sf_email",
+  "n_context": 15716,
+  "n_dev": 6320,
+  "better": "higher",
+  "ate_dev_aipw_per_1000": -10.78065894089413,
+  "scale_beta_logodds": 0.046539618323925426,
+  "control_rate_context": 0.3272261370916079,
+  "rank_corr_risk_benefit": 0.20897529104113202,
+  "seconds": 124.2,
+  "table": [
+   {
+    "ranking": "risk",
+    "metric": "per_1000",
+    "budget": 0.1,
+    "estimate": 33.18046468301466,
+    "lo95": 0.5113584233472593,
+    "hi95": 68.52275529151105
+   },
+   {
+    "ranking": "risk",
+    "metric": "per_1000",
+    "budget": 0.2,
+    "estimate": 14.811772992868189,
+    "lo95": -18.12725569615208,
+    "hi95": 39.127815685483796
+   },
+   {
+    "ranking": "risk",
+    "metric": "per_1000",
+    "budget": 0.3,
+    "estimate": -0.8646288309446797,
+    "lo95": -29.343613525377243,
+    "hi95": 24.473172165201614
+   },
+   {
+    "ranking": "risk",
+    "metric": "rate_autoc",
+    "budget": NaN,
+    "estimate": 0.013032095514975608,
+    "lo95": -0.000561046175817502,
+    "hi95": 0.026888900068897215
+   },
+   {
+    "ranking": "risk",
+    "metric": "rate_qini",
+    "budget": NaN,
+    "estimate": 0.004402677828491958,
+    "lo95": -0.0008952985980719095,
+    "hi95": 0.009073192330386405
+   },
+   {
+    "ranking": "scale",
+    "metric": "per_1000",
+    "budget": 0.1,
+    "estimate": -47.27311803300031,
+    "lo95": -119.17657586829668,
+    "hi95": 39.6369441621307
+   },
+   {
+    "ranking": "scale",
+    "metric": "per_1000",
+    "budget": 0.2,
+    "estimate": -22.51679898360632,
+    "lo95": -69.7869151045833,
+    "hi95": 35.83016726763227
+   },
+   {
+    "ranking": "scale",
+    "metric": "per_1000",
+    "budget": 0.3,
+    "estimate": -41.05442829079315,
+    "lo95": -77.69758529774727,
+    "hi95": 3.3296933314031154
+   },
+   {
+    "ranking": "scale",
+    "metric": "rate_autoc",
+    "budget": NaN,
+    "estimate": -0.01473263347422734,
+    "lo95": -0.03410045361703434,
+    "hi95": 0.006297157162680963
+   },
+   {
+    "ranking": "scale",
+    "metric": "rate_qini",
+    "budget": NaN,
+    "estimate": -0.00498134819848769,
+    "lo95": -0.00981966505662145,
+    "hi95": 0.0005148647938665432
+   },
+   {
+    "ranking": "benefit",
+    "metric": "per_1000",
+    "budget": 0.1,
+    "estimate": 24.748386838448557,
+    "lo95": -34.037490122182966,
+    "hi95": 96.68931432235826
+   },
+   {
+    "ranking": "benefit",
+    "metric": "per_1000",
+    "budget": 0.2,
+    "estimate": -6.238397034563672,
+    "lo95": -48.59864566062579,
+    "hi95": 37.686861374312464
+   },
+   {
+    "ranking": "benefit",
+    "metric": "per_1000",
+    "budget": 0.3,
+    "estimate": -12.619289104889027,
+    "lo95": -48.07247991719696,
+    "hi95": 20.445916565090496
+   },
+   {
+    "ranking": "benefit",
+    "metric": "rate_autoc",
+    "budget": NaN,
+    "estimate": 0.006700647439140457,
+    "lo95": -0.013422744589215737,
+    "hi95": 0.02501654409832039
+   },
+   {
+    "ranking": "benefit",
+    "metric": "rate_qini",
+    "budget": NaN,
+    "estimate": 0.0022653169799574106,
+    "lo95": -0.00332374131350903,
+    "hi95": 0.00721999655219337
+   },
+   {
+    "ranking": "random",
+    "metric": "per_1000",
+    "budget": 0.1,
+    "estimate": -12.496584530619662,
+    "lo95": -62.750906317840055,
+    "hi95": 55.73387970673259
+   },
+   {
+    "ranking": "random",
+    "metric": "per_1000",
+    "budget": 0.2,
+    "estimate": 1.3415385155062791,
+    "lo95": -53.704074732815734,
+    "hi95": 26.22841341358551
+   },
+   {
+    "ranking": "random",
+    "metric": "per_1000",
+    "budget": 0.3,
+    "estimate": -8.931718379459781,
+    "lo95": -40.50733301229791,
+    "hi95": 21.097538626862434
+   },
+   {
+    "ranking": "random",
+    "metric": "rate_autoc",
+    "budget": NaN,
+    "estimate": 0.0020833286309055667,
+    "lo95": -0.018879853508867183,
+    "hi95": 0.01928518766794026
+   },
+   {
+    "ranking": "random",
+    "metric": "rate_qini",
+    "budget": NaN,
+    "estimate": -0.0011293338163629587,
+    "lo95": -0.006037370292255324,
+    "hi95": 0.005130606243194181
+   },
+   {
+    "ranking": "benefit-minus-risk",
+    "metric": "per_1000",
+    "budget": 0.1,
+    "estimate": -8.432077844566106,
+    "lo95": -74.2786128183294,
+    "hi95": 61.347320603320604
+   },
+   {
+    "ranking": "benefit-minus-risk",
+    "metric": "per_1000",
+    "budget": 0.2,
+    "estimate": -21.05017002743186,
+    "lo95": -63.007011082416376,
+    "hi95": 32.81272790714544
+   },
+   {
+    "ranking": "benefit-minus-risk",
+    "metric": "per_1000",
+    "budget": 0.3,
+    "estimate": -11.754660273944348,
+    "lo95": -46.074336539652556,
+    "hi95": 23.988509596404075
+   },
+   {
+    "ranking": "benefit-minus-risk",
+    "metric": "rate_autoc",
+    "budget": NaN,
+    "estimate": -0.006331448075835151,
+    "lo95": -0.02985522810044379,
+    "hi95": 0.01635887453353723
+   },
+   {
+    "ranking": "benefit-minus-risk",
+    "metric": "rate_qini",
+    "budget": NaN,
+    "estimate": -0.0021373608485345474,
+    "lo95": -0.008659926693690366,
+    "hi95": 0.004716481387656586
+   },
+   {
+    "ranking": "scale-minus-risk",
+    "metric": "per_1000",
+    "budget": 0.1,
+    "estimate": -80.45358271601498,
+    "lo95": -161.07121756933392,
+    "hi95": 8.398713549333012
+   },
+   {
+    "ranking": "scale-minus-risk",
+    "metric": "per_1000",
+    "budget": 0.2,
+    "estimate": -37.32857197647451,
+    "lo95": -94.3983405040813,
+    "hi95": 23.496341786181137
+   },
+   {
+    "ranking": "scale-minus-risk",
+    "metric": "per_1000",
+    "budget": 0.3,
+    "estimate": -40.189799459848466,
+    "lo95": -83.83725923692474,
+    "hi95": 11.759809869060076
+   },
+   {
+    "ranking": "scale-minus-risk",
+    "metric": "rate_autoc",
+    "budget": NaN,
+    "estimate": -0.027764728989202948,
+    "lo95": -0.056595092629200816,
+    "hi95": 0.002225492588467292
+   },
+   {
+    "ranking": "scale-minus-risk",
+    "metric": "rate_qini",
+    "budget": NaN,
+    "estimate": -0.009384026026979648,
+    "lo95": -0.01811456232824877,
+    "hi95": -9.530293009263184e-05
+   },
+   {
+    "ranking": "benefit-minus-scale",
+    "metric": "per_1000",
+    "budget": 0.1,
+    "estimate": 72.02150487144887,
+    "lo95": -28.182938310423154,
+    "hi95": 173.2261730812652
+   },
+   {
+    "ranking": "benefit-minus-scale",
+    "metric": "per_1000",
+    "budget": 0.2,
+    "estimate": 16.27840194904265,
+    "lo95": -35.12464515416929,
+    "hi95": 75.26648692308602
+   },
+   {
+    "ranking": "benefit-minus-scale",
+    "metric": "per_1000",
+    "budget": 0.3,
+    "estimate": 28.43513918590412,
+    "lo95": -24.400763762526847,
+    "hi95": 68.20252890027928
+   },
+   {
+    "ranking": "benefit-minus-scale",
+    "metric": "rate_autoc",
+    "budget": NaN,
+    "estimate": 0.021433280913367797,
+    "lo95": -0.008794118592875743,
+    "hi95": 0.05153632334667012
+   },
+   {
+    "ranking": "benefit-minus-scale",
+    "metric": "rate_qini",
+    "budget": NaN,
+    "estimate": 0.0072466651784451,
+    "lo95": -0.0010237325129776145,
+    "hi95": 0.01413091647990645
+   }
+  ]
+ },
+ "karlan_list": {
+  "dataset": "karlan_list",
+  "n_context": 25116,
+  "n_dev": 10018,
+  "better": "higher",
+  "ate_dev_aipw_per_1000": 6.847758398292423,
+  "scale_beta_logodds": 0.12031172858424784,
+  "control_rate_context": 0.019715617158561356,
+  "rank_corr_risk_benefit": 0.24458343638258384,
+  "seconds": 152.8,
+  "table": [
+   {
+    "ranking": "risk",
+    "metric": "per_1000",
+    "budget": 0.1,
+    "estimate": -4.460616949741759,
+    "lo95": -16.57878744266842,
+    "hi95": 5.9682925090521115
+   },
+   {
+    "ranking": "risk",
+    "metric": "per_1000",
+    "budget": 0.2,
+    "estimate": 4.2056308952519155,
+    "lo95": -3.2841870373475355,
+    "hi95": 12.348518355803622
+   },
+   {
+    "ranking": "risk",
+    "metric": "per_1000",
+    "budget": 0.3,
+    "estimate": 6.768172221978286,
+    "lo95": 0.9932488287926526,
+    "hi95": 12.488287309910286
+   },
+   {
+    "ranking": "risk",
+    "metric": "rate_autoc",
+    "budget": NaN,
+    "estimate": -0.003417524501449598,
+    "lo95": -0.007564702437252289,
+    "hi95": 0.001035928386441685
+   },
+   {
+    "ranking": "risk",
+    "metric": "rate_qini",
+    "budget": NaN,
+    "estimate": -0.001112904490579251,
+    "lo95": -0.0028332729019205053,
+    "hi95": 0.0006761305109980056
+   },
+   {
+    "ranking": "scale",
+    "metric": "per_1000",
+    "budget": 0.1,
+    "estimate": 20.94805781633717,
+    "lo95": -7.52055299679779,
+    "hi95": 49.33758698114642
+   },
+   {
+    "ranking": "scale",
+    "metric": "per_1000",
+    "budget": 0.2,
+    "estimate": 14.830667408356987,
+    "lo95": -2.383269705442937,
+    "hi95": 33.40777877399095
+   },
+   {
+    "ranking": "scale",
+    "metric": "per_1000",
+    "budget": 0.3,
+    "estimate": 15.383707546874469,
+    "lo95": 1.324585342124645,
+    "hi95": 28.97735765020525
+   },
+   {
+    "ranking": "scale",
+    "metric": "rate_autoc",
+    "budget": NaN,
+    "estimate": 0.004999101581723246,
+    "lo95": -0.005051612324781647,
+    "hi95": 0.014327392847764459
+   },
+   {
+    "ranking": "scale",
+    "metric": "rate_qini",
+    "budget": NaN,
+    "estimate": 0.0011129183806659042,
+    "lo95": -0.0006761304258357729,
+    "hi95": 0.002833274032216044
+   },
+   {
+    "ranking": "benefit",
+    "metric": "per_1000",
+    "budget": 0.1,
+    "estimate": 26.04674618427924,
+    "lo95": 1.8492396940510702,
+    "hi95": 51.6881160272273
+   },
+   {
+    "ranking": "benefit",
+    "metric": "per_1000",
+    "budget": 0.2,
+    "estimate": 17.714990750400535,
+    "lo95": 3.1258504619732843,
+    "hi95": 31.98908694623145
+   },
+   {
+    "ranking": "benefit",
+    "metric": "per_1000",
+    "budget": 0.3,
+    "estimate": 8.357859175515113,
+    "lo95": -2.907695136353372,
+    "hi95": 20.555680275038696
+   },
+   {
+    "ranking": "benefit",
+    "metric": "rate_autoc",
+    "budget": NaN,
+    "estimate": 0.003932203203647545,
+    "lo95": -0.004378403265661667,
+    "hi95": 0.012570584276328045
+   },
+   {
+    "ranking": "benefit",
+    "metric": "rate_qini",
+    "budget": NaN,
+    "estimate": 0.00038656097182545197,
+    "lo95": -0.00140571426006743,
+    "hi95": 0.0023661543853396695
+   },
+   {
+    "ranking": "random",
+    "metric": "per_1000",
+    "budget": 0.1,
+    "estimate": 5.691975779276214,
+    "lo95": -11.446162547628354,
+    "hi95": 22.363587214117093
+   },
+   {
+    "ranking": "random",
+    "metric": "per_1000",
+    "budget": 0.2,
+    "estimate": 7.143334219096925,
+    "lo95": -6.605284096362121,
+    "hi95": 19.707300354008446
+   },
+   {
+    "ranking": "random",
+    "metric": "per_1000",
+    "budget": 0.3,
+    "estimate": 4.700162813009965,
+    "lo95": -4.911246714517486,
+    "hi95": 16.839174160899624
+   },
+   {
+    "ranking": "random",
+    "metric": "rate_autoc",
+    "budget": NaN,
+    "estimate": -0.0022087021319858982,
+    "lo95": -0.0059126850433047695,
+    "hi95": 0.005576292461287335
+   },
+   {
+    "ranking": "random",
+    "metric": "rate_qini",
+    "budget": NaN,
+    "estimate": -0.00035196708850885195,
+    "lo95": -0.0017923993335640905,
+    "hi95": 0.0016478652421725165
+   },
+   {
+    "ranking": "benefit-minus-risk",
+    "metric": "per_1000",
+    "budget": 0.1,
+    "estimate": 30.507363134021,
+    "lo95": 3.598505819665322,
+    "hi95": 58.59394084228506
+   },
+   {
+    "ranking": "benefit-minus-risk",
+    "metric": "per_1000",
+    "budget": 0.2,
+    "estimate": 13.50935985514862,
+    "lo95": -3.1901555815858176,
+    "hi95": 31.07536716224808
+   },
+   {
+    "ranking": "benefit-minus-risk",
+    "metric": "per_1000",
+    "budget": 0.3,
+    "estimate": 1.5896869535368268,
+    "lo95": -10.832882803083013,
+    "hi95": 14.93877316064689
+   },
+   {
+    "ranking": "benefit-minus-risk",
+    "metric": "rate_autoc",
+    "budget": NaN,
+    "estimate": 0.0073497277050971425,
+    "lo95": -0.0027351497216537243,
+    "hi95": 0.018372807114434626
+   },
+   {
+    "ranking": "benefit-minus-risk",
+    "metric": "rate_qini",
+    "budget": NaN,
+    "estimate": 0.0014994654624047028,
+    "lo95": -0.0008431804134898508,
+    "hi95": 0.004072421505212745
+   },
+   {
+    "ranking": "scale-minus-risk",
+    "metric": "per_1000",
+    "budget": 0.1,
+    "estimate": 25.408674766078928,
+    "lo95": -5.410972011914318,
+    "hi95": 55.136814362593036
+   },
+   {
+    "ranking": "scale-minus-risk",
+    "metric": "per_1000",
+    "budget": 0.2,
+    "estimate": 10.625036513105073,
+    "lo95": -9.92402474197017,
+    "hi95": 28.96566858285113
+   },
+   {
+    "ranking": "scale-minus-risk",
+    "metric": "per_1000",
+    "budget": 0.3,
+    "estimate": 8.615535324896182,
+    "lo95": -6.961172504931651,
+    "hi95": 21.834935992578146
+   },
+   {
+    "ranking": "scale-minus-risk",
+    "metric": "rate_autoc",
+    "budget": NaN,
+    "estimate": 0.008416626083172844,
+    "lo95": -0.005748705062588384,
+    "hi95": 0.020454724231061202
+   },
+   {
+    "ranking": "scale-minus-risk",
+    "metric": "rate_qini",
+    "budget": NaN,
+    "estimate": 0.002225822871245155,
+    "lo95": -0.0013522609368337795,
+    "hi95": 0.005666546934136548
+   },
+   {
+    "ranking": "benefit-minus-scale",
+    "metric": "per_1000",
+    "budget": 0.1,
+    "estimate": 5.098688367942071,
+    "lo95": -30.031788172902758,
+    "hi95": 40.59535406821407
+   },
+   {
+    "ranking": "benefit-minus-scale",
+    "metric": "per_1000",
+    "budget": 0.2,
+    "estimate": 2.8843233420435475,
+    "lo95": -17.033720519572206,
+    "hi95": 23.136276049998592
+   },
+   {
+    "ranking": "benefit-minus-scale",
+    "metric": "per_1000",
+    "budget": 0.3,
+    "estimate": -7.025848371359356,
+    "lo95": -19.174500498017007,
+    "hi95": 6.833005104791472
+   },
+   {
+    "ranking": "benefit-minus-scale",
+    "metric": "rate_autoc",
+    "budget": NaN,
+    "estimate": -0.001066898378075701,
+    "lo95": -0.01496662542118805,
+    "hi95": 0.012110244702900029
+   },
+   {
+    "ranking": "benefit-minus-scale",
+    "metric": "rate_qini",
+    "budget": NaN,
+    "estimate": -0.0007263574088404523,
+    "lo95": -0.003621250974423182,
+    "hi95": 0.002334404431357236
+   }
+  ]
+ },
+ "stepup": {
+  "dataset": "stepup",
+  "n_context": 30860,
+  "n_dev": 12098,
+  "better": "higher",
+  "ate_dev_aipw_per_1000": 17.183366745861314,
+  "scale_beta_logodds": 0.27395127933294466,
+  "control_rate_context": 0.7649606299212598,
+  "rank_corr_risk_benefit": 0.41407558455252713,
+  "seconds": 245.9,
+  "table": [
+   {
+    "ranking": "risk",
+    "metric": "per_1000",
+    "budget": 0.1,
+    "estimate": 111.39655420206805,
+    "lo95": 24.041847268672406,
+    "hi95": 189.66592770375345
+   },
+   {
+    "ranking": "risk",
+    "metric": "per_1000",
+    "budget": 0.2,
+    "estimate": 38.87297581635562,
+    "lo95": -33.738036387263065,
+    "hi95": 105.96389270319875
+   },
+   {
+    "ranking": "risk",
+    "metric": "per_1000",
+    "budget": 0.3,
+    "estimate": 25.83472640478044,
+    "lo95": -29.313786733630987,
+    "hi95": 82.39264653649717
+   },
+   {
+    "ranking": "risk",
+    "metric": "rate_autoc",
+    "budget": NaN,
+    "estimate": 0.0129197888443198,
+    "lo95": -0.011631558468019136,
+    "hi95": 0.036562674684656314
+   },
+   {
+    "ranking": "risk",
+    "metric": "rate_qini",
+    "budget": NaN,
+    "estimate": 0.0029239206939270317,
+    "lo95": -0.003458699665749749,
+    "hi95": 0.009384837365511852
+   },
+   {
+    "ranking": "scale",
+    "metric": "per_1000",
+    "budget": 0.1,
+    "estimate": 34.375186895143045,
+    "lo95": -64.35539644196288,
+    "hi95": 148.77556426203742
+   },
+   {
+    "ranking": "scale",
+    "metric": "per_1000",
+    "budget": 0.2,
+    "estimate": -10.26386249965005,
+    "lo95": -83.26263555106327,
+    "hi95": 66.95158979066701
+   },
+   {
+    "ranking": "scale",
+    "metric": "per_1000",
+    "budget": 0.3,
+    "estimate": 23.888141812336524,
+    "lo95": -35.775792077804034,
+    "hi95": 78.30220516815895
+   },
+   {
+    "ranking": "scale",
+    "metric": "rate_autoc",
+    "budget": NaN,
+    "estimate": 0.00583862280794895,
+    "lo95": -0.024067031676117092,
+    "hi95": 0.03603137678679611
+   },
+   {
+    "ranking": "scale",
+    "metric": "rate_qini",
+    "budget": NaN,
+    "estimate": 0.0015358282805141466,
+    "lo95": -0.004969306519815176,
+    "hi95": 0.007947814699771514
+   },
+   {
+    "ranking": "benefit",
+    "metric": "per_1000",
+    "budget": 0.1,
+    "estimate": 46.742440696326,
+    "lo95": -59.73037848111165,
+    "hi95": 132.77979059824472
+   },
+   {
+    "ranking": "benefit",
+    "metric": "per_1000",
+    "budget": 0.2,
+    "estimate": 24.928865635337303,
+    "lo95": -49.59555495088024,
+    "hi95": 85.09771095257935
+   },
+   {
+    "ranking": "benefit",
+    "metric": "per_1000",
+    "budget": 0.3,
+    "estimate": 15.769339724702233,
+    "lo95": -46.569617727544845,
+    "hi95": 68.66868720493133
+   },
+   {
+    "ranking": "benefit",
+    "metric": "rate_autoc",
+    "budget": NaN,
+    "estimate": 0.007467249747486134,
+    "lo95": -0.022588748321985555,
+    "hi95": 0.0350996711812694
+   },
+   {
+    "ranking": "benefit",
+    "metric": "rate_qini",
+    "budget": NaN,
+    "estimate": 0.0008925274674366856,
+    "lo95": -0.007728708655069691,
+    "hi95": 0.010154816248502825
+   },
+   {
+    "ranking": "random",
+    "metric": "per_1000",
+    "budget": 0.1,
+    "estimate": 55.67107127959053,
+    "lo95": -55.59256274759953,
+    "hi95": 84.25731445824411
+   },
+   {
+    "ranking": "random",
+    "metric": "per_1000",
+    "budget": 0.2,
+    "estimate": 24.556790358276828,
+    "lo95": -31.27155018622734,
+    "hi95": 64.72985502639446
+   },
+   {
+    "ranking": "random",
+    "metric": "per_1000",
+    "budget": 0.3,
+    "estimate": 36.37675869941964,
+    "lo95": -24.160173303587527,
+    "hi95": 62.12200630559857
+   },
+   {
+    "ranking": "random",
+    "metric": "rate_autoc",
+    "budget": NaN,
+    "estimate": 0.005372562326051902,
+    "lo95": -0.022871696679391998,
+    "hi95": 0.021115583181770134
+   },
+   {
+    "ranking": "random",
+    "metric": "rate_qini",
+    "budget": NaN,
+    "estimate": 0.0016917824511713333,
+    "lo95": -0.00638476691714674,
+    "hi95": 0.006164089441742004
+   },
+   {
+    "ranking": "benefit-minus-risk",
+    "metric": "per_1000",
+    "budget": 0.1,
+    "estimate": -64.65411350574205,
+    "lo95": -181.51418755987737,
+    "hi95": 33.18112401551228
+   },
+   {
+    "ranking": "benefit-minus-risk",
+    "metric": "per_1000",
+    "budget": 0.2,
+    "estimate": -13.944110181018317,
+    "lo95": -71.6652582034366,
+    "hi95": 56.40107176720785
+   },
+   {
+    "ranking": "benefit-minus-risk",
+    "metric": "per_1000",
+    "budget": 0.3,
+    "estimate": -10.065386680078207,
+    "lo95": -51.635209028872474,
+    "hi95": 27.525313684300304
+   },
+   {
+    "ranking": "benefit-minus-risk",
+    "metric": "rate_autoc",
+    "budget": NaN,
+    "estimate": -0.005452539096833665,
+    "lo95": -0.03146267221581675,
+    "hi95": 0.022172089001032135
+   },
+   {
+    "ranking": "benefit-minus-risk",
+    "metric": "rate_qini",
+    "budget": NaN,
+    "estimate": -0.0020313932264903463,
+    "lo95": -0.009711091488421406,
+    "hi95": 0.007163575072400239
+   },
+   {
+    "ranking": "scale-minus-risk",
+    "metric": "per_1000",
+    "budget": 0.1,
+    "estimate": -77.021367306925,
+    "lo95": -210.19736788592675,
+    "hi95": 57.75449573002479
+   },
+   {
+    "ranking": "scale-minus-risk",
+    "metric": "per_1000",
+    "budget": 0.2,
+    "estimate": -49.13683831600567,
+    "lo95": -105.01030016117413,
+    "hi95": 10.557931849974715
+   },
+   {
+    "ranking": "scale-minus-risk",
+    "metric": "per_1000",
+    "budget": 0.3,
+    "estimate": -1.9465845924439158,
+    "lo95": -34.580381213427096,
+    "hi95": 26.152462887941475
+   },
+   {
+    "ranking": "scale-minus-risk",
+    "metric": "rate_autoc",
+    "budget": NaN,
+    "estimate": -0.00708116603637085,
+    "lo95": -0.03343381555210161,
+    "hi95": 0.018294294628344452
+   },
+   {
+    "ranking": "scale-minus-risk",
+    "metric": "rate_qini",
+    "budget": NaN,
+    "estimate": -0.0013880924134128851,
+    "lo95": -0.004218383776529769,
+    "hi95": 0.0014545125576963763
+   },
+   {
+    "ranking": "benefit-minus-scale",
+    "metric": "per_1000",
+    "budget": 0.1,
+    "estimate": 12.367253801182954,
+    "lo95": -117.00402208565333,
+    "hi95": 135.67523080083345
+   },
+   {
+    "ranking": "benefit-minus-scale",
+    "metric": "per_1000",
+    "budget": 0.2,
+    "estimate": 35.192728134987355,
+    "lo95": -27.56196268027601,
+    "hi95": 95.8380993008709
+   },
+   {
+    "ranking": "benefit-minus-scale",
+    "metric": "per_1000",
+    "budget": 0.3,
+    "estimate": -8.118802087634291,
+    "lo95": -50.59201496504753,
+    "hi95": 42.45916310897555
+   },
+   {
+    "ranking": "benefit-minus-scale",
+    "metric": "rate_autoc",
+    "budget": NaN,
+    "estimate": 0.0016286269395371844,
+    "lo95": -0.02815431578534605,
+    "hi95": 0.03793269320530339
+   },
+   {
+    "ranking": "benefit-minus-scale",
+    "metric": "rate_qini",
+    "budget": NaN,
+    "estimate": -0.000643300813077461,
+    "lo95": -0.008687363111992022,
+    "hi95": 0.009333178413689412
+   }
+  ]
+ },
+ "oregon": {
+  "dataset": "oregon",
+  "n_context": 12250,
+  "n_dev": 4952,
+  "better": "lower",
+  "ate_dev_aipw_per_1000": -19.97711310813605,
+  "scale_beta_logodds": 0.12642673666523385,
+  "control_rate_context": 0.34264607118871726,
+  "rank_corr_risk_benefit": 0.1379726215927424,
+  "seconds": 125.1,
+  "table": [
+   {
+    "ranking": "risk",
+    "metric": "per_1000",
+    "budget": 0.1,
+    "estimate": -7.852988148385318,
+    "lo95": -96.21525595329575,
+    "hi95": 63.203238675940284
+   },
+   {
+    "ranking": "risk",
+    "metric": "per_1000",
+    "budget": 0.2,
+    "estimate": -5.761902305130323,
+    "lo95": -63.1946787820396,
+    "hi95": 49.250558281026315
+   },
+   {
+    "ranking": "risk",
+    "metric": "per_1000",
+    "budget": 0.3,
+    "estimate": -29.422073492553956,
+    "lo95": -75.75670363017348,
+    "hi95": 20.52234195163839
+   },
+   {
+    "ranking": "risk",
+    "metric": "rate_autoc",
+    "budget": NaN,
+    "estimate": 0.006076592137625341,
+    "lo95": -0.01179440099619391,
+    "hi95": 0.031008276939236284
+   },
+   {
+    "ranking": "risk",
+    "metric": "rate_qini",
+    "budget": NaN,
+    "estimate": -0.0005717856205760045,
+    "lo95": -0.006384927160276698,
+    "hi95": 0.0065321891211564155
+   },
+   {
+    "ranking": "scale",
+    "metric": "per_1000",
+    "budget": 0.1,
+    "estimate": -11.670005122443998,
+    "lo95": -83.63601258725626,
+    "hi95": 56.78219133854005
+   },
+   {
+    "ranking": "scale",
+    "metric": "per_1000",
+    "budget": 0.2,
+    "estimate": -16.71007874540414,
+    "lo95": -67.91569899789593,
+    "hi95": 30.905589414928837
+   },
+   {
+    "ranking": "scale",
+    "metric": "per_1000",
+    "budget": 0.3,
+    "estimate": -6.064581843513606,
+    "lo95": -47.07444414522363,
+    "hi95": 32.929022812129304
+   },
+   {
+    "ranking": "scale",
+    "metric": "rate_autoc",
+    "budget": NaN,
+    "estimate": 0.01289369384474557,
+    "lo95": -0.010806137825622755,
+    "hi95": 0.03862663260980188
+   },
+   {
+    "ranking": "scale",
+    "metric": "rate_qini",
+    "budget": NaN,
+    "estimate": 0.0036354143064343254,
+    "lo95": -0.003888113770310507,
+    "hi95": 0.010356294128240696
+   },
+   {
+    "ranking": "benefit",
+    "metric": "per_1000",
+    "budget": 0.1,
+    "estimate": -46.056783310345956,
+    "lo95": -131.1546061071229,
+    "hi95": 40.66849569645967
+   },
+   {
+    "ranking": "benefit",
+    "metric": "per_1000",
+    "budget": 0.2,
+    "estimate": -26.627411770156815,
+    "lo95": -85.03267610574883,
+    "hi95": 26.515182195819857
+   },
+   {
+    "ranking": "benefit",
+    "metric": "per_1000",
+    "budget": 0.3,
+    "estimate": -16.14685479970701,
+    "lo95": -59.47426956843159,
+    "hi95": 27.021408161636842
+   },
+   {
+    "ranking": "benefit",
+    "metric": "rate_autoc",
+    "budget": NaN,
+    "estimate": 0.0037681284155688926,
+    "lo95": -0.02104808691875348,
+    "hi95": 0.03010201202124586
+   },
+   {
+    "ranking": "benefit",
+    "metric": "rate_qini",
+    "budget": NaN,
+    "estimate": 0.004623171466368086,
+    "lo95": -0.0030740096910593768,
+    "hi95": 0.012337035561288616
+   },
+   {
+    "ranking": "random",
+    "metric": "per_1000",
+    "budget": 0.1,
+    "estimate": -35.7307649199751,
+    "lo95": -101.67652765972159,
+    "hi95": 61.43264666448901
+   },
+   {
+    "ranking": "random",
+    "metric": "per_1000",
+    "budget": 0.2,
+    "estimate": -31.640458087415897,
+    "lo95": -86.29729652910358,
+    "hi95": 30.177091483582213
+   },
+   {
+    "ranking": "random",
+    "metric": "per_1000",
+    "budget": 0.3,
+    "estimate": 2.5293102228407722,
+    "lo95": -71.36853657778776,
+    "hi95": 26.893069052263975
+   },
+   {
+    "ranking": "random",
+    "metric": "rate_autoc",
+    "budget": NaN,
+    "estimate": -0.002276079187974657,
+    "lo95": -0.02550024349075503,
+    "hi95": 0.023641164865630622
+   },
+   {
+    "ranking": "random",
+    "metric": "rate_qini",
+    "budget": NaN,
+    "estimate": 2.83829737862526e-05,
+    "lo95": -0.006390023274638842,
+    "hi95": 0.006852545593669541
+   },
+   {
+    "ranking": "benefit-minus-risk",
+    "metric": "per_1000",
+    "budget": 0.1,
+    "estimate": -38.20379516196064,
+    "lo95": -125.77168141085039,
+    "hi95": 54.00640215814442
+   },
+   {
+    "ranking": "benefit-minus-risk",
+    "metric": "per_1000",
+    "budget": 0.2,
+    "estimate": -20.86550946502649,
+    "lo95": -75.93071089013637,
+    "hi95": 37.78179668378448
+   },
+   {
+    "ranking": "benefit-minus-risk",
+    "metric": "per_1000",
+    "budget": 0.3,
+    "estimate": 13.275218692846945,
+    "lo95": -36.606683090930304,
+    "hi95": 59.05178067108518
+   },
+   {
+    "ranking": "benefit-minus-risk",
+    "metric": "rate_autoc",
+    "budget": NaN,
+    "estimate": -0.0023084637220564487,
+    "lo95": -0.029072881299705457,
+    "hi95": 0.02638344216531214
+   },
+   {
+    "ranking": "benefit-minus-risk",
+    "metric": "rate_qini",
+    "budget": NaN,
+    "estimate": 0.005194957086944091,
+    "lo95": -0.004117382020505792,
+    "hi95": 0.013984630395195468
+   },
+   {
+    "ranking": "scale-minus-risk",
+    "metric": "per_1000",
+    "budget": 0.1,
+    "estimate": -3.8170169740586797,
+    "lo95": -98.82706653853516,
+    "hi95": 90.90832742043727
+   },
+   {
+    "ranking": "scale-minus-risk",
+    "metric": "per_1000",
+    "budget": 0.2,
+    "estimate": -10.948176440273816,
+    "lo95": -75.05966983845565,
+    "hi95": 57.289466498702055
+   },
+   {
+    "ranking": "scale-minus-risk",
+    "metric": "per_1000",
+    "budget": 0.3,
+    "estimate": 23.357491649040348,
+    "lo95": -40.193137412320596,
+    "hi95": 74.70743750302653
+   },
+   {
+    "ranking": "scale-minus-risk",
+    "metric": "rate_autoc",
+    "budget": NaN,
+    "estimate": 0.006817101707120229,
+    "lo95": -0.0305718203946218,
+    "hi95": 0.035967581709426655
+   },
+   {
+    "ranking": "scale-minus-risk",
+    "metric": "rate_qini",
+    "budget": NaN,
+    "estimate": 0.00420719992701033,
+    "lo95": -0.010309544294074638,
+    "hi95": 0.01619002797103275
+   },
+   {
+    "ranking": "benefit-minus-scale",
+    "metric": "per_1000",
+    "budget": 0.1,
+    "estimate": -34.38677818790196,
+    "lo95": -127.60199952157534,
+    "hi95": 84.1682921682654
+   },
+   {
+    "ranking": "benefit-minus-scale",
+    "metric": "per_1000",
+    "budget": 0.2,
+    "estimate": -9.917333024752676,
+    "lo95": -71.1075867395453,
+    "hi95": 59.49535520352656
+   },
+   {
+    "ranking": "benefit-minus-scale",
+    "metric": "per_1000",
+    "budget": 0.3,
+    "estimate": -10.082272956193405,
+    "lo95": -58.85160687100236,
+    "hi95": 50.81554706095038
+   },
+   {
+    "ranking": "benefit-minus-scale",
+    "metric": "rate_autoc",
+    "budget": NaN,
+    "estimate": -0.009125565429176677,
+    "lo95": -0.04430992390519996,
+    "hi95": 0.02560640305072544
+   },
+   {
+    "ranking": "benefit-minus-scale",
+    "metric": "rate_qini",
+    "budget": NaN,
+    "estimate": 0.0009877571599337608,
+    "lo95": -0.010355777534906387,
+    "hi95": 0.012170796177308308
+   }
+  ]
+ },
+ "hillstrom": {
+  "dataset": "hillstrom",
+  "n_context": 21367,
+  "n_dev": 8559,
+  "better": "higher",
+  "ate_dev_aipw_per_1000": 67.06544310492414,
+  "scale_beta_logodds": 0.630207709334484,
+  "control_rate_context": 0.10762331838565023,
+  "rank_corr_risk_benefit": 0.14920074839861336,
+  "seconds": 145.7,
+  "table": [
+   {
+    "ranking": "risk",
+    "metric": "per_1000",
+    "budget": 0.1,
+    "estimate": 39.68974566788288,
+    "lo95": 7.666010696087445,
+    "hi95": 63.16792873688589
+   },
+   {
+    "ranking": "risk",
+    "metric": "per_1000",
+    "budget": 0.2,
+    "estimate": 51.55459252478602,
+    "lo95": 28.956926810008163,
+    "hi95": 75.14711672671598
+   },
+   {
+    "ranking": "risk",
+    "metric": "per_1000",
+    "budget": 0.3,
+    "estimate": 58.87091700260042,
+    "lo95": 38.91988249469119,
+    "hi95": 78.64062131431488
+   },
+   {
+    "ranking": "risk",
+    "metric": "rate_autoc",
+    "budget": NaN,
+    "estimate": -0.0066789014399231605,
+    "lo95": -0.017076141719872484,
+    "hi95": 0.003918589372993244
+   },
+   {
+    "ranking": "risk",
+    "metric": "rate_qini",
+    "budget": NaN,
+    "estimate": -0.0011267135683877129,
+    "lo95": -0.004852722941764727,
+    "hi95": 0.002434064500720261
+   },
+   {
+    "ranking": "scale",
+    "metric": "per_1000",
+    "budget": 0.1,
+    "estimate": 60.58180035600978,
+    "lo95": 6.7956273841424535,
+    "hi95": 119.34256200544581
+   },
+   {
+    "ranking": "scale",
+    "metric": "per_1000",
+    "budget": 0.2,
+    "estimate": 66.0937968332327,
+    "lo95": 28.379135485235572,
+    "hi95": 104.93439603491335
+   },
+   {
+    "ranking": "scale",
+    "metric": "per_1000",
+    "budget": 0.3,
+    "estimate": 66.5390552843754,
+    "lo95": 35.80132607926748,
+    "hi95": 97.84954130259463
+   },
+   {
+    "ranking": "scale",
+    "metric": "rate_autoc",
+    "budget": NaN,
+    "estimate": 0.0005393641380171633,
+    "lo95": -0.014726163514506783,
+    "hi95": 0.016021126977878747
+   },
+   {
+    "ranking": "scale",
+    "metric": "rate_qini",
+    "budget": NaN,
+    "estimate": 0.0011279671135314853,
+    "lo95": -0.0024339094039082117,
+    "hi95": 0.004853328414221809
+   },
+   {
+    "ranking": "benefit",
+    "metric": "per_1000",
+    "budget": 0.1,
+    "estimate": 101.60275889087225,
+    "lo95": 52.33591690916976,
+    "hi95": 145.13423988495086
+   },
+   {
+    "ranking": "benefit",
+    "metric": "per_1000",
+    "budget": 0.2,
+    "estimate": 85.8201022181667,
+    "lo95": 56.271786610709896,
+    "hi95": 121.12249520428414
+   },
+   {
+    "ranking": "benefit",
+    "metric": "per_1000",
+    "budget": 0.3,
+    "estimate": 70.94437540788525,
+    "lo95": 44.16174485806734,
+    "hi95": 99.33577829851384
+   },
+   {
+    "ranking": "benefit",
+    "metric": "rate_autoc",
+    "budget": NaN,
+    "estimate": 0.005238924244142547,
+    "lo95": -0.009604340521207615,
+    "hi95": 0.021372618842076932
+   },
+   {
+    "ranking": "benefit",
+    "metric": "rate_qini",
+    "budget": NaN,
+    "estimate": 0.0009778974876637958,
+    "lo95": -0.003061556087569019,
+    "hi95": 0.005520316527805558
+   },
+   {
+    "ranking": "random",
+    "metric": "per_1000",
+    "budget": 0.1,
+    "estimate": 92.31409766754128,
+    "lo95": 23.236054401591513,
+    "hi95": 111.73562149866697
+   },
+   {
+    "ranking": "random",
+    "metric": "per_1000",
+    "budget": 0.2,
+    "estimate": 97.12390156992585,
+    "lo95": 33.766257005597325,
+    "hi95": 97.27997883198411
+   },
+   {
+    "ranking": "random",
+    "metric": "per_1000",
+    "budget": 0.3,
+    "estimate": 93.99095418189656,
+    "lo95": 41.23019568339347,
+    "hi95": 94.46702138788227
+   },
+   {
+    "ranking": "random",
+    "metric": "rate_autoc",
+    "budget": NaN,
+    "estimate": 0.017827962940598623,
+    "lo95": -0.014212666944976882,
+    "hi95": 0.012422405903139555
+   },
+   {
+    "ranking": "random",
+    "metric": "rate_qini",
+    "budget": NaN,
+    "estimate": 0.00586510512915921,
+    "lo95": -0.0035682963553098804,
+    "hi95": 0.004033321159735368
+   },
+   {
+    "ranking": "benefit-minus-risk",
+    "metric": "per_1000",
+    "budget": 0.1,
+    "estimate": 61.91301322298937,
+    "lo95": 12.960102173552928,
+    "hi95": 117.1174342255892
+   },
+   {
+    "ranking": "benefit-minus-risk",
+    "metric": "per_1000",
+    "budget": 0.2,
+    "estimate": 34.26550969338068,
+    "lo95": -1.329456330450249,
+    "hi95": 68.05029796915633
+   },
+   {
+    "ranking": "benefit-minus-risk",
+    "metric": "per_1000",
+    "budget": 0.3,
+    "estimate": 12.073458405284825,
+    "lo95": -11.194364991286823,
+    "hi95": 43.6577745272963
+   },
+   {
+    "ranking": "benefit-minus-risk",
+    "metric": "rate_autoc",
+    "budget": NaN,
+    "estimate": 0.011917825684065707,
+    "lo95": -0.00511150279214563,
+    "hi95": 0.03196871030330976
+   },
+   {
+    "ranking": "benefit-minus-risk",
+    "metric": "rate_qini",
+    "budget": NaN,
+    "estimate": 0.0021046110560515086,
+    "lo95": -0.002885726455038988,
+    "hi95": 0.0070264250721155525
+   },
+   {
+    "ranking": "scale-minus-risk",
+    "metric": "per_1000",
+    "budget": 0.1,
+    "estimate": 20.892054688126898,
+    "lo95": -39.96352992435148,
+    "hi95": 92.17009438074727
+   },
+   {
+    "ranking": "scale-minus-risk",
+    "metric": "per_1000",
+    "budget": 0.2,
+    "estimate": 14.539204308446685,
+    "lo95": -28.379534356417576,
+    "hi95": 61.707079482566314
+   },
+   {
+    "ranking": "scale-minus-risk",
+    "metric": "per_1000",
+    "budget": 0.3,
+    "estimate": 7.668138281774972,
+    "lo95": -26.029678526908572,
+    "hi95": 44.08263091703133
+   },
+   {
+    "ranking": "scale-minus-risk",
+    "metric": "rate_autoc",
+    "budget": NaN,
+    "estimate": 0.007218265577940324,
+    "lo95": -0.0175495769858222,
+    "hi95": 0.032298164814588165
+   },
+   {
+    "ranking": "scale-minus-risk",
+    "metric": "rate_qini",
+    "budget": NaN,
+    "estimate": 0.0022546806819191984,
+    "lo95": -0.004867973904628473,
+    "hi95": 0.009706051355986532
+   },
+   {
+    "ranking": "benefit-minus-scale",
+    "metric": "per_1000",
+    "budget": 0.1,
+    "estimate": 41.02095853486247,
+    "lo95": -27.282997117062585,
+    "hi95": 96.02981503428956
+   },
+   {
+    "ranking": "benefit-minus-scale",
+    "metric": "per_1000",
+    "budget": 0.2,
+    "estimate": 19.726305384933994,
+    "lo95": -27.497354312592325,
+    "hi95": 66.05356037997574
+   },
+   {
+    "ranking": "benefit-minus-scale",
+    "metric": "per_1000",
+    "budget": 0.3,
+    "estimate": 4.405320123509853,
+    "lo95": -27.384381639246214,
+    "hi95": 38.54087259384934
+   },
+   {
+    "ranking": "benefit-minus-scale",
+    "metric": "rate_autoc",
+    "budget": NaN,
+    "estimate": 0.004699560106125384,
+    "lo95": -0.019758008826447272,
+    "hi95": 0.02923507895107386
+   },
+   {
+    "ranking": "benefit-minus-scale",
+    "metric": "rate_qini",
+    "budget": NaN,
+    "estimate": -0.00015006962586768956,
+    "lo95": -0.006533057365984281,
+    "hi95": 0.006086350912696559
+   }
+  ]
+ },
+ "sixcity": {
+  "dataset": "sixcity",
+  "n_context": 9385,
+  "n_dev": 3832,
+  "better": "higher",
+  "ate_dev_aipw_per_1000": 15.636219037141602,
+  "scale_beta_logodds": 0.15520303142979136,
+  "control_rate_context": 0.27996798078847307,
+  "rank_corr_risk_benefit": 0.10411361504256299,
+  "seconds": 76.6,
+  "table": [
+   {
+    "ranking": "risk",
+    "metric": "per_1000",
+    "budget": 0.1,
+    "estimate": 19.2296935504043,
+    "lo95": 3.836522629781393,
+    "hi95": 39.049846293259286
+   },
+   {
+    "ranking": "risk",
+    "metric": "per_1000",
+    "budget": 0.2,
+    "estimate": 20.177002054641285,
+    "lo95": 8.146323584074478,
+    "hi95": 34.08967167245115
+   },
+   {
+    "ranking": "risk",
+    "metric": "per_1000",
+    "budget": 0.3,
+    "estimate": 6.9573143008246,
+    "lo95": -6.480404604478715,
+    "hi95": 21.436913335710617
+   },
+   {
+    "ranking": "risk",
+    "metric": "rate_autoc",
+    "budget": NaN,
+    "estimate": -0.003587332879645872,
+    "lo95": -0.02005128614377116,
+    "hi95": 0.011926798987539356
+   },
+   {
+    "ranking": "risk",
+    "metric": "rate_qini",
+    "budget": NaN,
+    "estimate": -0.0020699066031108567,
+    "lo95": -0.007769782519973583,
+    "hi95": 0.00430701739454574
+   },
+   {
+    "ranking": "scale",
+    "metric": "per_1000",
+    "budget": 0.1,
+    "estimate": 115.2993541793042,
+    "lo95": 15.703947667116088,
+    "hi95": 211.5365659468325
+   },
+   {
+    "ranking": "scale",
+    "metric": "per_1000",
+    "budget": 0.2,
+    "estimate": 4.307525971129083,
+    "lo95": -66.06029298117916,
+    "hi95": 69.38270549563221
+   },
+   {
+    "ranking": "scale",
+    "metric": "per_1000",
+    "budget": 0.3,
+    "estimate": 39.245796657008675,
+    "lo95": -24.685084702403046,
+    "hi95": 96.45830951819931
+   },
+   {
+    "ranking": "scale",
+    "metric": "rate_autoc",
+    "budget": NaN,
+    "estimate": 0.01751788471291387,
+    "lo95": -0.009299727018915903,
+    "hi95": 0.042056942688126486
+   },
+   {
+    "ranking": "scale",
+    "metric": "rate_qini",
+    "budget": NaN,
+    "estimate": 0.0017425264607913637,
+    "lo95": -0.005073003420064403,
+    "hi95": 0.008577368762309594
+   },
+   {
+    "ranking": "benefit",
+    "metric": "per_1000",
+    "budget": 0.1,
+    "estimate": 42.87786656196064,
+    "lo95": -47.021058046074266,
+    "hi95": 131.5547839567018
+   },
+   {
+    "ranking": "benefit",
+    "metric": "per_1000",
+    "budget": 0.2,
+    "estimate": 47.80885424696897,
+    "lo95": -20.604786995565043,
+    "hi95": 112.92251279462617
+   },
+   {
+    "ranking": "benefit",
+    "metric": "per_1000",
+    "budget": 0.3,
+    "estimate": 19.19503848586111,
+    "lo95": -28.106428940726776,
+    "hi95": 70.06220202940095
+   },
+   {
+    "ranking": "benefit",
+    "metric": "rate_autoc",
+    "budget": NaN,
+    "estimate": 0.011790453168542417,
+    "lo95": -0.01866118369429274,
+    "hi95": 0.038997792648754456
+   },
+   {
+    "ranking": "benefit",
+    "metric": "rate_qini",
+    "budget": NaN,
+    "estimate": 0.00013622445871349612,
+    "lo95": -0.007120646861393905,
+    "hi95": 0.007191543215556236
+   },
+   {
+    "ranking": "random",
+    "metric": "per_1000",
+    "budget": 0.1,
+    "estimate": 4.430232957147931,
+    "lo95": -50.12718031440351,
+    "hi95": 89.71885605420388
+   },
+   {
+    "ranking": "random",
+    "metric": "per_1000",
+    "budget": 0.2,
+    "estimate": 2.172422273091199,
+    "lo95": -33.75442856608516,
+    "hi95": 67.55957642587694
+   },
+   {
+    "ranking": "random",
+    "metric": "per_1000",
+    "budget": 0.3,
+    "estimate": 25.724104383402388,
+    "lo95": -34.15862886458289,
+    "hi95": 55.393732019905734
+   },
+   {
+    "ranking": "random",
+    "metric": "rate_autoc",
+    "budget": NaN,
+    "estimate": 0.0043116505472315,
+    "lo95": -0.02150125619478507,
+    "hi95": 0.02149823535026448
+   },
+   {
+    "ranking": "random",
+    "metric": "rate_qini",
+    "budget": NaN,
+    "estimate": 0.0014950698842500446,
+    "lo95": -0.007351850170672036,
+    "hi95": 0.006307916091145183
+   },
+   {
+    "ranking": "benefit-minus-risk",
+    "metric": "per_1000",
+    "budget": 0.1,
+    "estimate": 23.648173011556338,
+    "lo95": -75.57944777805987,
+    "hi95": 111.39275577408701
+   },
+   {
+    "ranking": "benefit-minus-risk",
+    "metric": "per_1000",
+    "budget": 0.2,
+    "estimate": 27.631852192327685,
+    "lo95": -38.95141248623798,
+    "hi95": 91.25748057016547
+   },
+   {
+    "ranking": "benefit-minus-risk",
+    "metric": "per_1000",
+    "budget": 0.3,
+    "estimate": 12.237724185036512,
+    "lo95": -33.74782202956555,
+    "hi95": 65.98300353341038
+   },
+   {
+    "ranking": "benefit-minus-risk",
+    "metric": "rate_autoc",
+    "budget": NaN,
+    "estimate": 0.01537778604818829,
+    "lo95": -0.01965190909096759,
+    "hi95": 0.052201507102759684
+   },
+   {
+    "ranking": "benefit-minus-risk",
+    "metric": "rate_qini",
+    "budget": NaN,
+    "estimate": 0.002206131061824353,
+    "lo95": -0.00761682015212607,
+    "hi95": 0.011115634166613536
+   },
+   {
+    "ranking": "scale-minus-risk",
+    "metric": "per_1000",
+    "budget": 0.1,
+    "estimate": 96.0696606288999,
+    "lo95": -9.149044882207576,
+    "hi95": 193.04955075619282
+   },
+   {
+    "ranking": "scale-minus-risk",
+    "metric": "per_1000",
+    "budget": 0.2,
+    "estimate": -15.869476083512202,
+    "lo95": -88.85545238098351,
+    "hi95": 52.56047420689986
+   },
+   {
+    "ranking": "scale-minus-risk",
+    "metric": "per_1000",
+    "budget": 0.3,
+    "estimate": 32.288482356184076,
+    "lo95": -33.60390312997838,
+    "hi95": 89.26235557800912
+   },
+   {
+    "ranking": "scale-minus-risk",
+    "metric": "rate_autoc",
+    "budget": NaN,
+    "estimate": 0.021105217592559743,
+    "lo95": -0.018845916255985126,
+    "hi95": 0.058494089323850404
+   },
+   {
+    "ranking": "scale-minus-risk",
+    "metric": "rate_qini",
+    "budget": NaN,
+    "estimate": 0.0038124330639022204,
+    "lo95": -0.00808531330021956,
+    "hi95": 0.015271863807505373
+   },
+   {
+    "ranking": "benefit-minus-scale",
+    "metric": "per_1000",
+    "budget": 0.1,
+    "estimate": -72.42148761734356,
+    "lo95": -188.84294485000285,
+    "hi95": 40.94359096751929
+   },
+   {
+    "ranking": "benefit-minus-scale",
+    "metric": "per_1000",
+    "budget": 0.2,
+    "estimate": 43.50132827583989,
+    "lo95": -26.791997536627704,
+    "hi95": 118.58533215288745
+   },
+   {
+    "ranking": "benefit-minus-scale",
+    "metric": "per_1000",
+    "budget": 0.3,
+    "estimate": -20.050758171147564,
+    "lo95": -67.43309232779299,
+    "hi95": 39.97979888096952
+   },
+   {
+    "ranking": "benefit-minus-scale",
+    "metric": "rate_autoc",
+    "budget": NaN,
+    "estimate": -0.005727431544371454,
+    "lo95": -0.03987490729147649,
+    "hi95": 0.028176917416920196
+   },
+   {
+    "ranking": "benefit-minus-scale",
+    "metric": "rate_qini",
+    "budget": NaN,
+    "estimate": -0.0016063020020778676,
+    "lo95": -0.011543854021754351,
+    "hi95": 0.0076953631971549905
+   }
+  ]
+ },
+ "newhaven": {
+  "dataset": "newhaven",
+  "n_context": 15485,
+  "n_dev": 6262,
+  "better": "higher",
+  "ate_dev_aipw_per_1000": -0.15540055684905332,
+  "scale_beta_logodds": 0.2197148878547696,
+  "control_rate_context": 0.42608346709470307,
+  "rank_corr_risk_benefit": 0.006550921742470639,
+  "seconds": 95.9,
+  "table": [
+   {
+    "ranking": "risk",
+    "metric": "per_1000",
+    "budget": 0.1,
+    "estimate": -28.93469715681959,
+    "lo95": -76.3633130537796,
+    "hi95": 28.128036262590598
+   },
+   {
+    "ranking": "risk",
+    "metric": "per_1000",
+    "budget": 0.2,
+    "estimate": -17.574008519780165,
+    "lo95": -54.292951260285705,
+    "hi95": 23.831136235705003
+   },
+   {
+    "ranking": "risk",
+    "metric": "per_1000",
+    "budget": 0.3,
+    "estimate": -6.213919925516154,
+    "lo95": -44.77582967411696,
+    "hi95": 31.704133164217488
+   },
+   {
+    "ranking": "risk",
+    "metric": "rate_autoc",
+    "budget": NaN,
+    "estimate": -0.004248830910668119,
+    "lo95": -0.02629827381729483,
+    "hi95": 0.01805680489076228
+   },
+   {
+    "ranking": "risk",
+    "metric": "rate_qini",
+    "budget": NaN,
+    "estimate": -0.001466272474398191,
+    "lo95": -0.008846777643999954,
+    "hi95": 0.005252480876030592
+   },
+   {
+    "ranking": "scale",
+    "metric": "per_1000",
+    "budget": 0.1,
+    "estimate": -42.35457314125359,
+    "lo95": -141.34078910999165,
+    "hi95": 54.82973780254904
+   },
+   {
+    "ranking": "scale",
+    "metric": "per_1000",
+    "budget": 0.2,
+    "estimate": -10.393123542362101,
+    "lo95": -88.78541209222276,
+    "hi95": 71.5773516322712
+   },
+   {
+    "ranking": "scale",
+    "metric": "per_1000",
+    "budget": 0.3,
+    "estimate": 5.254170482719646,
+    "lo95": -60.969743288292534,
+    "hi95": 66.84919599226443
+   },
+   {
+    "ranking": "scale",
+    "metric": "rate_autoc",
+    "budget": NaN,
+    "estimate": -0.005765945971578707,
+    "lo95": -0.0374904475125642,
+    "hi95": 0.021790462079017688
+   },
+   {
+    "ranking": "scale",
+    "metric": "rate_qini",
+    "budget": NaN,
+    "estimate": 0.0010328816689408626,
+    "lo95": -0.006809709544247686,
+    "hi95": 0.008677291551975672
+   },
+   {
+    "ranking": "benefit",
+    "metric": "per_1000",
+    "budget": 0.1,
+    "estimate": -26.48714980296249,
+    "lo95": -127.14909806377783,
+    "hi95": 58.55888327491286
+   },
+   {
+    "ranking": "benefit",
+    "metric": "per_1000",
+    "budget": 0.2,
+    "estimate": -60.03589460832647,
+    "lo95": -122.87044909243022,
+    "hi95": 10.521815983398495
+   },
+   {
+    "ranking": "benefit",
+    "metric": "per_1000",
+    "budget": 0.3,
+    "estimate": -26.004888179052386,
+    "lo95": -79.72699743341391,
+    "hi95": 32.22348695406424
+   },
+   {
+    "ranking": "benefit",
+    "metric": "rate_autoc",
+    "budget": NaN,
+    "estimate": -0.01867593325634842,
+    "lo95": -0.04940596462421283,
+    "hi95": 0.010127118685777608
+   },
+   {
+    "ranking": "benefit",
+    "metric": "rate_qini",
+    "budget": NaN,
+    "estimate": -0.008235341723421776,
+    "lo95": -0.01666008708890996,
+    "hi95": 9.004625557069418e-05
+   },
+   {
+    "ranking": "random",
+    "metric": "per_1000",
+    "budget": 0.1,
+    "estimate": 23.307282371001154,
+    "lo95": -94.42715477133089,
+    "hi95": 95.40044846966245
+   },
+   {
+    "ranking": "random",
+    "metric": "per_1000",
+    "budget": 0.2,
+    "estimate": -4.310759109422869,
+    "lo95": -63.68444660043676,
+    "hi95": 60.678952398904954
+   },
+   {
+    "ranking": "random",
+    "metric": "per_1000",
+    "budget": 0.3,
+    "estimate": 8.674681076472138,
+    "lo95": -46.82088466574936,
+    "hi95": 44.636014400497096
+   },
+   {
+    "ranking": "random",
+    "metric": "rate_autoc",
+    "budget": NaN,
+    "estimate": 0.010738308645347267,
+    "lo95": -0.029556621394029824,
+    "hi95": 0.023762750654562962
+   },
+   {
+    "ranking": "random",
+    "metric": "rate_qini",
+    "budget": NaN,
+    "estimate": 0.0037781912067719825,
+    "lo95": -0.007920295836211714,
+    "hi95": 0.006441687775448385
+   },
+   {
+    "ranking": "benefit-minus-risk",
+    "metric": "per_1000",
+    "budget": 0.1,
+    "estimate": 2.4475473538570967,
+    "lo95": -107.5618063868804,
+    "hi95": 92.79534449504172
+   },
+   {
+    "ranking": "benefit-minus-risk",
+    "metric": "per_1000",
+    "budget": 0.2,
+    "estimate": -42.46188608854631,
+    "lo95": -110.049351043988,
+    "hi95": 35.52835253991268
+   },
+   {
+    "ranking": "benefit-minus-risk",
+    "metric": "per_1000",
+    "budget": 0.3,
+    "estimate": -19.79096825353623,
+    "lo95": -83.43956676906375,
+    "hi95": 40.15612895248653
+   },
+   {
+    "ranking": "benefit-minus-risk",
+    "metric": "rate_autoc",
+    "budget": NaN,
+    "estimate": -0.014427102345680301,
+    "lo95": -0.05151314594459221,
+    "hi95": 0.022712405717987397
+   },
+   {
+    "ranking": "benefit-minus-risk",
+    "metric": "rate_qini",
+    "budget": NaN,
+    "estimate": -0.006769069249023585,
+    "lo95": -0.01771610759767611,
+    "hi95": 0.004743681578636779
+   },
+   {
+    "ranking": "scale-minus-risk",
+    "metric": "per_1000",
+    "budget": 0.1,
+    "estimate": -13.419875984434,
+    "lo95": -124.42388698282961,
+    "hi95": 96.74324930511085
+   },
+   {
+    "ranking": "scale-minus-risk",
+    "metric": "per_1000",
+    "budget": 0.2,
+    "estimate": 7.180884977418064,
+    "lo95": -85.22613347878026,
+    "hi95": 102.838673898769
+   },
+   {
+    "ranking": "scale-minus-risk",
+    "metric": "per_1000",
+    "budget": 0.3,
+    "estimate": 11.468090408235799,
+    "lo95": -60.12357688752965,
+    "hi95": 80.31319809998338
+   },
+   {
+    "ranking": "scale-minus-risk",
+    "metric": "rate_autoc",
+    "budget": NaN,
+    "estimate": -0.0015171150609105876,
+    "lo95": -0.04632797193718308,
+    "hi95": 0.041764002179164365
+   },
+   {
+    "ranking": "scale-minus-risk",
+    "metric": "rate_qini",
+    "budget": NaN,
+    "estimate": 0.0024991541433390537,
+    "lo95": -0.009668297135609242,
+    "hi95": 0.014501132913083388
+   },
+   {
+    "ranking": "benefit-minus-scale",
+    "metric": "per_1000",
+    "budget": 0.1,
+    "estimate": 15.867423338291097,
+    "lo95": -117.01384954789337,
+    "hi95": 135.86275644508282
+   },
+   {
+    "ranking": "benefit-minus-scale",
+    "metric": "per_1000",
+    "budget": 0.2,
+    "estimate": -49.64277106596437,
+    "lo95": -135.52723881458152,
+    "hi95": 44.370280626813916
+   },
+   {
+    "ranking": "benefit-minus-scale",
+    "metric": "per_1000",
+    "budget": 0.3,
+    "estimate": -31.25905866177203,
+    "lo95": -99.23065058672597,
+    "hi95": 32.67916225605349
+   },
+   {
+    "ranking": "benefit-minus-scale",
+    "metric": "rate_autoc",
+    "budget": NaN,
+    "estimate": -0.012909987284769713,
+    "lo95": -0.0559764253079266,
+    "hi95": 0.025675931175194452
+   },
+   {
+    "ranking": "benefit-minus-scale",
+    "metric": "rate_qini",
+    "budget": NaN,
+    "estimate": -0.009268223392362638,
+    "lo95": -0.0203078436140027,
+    "hi95": 0.0018741347211040458
+   }
+  ]
+ },
+ "lenta": {
+  "dataset": "lenta",
+  "n_context": 343870,
+  "n_dev": 137379,
+  "better": "higher",
+  "ate_dev_aipw_per_1000": 6.551431884726519,
+  "scale_beta_logodds": 0.07657929813510449,
+  "control_rate_context": 0.10307785717621783,
+  "rank_corr_risk_benefit": -0.23315608689469808,
+  "seconds": 2623.9,
+  "table": [
+   {
+    "ranking": "risk",
+    "metric": "per_1000",
+    "budget": 0.1,
+    "estimate": 4.90497937225493,
+    "lo95": 0.29449722219321206,
+    "hi95": 9.189564507821208
+   },
+   {
+    "ranking": "risk",
+    "metric": "per_1000",
+    "budget": 0.2,
+    "estimate": 2.5430883506219204,
+    "lo95": -1.0955356501408287,
+    "hi95": 5.923053747684492
+   },
+   {
+    "ranking": "risk",
+    "metric": "per_1000",
+    "budget": 0.3,
+    "estimate": 4.497847095074633,
+    "lo95": 1.3210477956517324,
+    "hi95": 7.391601564064836
+   },
+   {
+    "ranking": "risk",
+    "metric": "rate_autoc",
+    "budget": NaN,
+    "estimate": -0.0030953648451164596,
+    "lo95": -0.006096278339653424,
+    "hi95": -0.00045063482191281455
+   },
+   {
+    "ranking": "risk",
+    "metric": "rate_qini",
+    "budget": NaN,
+    "estimate": -0.0012065521493515893,
+    "lo95": -0.0023599639263178055,
+    "hi95": -5.0345386575347125e-05
+   },
+   {
+    "ranking": "scale",
+    "metric": "per_1000",
+    "budget": 0.1,
+    "estimate": 13.844863957601925,
+    "lo95": -7.4077853889511465,
+    "hi95": 33.22217337494915
+   },
+   {
+    "ranking": "scale",
+    "metric": "per_1000",
+    "budget": 0.2,
+    "estimate": 14.328300680005261,
+    "lo95": 2.419171794415762,
+    "hi95": 26.873926149824456
+   },
+   {
+    "ranking": "scale",
+    "metric": "per_1000",
+    "budget": 0.3,
+    "estimate": 14.15969226101636,
+    "lo95": 4.784609346174596,
+    "hi95": 23.68807383821945
+   },
+   {
+    "ranking": "scale",
+    "metric": "rate_autoc",
+    "budget": NaN,
+    "estimate": 0.005165646771254273,
+    "lo95": 0.00011190158700998463,
+    "hi95": 0.01034313601315562
+   },
+   {
+    "ranking": "scale",
+    "metric": "rate_qini",
+    "budget": NaN,
+    "estimate": 0.0012482577505133364,
+    "lo95": 6.4771605592765e-05,
+    "hi95": 0.0023920418582008985
+   },
+   {
+    "ranking": "benefit",
+    "metric": "per_1000",
+    "budget": 0.1,
+    "estimate": 18.19933674847427,
+    "lo95": 4.244374532286055,
+    "hi95": 31.385497161046764
+   },
+   {
+    "ranking": "benefit",
+    "metric": "per_1000",
+    "budget": 0.2,
+    "estimate": 11.858922800975082,
+    "lo95": 3.369024274660315,
+    "hi95": 21.032411481238885
+   },
+   {
+    "ranking": "benefit",
+    "metric": "per_1000",
+    "budget": 0.3,
+    "estimate": 11.837245612027038,
+    "lo95": 5.064293399588179,
+    "hi95": 19.099207452263798
+   },
+   {
+    "ranking": "benefit",
+    "metric": "rate_autoc",
+    "budget": NaN,
+    "estimate": 0.0026124842233488294,
+    "lo95": -0.0013967426107882135,
+    "hi95": 0.006095467008725459
+   },
+   {
+    "ranking": "benefit",
+    "metric": "rate_qini",
+    "budget": NaN,
+    "estimate": 0.000197255760069058,
+    "lo95": -0.0008525653919349851,
+    "hi95": 0.0013007712254251656
+   },
+   {
+    "ranking": "random",
+    "metric": "per_1000",
+    "budget": 0.1,
+    "estimate": 1.755586465639993,
+    "lo95": -3.607604753139975,
+    "hi95": 16.859188607340354
+   },
+   {
+    "ranking": "random",
+    "metric": "per_1000",
+    "budget": 0.2,
+    "estimate": 5.692400730245045,
+    "lo95": -0.5511310018168205,
+    "hi95": 14.528065951772863
+   },
+   {
+    "ranking": "random",
+    "metric": "per_1000",
+    "budget": 0.3,
+    "estimate": 7.058758962198495,
+    "lo95": 0.37637013229515176,
+    "hi95": 13.634521267274863
+   },
+   {
+    "ranking": "random",
+    "metric": "rate_autoc",
+    "budget": NaN,
+    "estimate": 0.000517226843393792,
+    "lo95": -0.0033237881472893568,
+    "hi95": 0.003141894609907343
+   },
+   {
+    "ranking": "random",
+    "metric": "rate_qini",
+    "budget": NaN,
+    "estimate": 0.0006019781594741732,
+    "lo95": -0.000957612226648371,
+    "hi95": 0.0009403429645530501
+   },
+   {
+    "ranking": "benefit-minus-risk",
+    "metric": "per_1000",
+    "budget": 0.1,
+    "estimate": 13.29435737621934,
+    "lo95": -2.7256441787811,
+    "hi95": 26.470439551897744
+   },
+   {
+    "ranking": "benefit-minus-risk",
+    "metric": "per_1000",
+    "budget": 0.2,
+    "estimate": 9.315834450353162,
+    "lo95": 0.31743975613882497,
+    "hi95": 18.43061135833897
+   },
+   {
+    "ranking": "benefit-minus-risk",
+    "metric": "per_1000",
+    "budget": 0.3,
+    "estimate": 7.339398516952405,
+    "lo95": -0.2302431433576994,
+    "hi95": 15.318655136768246
+   },
+   {
+    "ranking": "benefit-minus-risk",
+    "metric": "rate_autoc",
+    "budget": NaN,
+    "estimate": 0.005707849068465289,
+    "lo95": 0.00047112321061787497,
+    "hi95": 0.011111244854634232
+   },
+   {
+    "ranking": "benefit-minus-risk",
+    "metric": "rate_qini",
+    "budget": NaN,
+    "estimate": 0.0014038079094206473,
+    "lo95": -0.00011978272866699431,
+    "hi95": 0.003034969892140141
+   },
+   {
+    "ranking": "scale-minus-risk",
+    "metric": "per_1000",
+    "budget": 0.1,
+    "estimate": 8.939884585346995,
+    "lo95": -11.857100298782086,
+    "hi95": 27.333785114194384
+   },
+   {
+    "ranking": "scale-minus-risk",
+    "metric": "per_1000",
+    "budget": 0.2,
+    "estimate": 11.785212329383342,
+    "lo95": -1.1591066138398973,
+    "hi95": 25.16120507112551
+   },
+   {
+    "ranking": "scale-minus-risk",
+    "metric": "per_1000",
+    "budget": 0.3,
+    "estimate": 9.661845165941727,
+    "lo95": -0.550937407416282,
+    "hi95": 19.758669194242735
+   },
+   {
+    "ranking": "scale-minus-risk",
+    "metric": "rate_autoc",
+    "budget": NaN,
+    "estimate": 0.008261011616370733,
+    "lo95": 0.0014972042187711648,
+    "hi95": 0.015766508626513062
+   },
+   {
+    "ranking": "scale-minus-risk",
+    "metric": "rate_qini",
+    "budget": NaN,
+    "estimate": 0.0024548098998649257,
+    "lo95": 0.00011652022239362056,
+    "hi95": 0.004746628140310286
+   },
+   {
+    "ranking": "benefit-minus-scale",
+    "metric": "per_1000",
+    "budget": 0.1,
+    "estimate": 4.354472790872345,
+    "lo95": -12.226582999707112,
+    "hi95": 19.993796479394057
+   },
+   {
+    "ranking": "benefit-minus-scale",
+    "metric": "per_1000",
+    "budget": 0.2,
+    "estimate": -2.46937787903018,
+    "lo95": -12.325112638819542,
+    "hi95": 7.215349803204027
+   },
+   {
+    "ranking": "benefit-minus-scale",
+    "metric": "per_1000",
+    "budget": 0.3,
+    "estimate": -2.322446648989322,
+    "lo95": -8.779636365810681,
+    "hi95": 5.106436231558172
+   },
+   {
+    "ranking": "benefit-minus-scale",
+    "metric": "rate_autoc",
+    "budget": NaN,
+    "estimate": -0.002553162547905444,
+    "lo95": -0.007813983002049841,
+    "hi95": 0.003026095372174034
+   },
+   {
+    "ranking": "benefit-minus-scale",
+    "metric": "rate_qini",
+    "budget": NaN,
+    "estimate": -0.0010510019904442784,
+    "lo95": -0.0024616564553469247,
+    "hi95": 0.0004503398717399355
+   }
+  ]
+ },
+ "x5": {
+  "dataset": "x5",
+  "n_context": 99743,
+  "n_dev": 39668,
+  "better": "higher",
+  "ate_dev_aipw_per_1000": 33.8428213859075,
+  "scale_beta_logodds": 0.14206826268222086,
+  "control_rate_context": 0.602505285833965,
+  "rank_corr_risk_benefit": 0.17166077631254797,
+  "seconds": 385.7,
+  "table": [
+   {
+    "ranking": "risk",
+    "metric": "per_1000",
+    "budget": 0.1,
+    "estimate": 60.48354189523838,
+    "lo95": 35.68224459868817,
+    "hi95": 83.2403782016271
+   },
+   {
+    "ranking": "risk",
+    "metric": "per_1000",
+    "budget": 0.2,
+    "estimate": 42.080235457974595,
+    "lo95": 24.814290237537865,
+    "hi95": 61.88659696308499
+   },
+   {
+    "ranking": "risk",
+    "metric": "per_1000",
+    "budget": 0.3,
+    "estimate": 38.55258410184794,
+    "lo95": 22.50887141286858,
+    "hi95": 55.208228870103184
+   },
+   {
+    "ranking": "risk",
+    "metric": "rate_autoc",
+    "budget": NaN,
+    "estimate": 0.008896477105284272,
+    "lo95": 0.0021183948620367996,
+    "hi95": 0.016622244401954492
+   },
+   {
+    "ranking": "risk",
+    "metric": "rate_qini",
+    "budget": NaN,
+    "estimate": 0.0031768060502597797,
+    "lo95": 0.00141750181033064,
+    "hi95": 0.005230249233436778
+   },
+   {
+    "ranking": "scale",
+    "metric": "per_1000",
+    "budget": 0.1,
+    "estimate": 69.29673255298736,
+    "lo95": 41.35082219068094,
+    "hi95": 98.71544492032395
+   },
+   {
+    "ranking": "scale",
+    "metric": "per_1000",
+    "budget": 0.2,
+    "estimate": 41.364069641715304,
+    "lo95": 19.737163531833037,
+    "hi95": 61.98086808307393
+   },
+   {
+    "ranking": "scale",
+    "metric": "per_1000",
+    "budget": 0.3,
+    "estimate": 43.11988652375237,
+    "lo95": 24.836689584642038,
+    "hi95": 58.58101917378593
+   },
+   {
+    "ranking": "scale",
+    "metric": "rate_autoc",
+    "budget": NaN,
+    "estimate": 0.010773050768175137,
+    "lo95": 0.0019166632372862257,
+    "hi95": 0.018628667819839684
+   },
+   {
+    "ranking": "scale",
+    "metric": "rate_qini",
+    "budget": NaN,
+    "estimate": 0.002900628438665739,
+    "lo95": 0.0006566705864232659,
+    "hi95": 0.004839719669532683
+   },
+   {
+    "ranking": "benefit",
+    "metric": "per_1000",
+    "budget": 0.1,
+    "estimate": 104.19177730379393,
+    "lo95": 74.95015086096063,
+    "hi95": 128.46789929007483
+   },
+   {
+    "ranking": "benefit",
+    "metric": "per_1000",
+    "budget": 0.2,
+    "estimate": 73.82860670018219,
+    "lo95": 54.749274063782735,
+    "hi95": 93.22683911592836
+   },
+   {
+    "ranking": "benefit",
+    "metric": "per_1000",
+    "budget": 0.3,
+    "estimate": 65.6707476845647,
+    "lo95": 48.41293606682856,
+    "hi95": 80.10538826125226
+   },
+   {
+    "ranking": "benefit",
+    "metric": "rate_autoc",
+    "budget": NaN,
+    "estimate": 0.028496606073673658,
+    "lo95": 0.01917793127710168,
+    "hi95": 0.036049609327321486
+   },
+   {
+    "ranking": "benefit",
+    "metric": "rate_qini",
+    "budget": NaN,
+    "estimate": 0.005671506125627763,
+    "lo95": 0.0029660923184888963,
+    "hi95": 0.007698084212245569
+   },
+   {
+    "ranking": "random",
+    "metric": "per_1000",
+    "budget": 0.1,
+    "estimate": 16.740882314436725,
+    "lo95": 7.272095184331276,
+    "hi95": 62.252550420829
+   },
+   {
+    "ranking": "random",
+    "metric": "per_1000",
+    "budget": 0.2,
+    "estimate": 22.687721319333875,
+    "lo95": 15.751096200196827,
+    "hi95": 52.06027952642799
+   },
+   {
+    "ranking": "random",
+    "metric": "per_1000",
+    "budget": 0.3,
+    "estimate": 31.20430752351749,
+    "lo95": 19.024605770442683,
+    "hi95": 49.22495724274682
+   },
+   {
+    "ranking": "random",
+    "metric": "rate_autoc",
+    "budget": NaN,
+    "estimate": -0.00571520943877246,
+    "lo95": -0.008959008051936878,
+    "hi95": 0.00814826556552335
+   },
+   {
+    "ranking": "random",
+    "metric": "rate_qini",
+    "budget": NaN,
+    "estimate": -0.0012425463340996758,
+    "lo95": -0.0024570248426607996,
+    "hi95": 0.002181708119416889
+   },
+   {
+    "ranking": "benefit-minus-risk",
+    "metric": "per_1000",
+    "budget": 0.1,
+    "estimate": 43.708235408555545,
+    "lo95": 9.694450859457303,
+    "hi95": 74.31147334390636
+   },
+   {
+    "ranking": "benefit-minus-risk",
+    "metric": "per_1000",
+    "budget": 0.2,
+    "estimate": 31.748371242207597,
+    "lo95": 6.888349981736855,
+    "hi95": 54.196361803849946
+   },
+   {
+    "ranking": "benefit-minus-risk",
+    "metric": "per_1000",
+    "budget": 0.3,
+    "estimate": 27.11816358271676,
+    "lo95": 8.65717984082307,
+    "hi95": 41.84217885281207
+   },
+   {
+    "ranking": "benefit-minus-risk",
+    "metric": "rate_autoc",
+    "budget": NaN,
+    "estimate": 0.019600128968389384,
+    "lo95": 0.008475288616935086,
+    "hi95": 0.02838280780566182
+   },
+   {
+    "ranking": "benefit-minus-risk",
+    "metric": "rate_qini",
+    "budget": NaN,
+    "estimate": 0.0024947000753679834,
+    "lo95": -0.0004332264506342002,
+    "hi95": 0.005115287408535944
+   },
+   {
+    "ranking": "scale-minus-risk",
+    "metric": "per_1000",
+    "budget": 0.1,
+    "estimate": 8.813190657748983,
+    "lo95": -30.758577219176292,
+    "hi95": 46.10016399999358
+   },
+   {
+    "ranking": "scale-minus-risk",
+    "metric": "per_1000",
+    "budget": 0.2,
+    "estimate": -0.7161658162592914,
+    "lo95": -31.610268489951242,
+    "hi95": 25.543442240505474
+   },
+   {
+    "ranking": "scale-minus-risk",
+    "metric": "per_1000",
+    "budget": 0.3,
+    "estimate": 4.567302421904429,
+    "lo95": -13.836578459123471,
+    "hi95": 20.00095612445585
+   },
+   {
+    "ranking": "scale-minus-risk",
+    "metric": "rate_autoc",
+    "budget": NaN,
+    "estimate": 0.001876573662890865,
+    "lo95": -0.010404888564014158,
+    "hi95": 0.011981313457958088
+   },
+   {
+    "ranking": "scale-minus-risk",
+    "metric": "rate_qini",
+    "budget": NaN,
+    "estimate": -0.0002761776115940409,
+    "lo95": -0.0024874375904180776,
+    "hi95": 0.0015005082858774326
+   },
+   {
+    "ranking": "benefit-minus-scale",
+    "metric": "per_1000",
+    "budget": 0.1,
+    "estimate": 34.89504475080656,
+    "lo95": -8.538484569323977,
+    "hi95": 70.28973899383757
+   },
+   {
+    "ranking": "benefit-minus-scale",
+    "metric": "per_1000",
+    "budget": 0.2,
+    "estimate": 32.46453705846689,
+    "lo95": 6.932539702492582,
+    "hi95": 56.179826067167255
+   },
+   {
+    "ranking": "benefit-minus-scale",
+    "metric": "per_1000",
+    "budget": 0.3,
+    "estimate": 22.55086116081233,
+    "lo95": 3.179558232912996,
+    "hi95": 38.452984185412504
+   },
+   {
+    "ranking": "benefit-minus-scale",
+    "metric": "rate_autoc",
+    "budget": NaN,
+    "estimate": 0.01772355530549852,
+    "lo95": 0.005656321180253209,
+    "hi95": 0.02913889976249305
+   },
+   {
+    "ranking": "benefit-minus-scale",
+    "metric": "rate_qini",
+    "budget": NaN,
+    "estimate": 0.0027708776869620243,
+    "lo95": -0.00035197723977301325,
+    "hi95": 0.005728321900064261
+   }
+  ]
+ }
+}

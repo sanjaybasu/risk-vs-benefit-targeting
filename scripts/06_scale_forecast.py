@@ -24,15 +24,16 @@ import modal
 
 ROOT = Path(__file__).resolve().parents[1]
 TRIALS = ["gusto", "ist", "synbiotic", "elaia1", "elaia2", "voter", "sf_email", "karlan_list",
-          "stepup", "hillstrom", "oregon"]
+          "stepup", "hillstrom", "oregon", "sixcity", "newhaven", "lenta", "x5"]
 BUDGETS = (0.10, 0.20, 0.30)
 N_DRAWS = 200
 
 app = modal.App("system-three-scale-forecast")
+# The container installs exactly the versions in uv.lock (exported to requirements.lock.txt),
+# so the posted moderators and the locally built predictions use the same libraries (F54).
 image = (
     modal.Image.debian_slim(python_version="3.12")
-    .pip_install("numpy==2.2.6", "pandas==2.2.3", "pyarrow==18.1.0", "scipy==1.15.3",
-                 "scikit-learn==1.6.1", "pydantic==2.12.5")
+    .pip_install_from_requirements(str(ROOT / "requirements.lock.txt"))
     .add_local_dir(ROOT / "src", "/root/src", copy=True)
 )
 for _t in TRIALS:  # context split only; dev and test never leave the machine
@@ -109,15 +110,17 @@ def compute(trial: str, draw: int) -> dict:
 
 
 @app.local_entrypoint()
-def main(draws: int = N_DRAWS):
+def main(draws: int = N_DRAWS, trials: str = ""):
     import numpy as np
 
-    jobs = [(t, d) for t in TRIALS for d in range(draws + 1)]
+    run = [t for t in trials.split(",") if t] or TRIALS
+    jobs = [(t, d) for t in run for d in range(draws + 1)]
     res = list(compute.starmap(jobs, order_outputs=False, return_exceptions=True))
     errors = [r for r in res if isinstance(r, Exception)]
     res = [r for r in res if not isinstance(r, Exception)]
-    out = {}
-    for t in TRIALS:
+    path = ROOT / "results" / "scale_forecast.json"
+    out = json.loads(path.read_text()) if path.exists() else {}
+    for t in run:
         rs = [r for r in res if r["trial"] == t]
         plug = next(r for r in rs if r["draw"] == 0)
         boots = [r for r in rs if r["draw"] > 0]
@@ -138,9 +141,10 @@ def main(draws: int = N_DRAWS):
         # F06(d): H1 entry requires the context beta to have the beneficial sign.
         rec["beneficial_sign"] = bool(s * plug["beta"] > 0)
         out[t] = rec
-    (ROOT / "results" / "scale_forecast.json").write_text(json.dumps(out, indent=1))
+    path.write_text(json.dumps(out, indent=1))
     print(f"{len(errors)} failed calls")
-    for t, r in out.items():
+    for t in run:
+        r = out[t]
         print(f"{t:12s} base={r['control_base_rate']:.3f} beta={r['beta']:+.3f} "
               f"[{r['beta_ci95'][0]:+.3f},{r['beta_ci95'][1]:+.3f}] sandwich_se={r['beta_se']:.3f} "
               f"gap20={r['gap']['0.2']:+.2f} se={r['gap_se']['0.2']:.2f} "

@@ -30,6 +30,10 @@ def registry() -> dict:
         "elaia2": (expansion.ELAIA2, expansion.ELAIA2_PUBLISHED, expansion.load_elaia2),
         "synbiotic": (expansion.SYNBIOTIC, expansion.SYNBIOTIC_PUBLISHED, expansion.load_synbiotic),
         "karlan_list": (expansion.KARLAN, expansion.KARLAN_PUBLISHED, expansion.load_karlan_list),
+        "sixcity": (expansion.SIXCITY, expansion.SIXCITY_PUBLISHED, expansion.load_sixcity),
+        "newhaven": (expansion.NEWHAVEN, expansion.NEWHAVEN_PUBLISHED, expansion.load_newhaven),
+        "lenta": (expansion.LENTA, expansion.LENTA_PUBLISHED, expansion.load_lenta),
+        "x5": (expansion.X5, expansion.X5_PUBLISHED, expansion.load_x5),
     }
     for pair in tier_a.RB_PAIRS:
         info = tier_a.rb_info(pair)

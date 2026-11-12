@@ -39,6 +39,14 @@
     "meta": "f569852deb487251306dcf50daec44c596adbcc1ab64f2bf8209bb862b901438",
     "test": "452dde11b7700bfdbcc980ad434319014610f398a819b1513e1dcfb2fced78f2"
   },
+  "lenta": {
+    "meta": "958be486bae3023dad5859a660c612c2071c6afa4a9c47748669ac2e2ea2c6bf",
+    "test": "d6728a064c3b28b9a6995637ea95987982df60539dd52aebfdf470bc242cd093"
+  },
+  "newhaven": {
+    "meta": "8f56f5476fd4bef639070d231ed60c8a13f5a49173bd125a50489a158d9e27b4",
+    "test": "d7ac9998c4c2876cb7e053ad7b04d6447436307d5f4cd77ee8bfcfcb0e57f58c"
+  },
   "nsw": {
     "meta": "1453365249585b03676347820b68f30da80515d04b06c8fd55dffafa67758fc3",
     "test": "ad35e6044ad13931a6c559dc4db5eb9ece68fa9938dfa15f7e0940563de4e1ef"
@@ -67,6 +75,10 @@
     "meta": "83641517da278ea3ed562571b4b54429209d59e8227cdc847001c274a9639ff7",
     "test": "c9df5580d985cc839d56be3b69b8dec079e266c0e85ebc1aeed51c33e9c55bf3"
   },
+  "sixcity": {
+    "meta": "8f56f5476fd4bef639070d231ed60c8a13f5a49173bd125a50489a158d9e27b4",
+    "test": "ee9ad59ea0382bf2dd3b276a2334898aeecf0d1454828cc4086e597cce2977bd"
+  },
   "stepup": {
     "meta": "49b61555dd085bf6282a301fe3e0e88ea76a89aae09a6b557ceda58bb2c6b4d1",
     "test": "ee6812e331e19e72369bd43f7a4565ede0f795615ea1ea7891c44a4b6f748ece"
@@ -90,5 +102,9 @@
   "voter": {
     "meta": "301a8e03c7f2953ec5832770200f50e237357eaab61f4db05ebcda9826a0232d",
     "test": "784f6ae746a5eaef54f962ee6863d2e93bcc2f687b916bb23e740d9c1211527f"
+  },
+  "x5": {
+    "meta": "958be486bae3023dad5859a660c612c2071c6afa4a9c47748669ac2e2ea2c6bf",
+    "test": "fb7a902d9cf6640d0e23b90888419ac5ffccc7fc7861e4b62bf4b17b7e6530e4"
   }
 }

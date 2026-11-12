@@ -218,6 +218,149 @@ def load_karlan_list() -> pd.DataFrame:
     return frame("karlan_list", d[KARLAN_X], action, d["gave"], KARLAN, propensity=pd.Series(prop))
 
 
+# ---------------------------------------------------------------- capped expansion (DECISIONS 2026-11-12)
+def _stratum_prop(treated: pd.Series, stratum: pd.Series) -> np.ndarray:
+    p = treated.groupby(stratum).transform("mean")
+    return np.where(treated, p, 1 - p)
+
+
+SIXCITY = DatasetInfo(
+    name="sixcity", tier="B", outcome_name="voted_2001", better="higher", reference="control",
+    actions=("control", "canvass"), license="CC0-1.0", commercial_use=True,
+    citation="Green DP, Gerber AS, Nickerson DW. Getting out the vote in local elections: results "
+    "from six door-to-door canvassing experiments. J Polit 2003;65:1083-1096. "
+    "Data: Yale Dataverse doi:10.60600/YU/B9TZNZ",
+)
+SIXCITY_PUBLISHED = {"source": "J Polit 2003 pooled ITT [value UNVERIFIED]", "arm": "canvass",
+                     "metric": "diff_strata", "value": None, "tol": None}
+
+
+def load_sixcity() -> pd.DataFrame:
+    """Individuals within households; assignment within city x turf (stratum), so the design
+    probability is the within-stratum treated share; clusters are households (city + family)."""
+    s = pd.read_stata(RAW / "sixcity" / "data.tab", convert_categoricals=False)
+    s = s[s["voted01"].notna()].reset_index(drop=True)
+    x = pd.DataFrame({
+        "age": s["age"], "voted00": s["voted00"], "voted99": s["voted99"], "famsize": s["famsize"],
+        "primary": pd.to_numeric(s["primary"], errors="coerce"),
+        "female": (s["sex"] == "F").astype(float), "male": (s["sex"] == "M").astype(float),
+        "dem": (s["party"] == "D").astype(float), "rep": (s["party"] == "R").astype(float),
+        "black": (s["race"] == "B").astype(float), "white": (s["race"] == "W").astype(float),
+    })
+    for c in sorted(s["city"].unique()):
+        x[f"city_{c}"] = (s["city"] == c).astype(float)
+    stratum = s["city"].astype(str) + "_" + s["turf"].astype(str)
+    # Strata assigned entirely to one arm carry no randomized contrast; they are dropped.
+    share = (s["treatmen"] == 1).groupby(stratum).transform("mean")
+    keep = (share > 0) & (share < 1)
+    s, x, stratum = s[keep].reset_index(drop=True), x[keep].reset_index(drop=True), stratum[keep].reset_index(drop=True)
+    treated = s["treatmen"] == 1
+    action = pd.Series(np.where(treated, "canvass", "control"))
+    return frame("sixcity", x, action, s["voted01"], SIXCITY,
+                 propensity=pd.Series(_stratum_prop(treated, stratum)), stratum=stratum,
+                 cluster=s["city"].astype(str) + "_" + s["family"].astype(str))
+
+
+NEWHAVEN = DatasetInfo(
+    name="newhaven", tier="B", outcome_name="voted_1998", better="higher", reference="control",
+    actions=("control", "canvass"), license="CC0-1.0", commercial_use=True,
+    citation="Gerber AS, Green DP. The effects of canvassing, telephone calls, and direct mail on "
+    "voter turnout: a field experiment. Am Polit Sci Rev 2000;94:653-663; correction APSR "
+    "2005;99:301-313. Data: Yale Dataverse doi:10.60600/YU/ODL44F",
+)
+NEWHAVEN_PUBLISHED = {"source": "APSR 2000/2005 canvass ITT [value UNVERIFIED]", "arm": "canvass",
+                      "metric": "diff_strata", "value": None, "tol": None}
+
+
+def load_newhaven() -> pd.DataFrame:
+    """Factorial (canvass x mail x phone), households randomized. Contrast: in-person canvass vs
+    none, marginal over the independently randomized mail and phone factors. Stratum: persons
+    per household; clusters: household (id1)."""
+    n = pd.read_stata(RAW / "newhaven" / "NHrep_individual.tab", convert_categoricals=False)
+    n = n[n["v98"].notna()].reset_index(drop=True)
+    x = n[["persons", "age", "agemiss", "majorpty", "v96_1", "v96_0", "ward"]].copy()
+    treated = n["persngrp"] == 1
+    action = pd.Series(np.where(treated, "canvass", "control"))
+    return frame("newhaven", x, action, n["v98"], NEWHAVEN,
+                 propensity=pd.Series(_stratum_prop(treated, n["persons"])),
+                 stratum=n["persons"], cluster=n["id1"])
+
+
+LENTA = DatasetInfo(
+    name="lenta", tier="B", outcome_name="visit_after_sms", better="higher", reference="control",
+    actions=("control", "sms"), license="not stated (BigTarget hackathon data via scikit-uplift)",
+    commercial_use=False,
+    citation="Lenta BigTarget uplift dataset (2020), distributed by scikit-uplift "
+    "(sklift.s3.eu-west-2.amazonaws.com/lenta_dataset.csv.gz).",
+)
+LENTA_PUBLISHED = {"source": "no published estimate", "arm": "sms", "metric": "treated_share",
+                   "value": None, "tol": None}
+
+
+def load_lenta() -> pd.DataFrame:
+    d = pd.read_csv(RAW / "lenta" / "lenta_dataset.csv.gz", low_memory=False)
+    x = d.drop(columns=["group", "response_att", "response_sms", "response_viber"])
+    x["gender"] = x["gender"].map({"Ж": 1.0, "М": 0.0}) if "gender" in x else np.nan
+    treated = d["group"] == "test"
+    p = 0.75  # observed assignment share (515,892 of 687,029); no published design share
+    action = pd.Series(np.where(treated, "sms", "control"))
+    return frame("lenta", x, action, d["response_att"], LENTA,
+                 propensity=pd.Series(np.where(treated, p, 1 - p)))
+
+
+X5 = DatasetInfo(
+    name="x5", tier="B", outcome_name="purchase_after_sms", better="higher", reference="control",
+    actions=("control", "sms"), license="not stated (X5 RetailHero 2019 competition data via "
+    "scikit-uplift)", commercial_use=False,
+    citation="X5 Retail Hero uplift modelling competition (2019), distributed by scikit-uplift.",
+)
+X5_PUBLISHED = {"source": "no published estimate", "arm": "sms", "metric": "treated_share",
+                "value": None, "tol": None}
+
+
+def load_x5() -> pd.DataFrame:
+    """Clients randomized 1:1 to an SMS. Covariates: client file plus aggregates of the purchase
+    history, which the competition documents as recorded before the communication."""
+    u = pd.read_csv(RAW / "x5" / "uplift_train.csv.gz")
+    c = pd.read_csv(RAW / "x5" / "clients.csv.gz")
+    agg_path = RAW / "x5" / "purchase_features.parquet"
+    if not agg_path.exists():
+        cols = ["client_id", "transaction_id", "transaction_datetime", "purchase_sum",
+                "regular_points_received", "express_points_spent", "regular_points_spent"]
+        it = pd.read_csv(RAW / "x5" / "purchases.csv.gz", usecols=cols, chunksize=2_000_000)
+        parts = []
+        for ch in it:
+            ch = ch.drop_duplicates(["client_id", "transaction_id"])
+            parts.append(ch.groupby("client_id").agg(
+                n_tx=("transaction_id", "nunique"), spend=("purchase_sum", "sum"),
+                points_recv=("regular_points_received", "sum"),
+                points_spent=("regular_points_spent", "sum"),
+                express_spent=("express_points_spent", "sum"),
+                last_tx=("transaction_datetime", "max"), first_tx=("transaction_datetime", "min")))
+        a = pd.concat(parts).groupby(level=0).agg(
+            n_tx=("n_tx", "sum"), spend=("spend", "sum"), points_recv=("points_recv", "sum"),
+            points_spent=("points_spent", "sum"), express_spent=("express_spent", "sum"),
+            last_tx=("last_tx", "max"), first_tx=("first_tx", "min"))
+        for col in ("last_tx", "first_tx"):
+            a[col] = pd.to_datetime(a[col]).astype("int64") / 8.64e13
+        a.to_parquet(agg_path)
+    a = pd.read_parquet(agg_path)
+    d = u.merge(c, on="client_id", how="left").merge(a, left_on="client_id", right_index=True, how="left")
+    x = pd.DataFrame({
+        "age": d["age"], "gender_f": (d["gender"] == "F").astype(float),
+        "gender_m": (d["gender"] == "M").astype(float),
+        "first_issue": pd.to_datetime(d["first_issue_date"]).astype("int64") / 8.64e13,
+        "first_redeem": pd.to_datetime(d["first_redeem_date"], errors="coerce").astype("int64") / 8.64e13,
+        "n_tx": d["n_tx"], "spend": d["spend"], "points_recv": d["points_recv"],
+        "points_spent": d["points_spent"], "express_spent": d["express_spent"],
+        "last_tx": d["last_tx"], "first_tx": d["first_tx"],
+    })
+    x.loc[d["first_redeem_date"].isna(), "first_redeem"] = np.nan
+    treated = d["treatment_flg"] == 1
+    action = pd.Series(np.where(treated, "sms", "control"))
+    return frame("x5", x, action, d["target"], X5, propensity=0.5, row_id=d["client_id"])
+
+
 # ---------------------------------------------------------------- San Francisco official email, June 2010
 SF_ARMS = {0: "control", 1: "registrar_email", 2: "advocacy_email"}
 SF_ARM_PROBS = {a: 1 / 3 for a in SF_ARMS.values()}

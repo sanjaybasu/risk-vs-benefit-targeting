@@ -19,32 +19,14 @@ import numpy as np
 import pandas as pd
 
 from system_three import rankers
-from system_three.estimators.dr import aipw_scores, binarize
+from system_three.analysis import ALL_BINARY as BINARY  # frozen config (F76)
+from system_three.analysis import prep
+from system_three.estimators.dr import aipw_scores
 from system_three.metrics import evaluate
-from system_three.splits import PROCESSED, load
 
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / "results" / "dev_baselines.json"
-# Pre-specified contrast arm for multi-arm trials (the published headline arm).
-ARM = {"voter": "neighbors", "hillstrom": "mens_email", "sf_email": "registrar_email"}
-BINARY = ["gusto", "ist", "elaia1", "elaia2", "synbiotic", "voter", "sf_email", "karlan_list",
-          "stepup", "oregon", "hillstrom", "camden", "criteo"]
-CAP = {"criteo": (1_000_000, 500_000)}  # (context rows, dev rows) sampled for local runs
 BUDGETS = (0.10, 0.20, 0.30)
-
-
-def prep(name: str, split: str) -> pd.DataFrame:
-    df = load(name, split)
-    attrs_path = PROCESSED / name / "attrs.json"
-    if attrs_path.exists():
-        df.attrs.update(json.loads(attrs_path.read_text()))
-    ref = df["reference"].iat[0]
-    act = ARM.get(name) or next(a for a in df["action"].unique() if a != ref)
-    b = binarize(df, act)
-    if name in CAP:
-        n = CAP[name][0 if split == "context" else 1]
-        b = b.sample(n=min(n, len(b)), random_state=rankers.SEED)
-    return b.reset_index(drop=True)
 
 
 def run(name: str) -> dict:
@@ -53,7 +35,8 @@ def run(name: str) -> dict:
     better = ctx["better"].iat[0]
     Xc, cols = rankers.design_matrix(ctx)
     Xd, _ = rankers.design_matrix(dev, cols)
-    f = rankers.fit(Xc, ctx["W"].to_numpy(), ctx["outcome"].to_numpy(), ctx["e"].to_numpy(), better)
+    f = rankers.fit(Xc, ctx["W"].to_numpy(), ctx["outcome"].to_numpy(), ctx["e"].to_numpy(), better,
+                    groups=ctx["cluster_id"].to_numpy())
     s = rankers.scores(f, Xd)
     g = aipw_scores(dev["outcome"].to_numpy(), dev["W"].to_numpy(), dev["e"].to_numpy(),
                     s["_m0"], s["_m1"], better)

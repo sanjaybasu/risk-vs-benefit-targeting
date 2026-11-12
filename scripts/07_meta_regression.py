@@ -10,8 +10,11 @@ Two modes.
 
 Meta-regression recipe (F28): random effects, tau^2 by REML (Fisher scoring), Knapp-Hartung
 variance with t on k - p df, untruncated q as primary and truncated max(1, q) as sensitivity.
-Primary weights (F16): sampling variances fixed before unsealing, v_j = (MDE_j / 2.8)^2 from the
-posted power column; sensitivity: the scorer's bootstrap SD^2.
+Primary weights: sampling variances fixed before unsealing from the dev split, the paired variance
+of the scale-minus-risk gap scaled to the two-arm test count, floored at (2 per 1,000)^2. A
+simulation showed that the conservative design variances, (MDE_j/2.8)^2, mis-weight the trials
+under realistic noise and inflate size about twofold; they are a sensitivity, as is the scorer's
+bootstrap SD^2.
 Units: outcomes improved per 1,000 actions at the 20% budget.
 
 Usage:
@@ -33,6 +36,7 @@ ROOT = Path(__file__).resolve().parents[1]
 RES = ROOT / "results"
 Q = "0.2"
 SEED = 20261112
+V_FLOOR = 2.0 ** 2  # floor on primary sampling variance, (per 1,000)^2
 FORECAST_MARGIN_NATS = 1.0  # H1 forecasts must beat the intercept-only forecast by 1 nat (summed)
 
 
@@ -103,11 +107,23 @@ def lpd(y, mean, var, df):
 def posted() -> dict:
     fc = json.loads((RES / "scale_forecast.json").read_text())
     dt = json.loads((RES / "dataset_table.json").read_text())
+    dev_path = RES / "dev_baselines.json"
+    dev = json.loads(dev_path.read_text()) if dev_path.exists() else {}
     out = {}
     for t, r in fc.items():
-        out[t] = {"x": r["gap"][Q], "x_se": r["gap_se"][Q], "beneficial": r["beneficial_sign"],
-                  "v_design": (1000 * dt[t]["mde_per_action_at_q20"] / 2.8) ** 2,
-                  "base": r["control_base_rate"], "pred_ate": r["pred_ate_per_1000"]}
+        rec = {"x": r["gap"][Q], "x_se": r["gap_se"][Q], "beneficial": r["beneficial_sign"],
+               "v_design": (1000 * dt[t]["mde_per_action_at_q20"] / 2.8) ** 2,
+               "base": r["control_base_rate"], "pred_ate": r["pred_ate_per_1000"]}
+        # Realistic paired sampling variance of the scale-minus-risk gap, from the dev split
+        # (variance only; dev is not confirmatory), scaled to the two-arm test count. Used to
+        # make the power simulation realistic; not used as weights.
+        if t in dev:
+            row = next(x for x in dev[t]["table"] if x["ranking"] == "scale-minus-risk"
+                       and x["budget"] == 0.2 and x["metric"] == "per_1000")
+            sd_dev = (row["hi95"] - row["lo95"]) / 3.92
+            rec["v_paired"] = (sd_dev ** 2) * dev[t]["n_dev"] / dt[t]["test"]
+            rec["v_primary"] = max(rec["v_paired"], V_FLOOR)
+        out[t] = rec
     return out
 
 
@@ -120,30 +136,36 @@ def simulate(n_sims=4000) -> dict:
     post = posted()
     trials = confirmatory(post)
     x = np.array([post[t]["x"] for t in trials])
-    v = np.array([post[t]["v_design"] for t in trials])
+    v = np.array([post[t]["v_primary"] for t in trials])  # primary weights (fixed pre-unseal)
+    has_paired = all("v_paired" in post[t] for t in trials)
+    v_true = {"conservative": np.array([post[t]["v_design"] for t in trials])}
+    if has_paired:
+        v_true["paired"] = np.array([post[t]["v_paired"] for t in trials])
     X = np.column_stack([np.ones_like(x), x])
     rng = np.random.default_rng(SEED)
     grid = {}
-    for slope in (0.0, 0.5, 1.0):
-        for tau in (0, 10, 20, 30):
-            for trunc in (False, True):
-                rej_weak = rej_joint = 0
-                for _ in range(n_sims):
-                    y = slope * x + rng.normal(0, tau, len(x)) + rng.normal(0, np.sqrt(v))
-                    f = fit_re(y, X, v, truncate=trunc)
-                    s = slope_test(f)
-                    rej_weak += (s["lo95"] > 0)
-                    rej_joint += joint_test(f)["p"] < 0.05
-                grid[f"slope={slope},tau={tau},trunc={trunc}"] = {
-                    "p_weak_form_positive": rej_weak / n_sims,
-                    "p_reject_joint_0_1": rej_joint / n_sims}
+    for noise, vt in v_true.items():  # sampling noise in the simulated data
+        for slope in (0.0, 0.5, 1.0):
+            for tau in (0, 10, 20, 30):
+                for trunc in (False, True):
+                    rej_weak = rej_joint = 0
+                    for _ in range(n_sims):
+                        y = slope * x + rng.normal(0, tau, len(x)) + rng.normal(0, np.sqrt(vt))
+                        f = fit_re(y, X, v, truncate=trunc)  # always fit with primary weights
+                        s = slope_test(f)
+                        rej_weak += (s["lo95"] > 0)
+                        rej_joint += joint_test(f)["p"] < 0.05
+                    grid[f"noise={noise},slope={slope},tau={tau},trunc={trunc}"] = {
+                        "p_weak_form_positive": rej_weak / n_sims,
+                        "p_reject_joint_0_1": rej_joint / n_sims}
     w = 1 / v
     Xw = X * w[:, None]
     H = X @ np.linalg.inv(X.T @ Xw) @ Xw.T
     xc = x - np.average(x, weights=w)
     info = w * xc**2 / np.sum(w * xc**2)
     influence = {t: {"hat": float(H[i, i]), "slope_information_share": float(info[i]),
-                     "x": float(x[i]), "design_se": float(np.sqrt(v[i]))}
+                     "x": float(x[i]), "design_se": float(np.sqrt(v[i])),
+                     "paired_se": float(np.sqrt(post[t]["v_paired"])) if has_paired else None}
                  for i, t in enumerate(trials)}
     return {"confirmatory_trials": trials, "excluded_by_sign_rule": [t for t in post if t not in trials],
             "grid": grid, "influence": influence, "n_sims": n_sims}
@@ -168,7 +190,8 @@ def analyze(scored: list[Path], holdouts: list[str]) -> dict:
     post, obs = posted(), observed(scored)
     trials = [t for t in confirmatory(post) if t in obs]
     x = np.array([post[t]["x"] for t in trials])
-    v = np.array([post[t]["v_design"] for t in trials])
+    v = np.array([post[t]["v_primary"] for t in trials])
+    v_design = np.array([post[t]["v_design"] for t in trials])
     y = np.array([obs[t]["scale_minus_risk"] for t in trials])
     X = np.column_stack([np.ones_like(x), x])
     res = {"trials": trials}
@@ -177,6 +200,7 @@ def analyze(scored: list[Path], holdouts: list[str]) -> dict:
         res[f"H1_{'truncated' if trunc else 'primary'}"] = {**slope_test(f), "joint_0_1": joint_test(f)}
     v_obs = np.array([max(obs[t]["scale_minus_risk_sd"] ** 2, 1e-6) for t in trials])
     res["H1_observed_variance_weights"] = slope_test(fit_re(y, X, v_obs))
+    res["H1_design_variance_weights"] = slope_test(fit_re(y, X, v_design))
     # H1b: residual benefit - scale has no association with the moderator.
     yb = np.array([obs[t]["benefit_minus_scale"] for t in trials])
     res["H1b"] = slope_test(fit_re(yb, X, v))
