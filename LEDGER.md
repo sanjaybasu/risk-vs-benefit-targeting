@@ -77,3 +77,22 @@ failures included. Never edit a past entry; add a correction entry instead.
   - Weak-form size at slope 0 is 0.027 to 0.053.
   - Power at slope 1 is 0.71 at τ = 0 and 0.48 at τ = 20.
   - Slope information: Hillstrom 0.44, Michigan 0.37, Karlan–List 0.13, GUSTO 0.05.
+
+## 2026-11-12 — pre-registration v1 posted to OSF
+
+- **Verification:** a Fable pre-post review found 9 blocking items. All were fixed before posting:
+  - Custodian wording: no one is named, and Sanjay holds the seal until two academic custodians with no Waymark equity take it over.
+  - Predictive variance: the text now states it, matching the code.
+  - Size range: now taken from the saved simulation.
+  - §4a: now discloses the 15-trial dev run.
+  - REML check: now backed by `tests/test_meta_regression.py`.
+  - Design-weight size: 0.052 to 0.066, saved in `h1_power_simulation.json`.
+  - Code coverage: a statement was added. H2, the sign-flip fit, RATE, and the variance floor are now in the hashed code. LOEO and the split-context moderator are to be hashed before unsealing.
+  - Table D: labels and formats fixed.
+  - Header: the open-items list was removed.
+- **Also fixed:** the ELAIA-1 target is now 0.004 (BMJ 2021 abstract: 21.3% vs 20.9%), and the DECISIONS.md reconciliation entry was added.
+- **Holdouts (seed 20261113, one per moderator tertile):** IST, StepUp, and Hillstrom.
+- **OSF:**
+  - Project rs7pm (private) holds the pre-registration, the red-team memo, the manifests, the forecasts, the simulation, the holdouts, the dev results, the dataset table, the code archive, and all 15 prediction parquets.
+  - Registration r2vsu (Secondary Data Preregistration template) was registered at 2026-11-12T21:20:07Z, pending admin approval. It becomes public on approval or automatically after 48 hours.
+- **Interrupted upload:** the first run lost its connection after 21 of 23 files. `10_osf_post.py` now records the project ID first, skips existing files, and retries. No duplicate project was created.

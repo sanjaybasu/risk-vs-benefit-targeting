@@ -92,11 +92,29 @@ def responses(md: str) -> dict:
     }
 
 
-def upload(s: requests.Session, node: str, path: Path, name: str | None = None) -> None:
+def existing(s: requests.Session, node: str) -> set[str]:
+    r = s.get(f"{API}/nodes/{node}/files/osfstorage/?page%5Bsize%5D=100")
+    r.raise_for_status()
+    return {f["attributes"]["name"] for f in r.json()["data"]}
+
+
+def upload(s: requests.Session, node: str, path: Path, name: str | None = None, tries: int = 5) -> None:
+    import time
+
     url = f"{FILES}/{node}/providers/osfstorage/?kind=file&name={name or path.name}"
-    r = s.put(url, data=path.read_bytes(), headers={"Content-Type": "application/octet-stream"})
-    if r.status_code not in (200, 201):
-        raise RuntimeError(f"upload {path.name}: {r.status_code} {r.text[:300]}")
+    for k in range(tries):
+        try:
+            r = s.put(url, data=path.read_bytes(), headers={"Content-Type": "application/octet-stream"},
+                      timeout=600)
+            if r.status_code in (200, 201):
+                return
+            if r.status_code == 409:  # already uploaded by an earlier, interrupted run
+                return
+            err = f"{r.status_code} {r.text[:300]}"
+        except requests.exceptions.RequestException as e:
+            err = str(e)
+        time.sleep(10 * (k + 1))
+    raise RuntimeError(f"upload {path.name}: {err}")
 
 
 def stage() -> dict:
@@ -110,6 +128,7 @@ def stage() -> dict:
                            "System Three program (Waymark)."}}})
         r.raise_for_status()
         st["node"] = r.json()["data"]["id"]
+        STATE.write_text(json.dumps(st, indent=1))  # record the project before any upload
     node = st["node"]
     archive = ROOT / "results" / "code_archive.tar.gz"
     subprocess.run(["git", "-C", str(ROOT), "archive", "--format=tar.gz", "-o", str(archive), "HEAD"],
@@ -120,8 +139,11 @@ def stage() -> dict:
              ROOT / "results" / "holdouts.json", ROOT / "results" / "dev_baselines.json",
              ROOT / "results" / "dataset_table.json", archive]
     files += sorted((ROOT / "predictions").glob("*.parquet"))
+    have = existing(s, node)
     for f in files:
         name = "predictions_manifest.json" if f.parent.name == "predictions" and f.suffix == ".json" else None
+        if (name or f.name) in have:
+            continue
         upload(s, node, f, name)
     if "draft" not in st:
         r = s.post(f"{API}/draft_registrations/", json={"data": {

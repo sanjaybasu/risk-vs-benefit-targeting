@@ -1,0 +1,32 @@
+{
+ "node": "rs7pm",
+ "draft": "6af62d7590307cbaba71100d",
+ "staged_files": [
+  "PREREGISTRATION_v1_filled.md",
+  "redteam_v0_revision_memo.md",
+  "seal_manifest.json",
+  "manifest.json",
+  "scale_forecast.json",
+  "h1_power_simulation.json",
+  "holdouts.json",
+  "dev_baselines.json",
+  "dataset_table.json",
+  "code_archive.tar.gz",
+  "elaia1.parquet",
+  "elaia2.parquet",
+  "gusto.parquet",
+  "hillstrom.parquet",
+  "ist.parquet",
+  "karlan_list.parquet",
+  "lenta.parquet",
+  "newhaven.parquet",
+  "oregon.parquet",
+  "sf_email.parquet",
+  "sixcity.parquet",
+  "stepup.parquet",
+  "synbiotic.parquet",
+  "voter.parquet",
+  "x5.parquet"
+ ],
+ "registration": "r2vsu"
+}
