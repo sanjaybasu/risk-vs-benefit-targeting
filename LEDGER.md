@@ -96,3 +96,15 @@ failures included. Never edit a past entry; add a correction entry instead.
   - Project rs7pm (private) holds the pre-registration, the red-team memo, the manifests, the forecasts, the simulation, the holdouts, the dev results, the dataset table, the code archive, and all 15 prediction parquets.
   - Registration r2vsu (Secondary Data Preregistration template) was registered at 2026-11-12T21:20:07Z, pending admin approval. It becomes public on approval or automatically after 48 hours.
 - **Interrupted upload:** the first run lost its connection after 21 of 23 files. `10_osf_post.py` now records the project ID first, skips existing files, and retries. No duplicate project was created.
+
+## 2026-11-12 — frozen secondary analyses and Paper 2 contenders
+
+- **LOEO:** environments are ELAIA-2 (4), synbiotic (2), StepUp (5), and Michigan (5 hashed block groups).
+- **Split-context moderators:** stable against the full-context values (Michigan 49.2 vs 49.7; six-city 34.3 vs 34.4; Hillstrom 45.1 vs 56.4; New Haven 25.5 vs 35.4).
+- **CausalPFN:** v0.1.5, run on a Modal L4. All 15 trials produced predictions with no missing values. Mean effects are close to the known trial effects (synbiotic −0.037 vs −0.036; Michigan +0.099 vs +0.081). Spearman correlation with the DR-learner ranking ranges from 0.13 to 0.54 (Lenta −0.01).
+- **LLM comparator (claude-opus-5-5):**
+  - Pilot: 50 of 50 succeeded, $0.10.
+  - Full run: 24,786 requests in three batches. All 24,836 requests (pilot plus full run) succeeded with valid estimates and 0 missing answers.
+  - Cost is about $90 in total. Per-batch token totals were not saved; the estimate extrapolates from the third batch, $17.59 for 4,786 requests.
+  - Requests bypassed the local compression proxy.
+- **Scorer:** gained `--allow-subset`. Registration update 1 is drafted (`notebooks/system-three/preregistration/REGISTRATION_UPDATE_1.md`) and will post once r2vsu is approved.
