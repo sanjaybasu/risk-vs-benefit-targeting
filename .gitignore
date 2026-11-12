@@ -1,0 +1,18 @@
+# Keep the public repo CODE-ONLY.
+data/
+*.parquet
+*.dta
+*.csv
+*.csv.gz
+*.pkl
+*.rda
+*.zip
+*.tar.gz
+*.joblib
+output/
+*.png
+*.pdf
+.venv/
+__pycache__/
+.pytest_cache/
+.ruff_cache/

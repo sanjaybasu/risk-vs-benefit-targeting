@@ -1,0 +1,258 @@
+openapi: 3.1.0
+info:
+  title: System Three
+  version: 0.1.0
+  summary: Effect of each action against a reference action, with uncertainty.
+  license:
+    name: MIT
+    identifier: MIT
+paths:
+  /v1/systemthree:
+    post:
+      operationId: estimate
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Request'
+      responses:
+        '200':
+          description: Per-action effects against the reference.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+components:
+  schemas:
+    Context:
+      additionalProperties: false
+      properties:
+        dataset_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: null
+          title: Dataset Id
+        records:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/Record'
+            type: array
+          - type: 'null'
+          default: null
+          title: Records
+      title: Context
+      type: object
+    Effect:
+      additionalProperties: false
+      properties:
+        action:
+          title: Action
+          type: string
+        delay_days:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          default: null
+          description: Set for type 'wait'.
+          title: Delay Days
+        mean:
+          description: Expected outcome change against the reference action.
+          title: Mean
+          type: number
+        interval_90:
+          maxItems: 2
+          minItems: 2
+          prefixItems:
+          - type: number
+          - type: number
+          title: Interval 90
+          type: array
+        p_harm:
+          description: Probability the change is in the worse direction for this case.
+          maximum: 1
+          minimum: 0
+          title: P Harm
+          type: number
+        p_best:
+          anyOf:
+          - maximum: 1
+            minimum: 0
+            type: number
+          - type: 'null'
+          default: null
+          description: 'Set for type ''choose'': probability this action is best.'
+          title: P Best
+        support:
+          description: How well the context covers this state and action (overlap).
+          maximum: 1
+          minimum: 0
+          title: Support
+          type: number
+      required:
+      - action
+      - mean
+      - interval_90
+      - p_harm
+      - support
+      title: Effect
+      type: object
+    Outcome:
+      additionalProperties: false
+      properties:
+        name:
+          description: Name of the outcome, e.g. 'readmit_180d'.
+          minLength: 1
+          title: Name
+          type: string
+        better:
+          description: Which direction of the outcome is better.
+          enum:
+          - higher
+          - lower
+          title: Better
+          type: string
+      required:
+      - name
+      - better
+      title: Outcome
+      type: object
+    Question:
+      additionalProperties: false
+      properties:
+        type:
+          enum:
+          - effect
+          - choose
+          - wait
+          title: Type
+          type: string
+        actions:
+          description: Menu of actions; includes the reference.
+          items:
+            type: string
+          minItems: 2
+          title: Actions
+          type: array
+        reference:
+          description: Reference action, such as 'none' or 'call_small_model'.
+          title: Reference
+          type: string
+        outcome:
+          $ref: '#/components/schemas/Outcome'
+        horizon_days:
+          anyOf:
+          - exclusiveMinimum: 0
+            type: integer
+          - type: 'null'
+          default: null
+          title: Horizon Days
+        delays_days:
+          anyOf:
+          - items:
+              minimum: 0
+              type: integer
+            type: array
+          - type: 'null'
+          default: null
+          description: 'Required for type ''wait'': candidate delays, 0 means act now.'
+          title: Delays Days
+      required:
+      - type
+      - actions
+      - reference
+      - outcome
+      title: Question
+      type: object
+    Record:
+      additionalProperties: false
+      properties:
+        state:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: string
+          title: State
+        action:
+          title: Action
+          type: string
+        outcome:
+          title: Outcome
+          type: number
+        propensity:
+          anyOf:
+          - exclusiveMaximum: 1
+            exclusiveMinimum: 0
+            type: number
+          - type: 'null'
+          default: null
+          description: P(action | state) under the logging policy, if known.
+          title: Propensity
+      required:
+      - state
+      - action
+      - outcome
+      title: Record
+      type: object
+    Request:
+      additionalProperties: false
+      properties:
+        model:
+          default: rose-latest
+          title: Model
+          type: string
+        state:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: string
+          title: State
+        question:
+          $ref: '#/components/schemas/Question'
+        context:
+          $ref: '#/components/schemas/Context'
+      required:
+      - state
+      - question
+      - context
+      title: Request
+      type: object
+    Response:
+      additionalProperties: false
+      properties:
+        model:
+          title: Model
+          type: string
+        contract_version:
+          default: 0.1.0
+          title: Contract Version
+          type: string
+        reference:
+          title: Reference
+          type: string
+        effects:
+          items:
+            $ref: '#/components/schemas/Effect'
+          title: Effects
+          type: array
+        abstain:
+          title: Abstain
+          type: boolean
+        abstain_reason:
+          anyOf:
+          - enum:
+            - low_support
+            - no_context
+            - outcome_unknown
+            type: string
+          - type: 'null'
+          default: null
+          title: Abstain Reason
+      required:
+      - model
+      - reference
+      - effects
+      - abstain
+      title: Response
+      type: object
