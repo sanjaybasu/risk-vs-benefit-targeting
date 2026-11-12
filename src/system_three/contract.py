@@ -6,6 +6,13 @@ and context (logged records of state, action, outcome, or a registered dataset i
 gives, per non-reference action, the expected change against the reference, a 90% interval,
 the probability of harm, and a support score, plus an abstain flag. It never returns free text.
 
+v0.2 (panel C37, C38, C67): the effect, interval, and p_harm refer to the conditional average
+effect at this state, CATE(x); individual-level effects are not identified from randomized data
+without further assumptions, so unit-level coverage is claimed only where both potential outcomes
+are observed. Optional Frechet-Hoeffding bounds give the identified range of the probability that
+an individual is harmed. The "wait" question type is removed: no benchmark dataset identifies
+delay effects.
+
 `contract/openapi.yaml` is generated from these models by `build_openapi()`; a test fails if the
 committed file differs from the generated one.
 """
@@ -16,7 +23,7 @@ from typing import Annotated, Any, Literal
 
 from pydantic import BaseModel, ConfigDict, Field, model_validator
 
-CONTRACT_VERSION = "0.1.0"
+CONTRACT_VERSION = "0.2.0"
 
 State = dict[str, Any] | str
 
@@ -31,14 +38,11 @@ class Outcome(_Strict):
 
 
 class Question(_Strict):
-    type: Literal["effect", "choose", "wait"]
+    type: Literal["effect", "choose"]
     actions: list[str] = Field(min_length=2, description="Menu of actions; includes the reference.")
     reference: str = Field(description="Reference action, such as 'none' or 'call_small_model'.")
     outcome: Outcome
     horizon_days: Annotated[int, Field(gt=0)] | None = None
-    delays_days: list[Annotated[int, Field(ge=0)]] | None = Field(
-        default=None, description="Required for type 'wait': candidate delays, 0 means act now."
-    )
 
     @model_validator(mode="after")
     def _check(self) -> Question:
@@ -46,8 +50,6 @@ class Question(_Strict):
             raise ValueError("actions must be unique")
         if self.reference not in self.actions:
             raise ValueError("reference must be one of actions")
-        if self.type == "wait" and not self.delays_days:
-            raise ValueError("type 'wait' needs delays_days")
         return self
 
 
@@ -80,11 +82,17 @@ class Request(_Strict):
 
 class Effect(_Strict):
     action: str
-    delay_days: int | None = Field(default=None, description="Set for type 'wait'.")
-    mean: float = Field(description="Expected outcome change against the reference action.")
-    interval_90: tuple[float, float]
+    mean: float = Field(description="CATE(x): expected outcome change against the reference "
+                                    "for cases with this state.")
+    interval_90: tuple[float, float] = Field(description="90% interval for CATE(x), not for an "
+                                                         "individual's effect.")
     p_harm: Annotated[float, Field(ge=0, le=1)] = Field(
-        description="Probability the change is in the worse direction for this case."
+        description="P(CATE(x) is in the worse direction | data). Not the probability that an "
+                    "individual is harmed, which is not identified; see p_harm_individual_bounds."
+    )
+    p_harm_individual_bounds: tuple[float, float] | None = Field(
+        default=None, description="Frechet-Hoeffding bounds on P(an individual with this state is "
+                                  "harmed), for binary outcomes; optional."
     )
     p_best: Annotated[float, Field(ge=0, le=1)] | None = Field(
         default=None, description="Set for type 'choose': probability this action is best."

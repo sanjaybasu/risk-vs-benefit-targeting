@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: System Three
-  version: 0.1.0
+  version: 0.2.0
   summary: Effect of each action against a reference action, with uncertainty.
   license:
     name: MIT
@@ -50,18 +50,12 @@ components:
         action:
           title: Action
           type: string
-        delay_days:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          default: null
-          description: Set for type 'wait'.
-          title: Delay Days
         mean:
-          description: Expected outcome change against the reference action.
+          description: 'CATE(x): expected outcome change against the reference for cases with this state.'
           title: Mean
           type: number
         interval_90:
+          description: 90% interval for CATE(x), not for an individual's effect.
           maxItems: 2
           minItems: 2
           prefixItems:
@@ -70,11 +64,25 @@ components:
           title: Interval 90
           type: array
         p_harm:
-          description: Probability the change is in the worse direction for this case.
+          description: P(CATE(x) is in the worse direction | data). Not the probability that an individual
+            is harmed, which is not identified; see p_harm_individual_bounds.
           maximum: 1
           minimum: 0
           title: P Harm
           type: number
+        p_harm_individual_bounds:
+          anyOf:
+          - maxItems: 2
+            minItems: 2
+            prefixItems:
+            - type: number
+            - type: number
+            type: array
+          - type: 'null'
+          default: null
+          description: Frechet-Hoeffding bounds on P(an individual with this state is harmed), for binary
+            outcomes; optional.
+          title: P Harm Individual Bounds
         p_best:
           anyOf:
           - maximum: 1
@@ -125,7 +133,6 @@ components:
           enum:
           - effect
           - choose
-          - wait
           title: Type
           type: string
         actions:
@@ -148,16 +155,6 @@ components:
           - type: 'null'
           default: null
           title: Horizon Days
-        delays_days:
-          anyOf:
-          - items:
-              minimum: 0
-              type: integer
-            type: array
-          - type: 'null'
-          default: null
-          description: 'Required for type ''wait'': candidate delays, 0 means act now.'
-          title: Delays Days
       required:
       - type
       - actions
@@ -225,7 +222,7 @@ components:
           title: Model
           type: string
         contract_version:
-          default: 0.1.0
+          default: 0.2.0
           title: Contract Version
           type: string
         reference:

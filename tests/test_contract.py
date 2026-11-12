@@ -40,7 +40,7 @@ def test_plan_example_validates():
     [
         {"question": {**PLAN_REQUEST["question"], "reference": "missing"}},
         {"question": {**PLAN_REQUEST["question"], "actions": ["none"]}},
-        {"question": {**PLAN_REQUEST["question"], "type": "wait"}},
+        {"question": {**PLAN_REQUEST["question"], "type": "wait"}},  # removed in v0.2
         {"context": {}},
         {"context": {"dataset_id": "x", "records": []}},
         {"extra_field": 1},
