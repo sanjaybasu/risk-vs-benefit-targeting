@@ -212,7 +212,7 @@ KARLAN_X = ["hpa", "ltmedmra", "freq", "years", "year5", "mrm2", "dormant", "fem
 
 def load_karlan_list() -> pd.DataFrame:
     d = pd.read_stata(RAW / "karlan_list" / "AER merged.dta", convert_categoricals=False)
-    p = d["treatment"].mean()  # design share assigned to any match (about 2/3)
+    p = 2 / 3  # design: two-thirds of letters assigned to a matching-grant arm (F66)
     action = d["treatment"].map({1: "matching_grant", 0: "no_match"})
     prop = np.where(d["treatment"] == 1, p, 1 - p)
     return frame("karlan_list", d[KARLAN_X], action, d["gave"], KARLAN, propensity=pd.Series(prop))

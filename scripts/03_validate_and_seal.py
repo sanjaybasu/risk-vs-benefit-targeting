@@ -23,6 +23,7 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
+from system_three.analysis import contrast_arm
 from system_three.estimators.dr import binarize, exact_scores, ipw_scores
 from system_three.loaders import registry
 from system_three.splits import PROCESSED, TEST_PUBLIC_COLUMNS, assign
@@ -31,7 +32,8 @@ from system_three.table import aux, features, validate
 ROOT = Path(__file__).resolve().parents[1]
 SEALED = ROOT.parent / "system-three-sealed"
 RESULTS = ROOT / "results"
-SEALED_COLS = ["row_id", "action", "outcome", "propensity", "y_ref", "y_act", "truth_exact"]
+SEALED_COLS = ["row_id", "cluster_id", "stratum", "action", "outcome", "propensity", "y_ref",
+               "y_act", "truth_exact"]
 Q = 0.20  # budget used for the power column
 
 
@@ -74,9 +76,8 @@ def reproduce(df: pd.DataFrame, info, pub: dict) -> dict:
     return out
 
 
-def unit_scores(df: pd.DataFrame, info) -> np.ndarray:
-    """Per-unit scores G for the first non-reference action (IPW or exact), for the power column."""
-    act = [a for a in info.actions if a != info.reference][0]
+def unit_scores(df: pd.DataFrame, info, act: str) -> np.ndarray:
+    """Per-unit scores G for the pre-specified contrast (IPW or exact), for the power column."""
     if df["truth_exact"].all():
         return exact_scores(df["y_act"], df["y_ref"], info.better)
     b = binarize(df, act)
@@ -105,11 +106,20 @@ def run(name: str, info, pub, load) -> dict:
     SEALED.mkdir(parents=True, exist_ok=True)
     sealed_path = SEALED / f"{name}_test.parquet"
     test[SEALED_COLS + aux(test)].to_parquet(sealed_path, index=False)
+    # Sealed trial metadata (F56): the scorer reads arms, direction, and design from here.
+    act = contrast_arm(name, df)
+    probs = attrs.get("arm_probs")
+    meta = {"better": info.better, "reference": info.reference, "action": act,
+            "p_action": probs[act] if probs else None,
+            "p_reference": probs[info.reference] if probs else None}
+    meta_path = SEALED / f"{name}_meta.json"
+    meta_path.write_text(json.dumps(meta, indent=1, sort_keys=True))
 
     dev_ctx = df[df["split"] != "test"]
     dev_ctx.attrs.update(attrs)
-    g = unit_scores(dev_ctx, info)
-    n_test_units = int((df["split"] == "test").sum())
+    g = unit_scores(dev_ctx, info, act)
+    # Power uses the two-arm test count for the pre-specified contrast (F58).
+    n_test_units = int(((df["split"] == "test") & df["action"].isin([act, info.reference])).sum())
     # Detectable difference (80% power, two-sided 0.05) between two rankings' mean effect among
     # the top 20%, treating the two selected sets as independent (conservative; AIPW and overlap
     # between the sets both shrink it). Estimated from context and dev IPW scores only.
@@ -130,7 +140,9 @@ def run(name: str, info, pub, load) -> dict:
         "mde_per_action_at_q20": float(mde),
         "mde_per_1000_at_q20": float(1000 * mde) if binary else None,
         "mde_in_outcome_sd": float(mde / dev_ctx["outcome"].std()),
+        "contrast_arm": act,
         "sealed_sha256": sha256(sealed_path),
+        "sealed_meta_sha256": sha256(meta_path),
     }
 
 
@@ -154,7 +166,8 @@ def main(argv: list[str]) -> int:
             print(f"{name:32s} FAIL {type(e).__name__}: {e}", flush=True)
             table[name] = {"dataset": name, "error": f"{type(e).__name__}: {e}"}
     table_path.write_text(json.dumps(table, indent=2))
-    manifest = {k: v.get("sealed_sha256") for k, v in table.items() if "sealed_sha256" in v}
+    manifest = {k: {"test": v.get("sealed_sha256"), "meta": v.get("sealed_meta_sha256")}
+                for k, v in table.items() if "sealed_sha256" in v}
     (RESULTS / "seal_manifest.json").write_text(json.dumps(manifest, indent=2, sort_keys=True))
     return 0 if all("error" not in v for v in table.values()) else 1
 

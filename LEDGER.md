@@ -57,3 +57,23 @@ failures included. Never edit a past entry; add a correction entry instead.
 - **Forecast holdouts:** the seeded lottery (20261112) stratified by intervention class drew synbiotic, sf_email, and oregon.
 - **Scorer:** `scripts/score_sealed.py` is the frozen custodian scorer. It takes the sealed path as an argument. Its synthetic recovery test is in `tests/test_seal_guard.py`.
 - **Red-team:** the Fable xhigh adversarial review of the pre-registration ran as workflow `wf_cb641732-837`. Reviewers were not shown the dev results.
+
+## 2026-11-12 — red-team fixes, step 1 (code and moderator table)
+
+- **Red-team:** workflow `wf_cb641732-837` ran the Fable six-lens review of pre-registration v0. It adopted 58 fixes, marked 17 to consider, and rejected 8. The memo is at `notebooks/system-three/preregistration/redteam_v0_revision_memo.md`.
+- **Code changes:**
+  - Rankers: `early_stopping` is off; deployed scores use fold-averaged p0 and p1; the scale fit is inverse-design-weighted with sandwich SE and step-halving Newton; out-of-fold AUC is reported; cross-fitting is cluster-level (`rankers.folds_for`).
+  - The frozen configuration moved to `src/system_three/analysis.py`.
+  - Karlan–List uses the design probability 2/3.
+  - The seal now carries cluster_id and stratum, and a sealed per-trial `meta.json` hashed in `results/seal_manifest.json`.
+  - The power column now uses the pre-specified contrast arm and the two-arm test count.
+  - The scorer reads clusters and metadata only from the sealed side, checks predictions against the manifest, enforces a two-sided row match, and records the git commit and the `uv.lock` hash.
+- **Pilot failures caught before posting:**
+  1. Resampling with replacement duplicated clusters across KFold folds, which biased cross-fitted p0 and β. The bootstrap β interval for ELAIA-2 excluded its own plug-in. Fixed with cluster-level folds and cluster half-sampling, where SE = SD/√2.
+  2. Weighted Newton diverged on near-separated half-samples (β about ±1e11). Fixed with step halving.
+- **Moderator table:** `scripts/06_scale_forecast.py` ran on Modal (200 half-samples per trial, 0 failed calls). The output is `results/scale_forecast.json`.
+- **Sign rule (F06d):** ELAIA-1 and Oregon have adverse context β and are excluded from H1. The confirmatory set has 9 trials.
+- **Power (`scripts/07_meta_regression.py simulate`, 3,000 simulations, conservative design SEs):**
+  - Weak-form size at slope 0 is 0.027 to 0.053.
+  - Power at slope 1 is 0.71 at τ = 0 and 0.48 at τ = 20.
+  - Slope information: Hillstrom 0.44, Michigan 0.37, Karlan–List 0.13, GUSTO 0.05.

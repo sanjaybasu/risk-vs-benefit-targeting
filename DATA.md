@@ -7,13 +7,20 @@ Every dataset is public. Raw files live in `data/raw/<dataset>/` (gitignored); `
 | Dataset | Tier | Outcome (better) | Rows | Test rows | Treated share | Outcome mean (context+dev) | Reproduction | Detectable gap at q = 20% | License | Commercial use |
 |---|---|---|---|---|---|---|---|---|---|---|
 | camden | C | readmit_180d (lower) | 782 | 254 | 0.503 | 0.608 | 0.006443 vs 0.0064 (match) | 1.77 SD | CC0-1.0 | yes |
-| voter | B | voted_aug2006_primary (higher) | 344,084 | 103,345 | 0.444 | 0.3167 | 0.08131 vs 0.08131 (match) | 0.09 SD | CC0-1.0 | yes |
+| voter | B | voted_aug2006_primary (higher) | 344,084 | 69,012 | 0.444 | 0.3167 | 0.08131 vs 0.08131 (match) | 0.12 SD | CC0-1.0 | yes |
 | ist | C | dead_or_dependent_6m (lower) | 19,285 | 5,827 | 0.500 | 0.6283 | -0.01251 vs -0.013 (match) | 0.38 SD | ODC-By-1.0 | yes |
 | illinois | C | spend_month_y1_usd (lower) | 3,239 | 981 | 0.682 | 567.9 | 10.83 vs 10.8 (match) | 0.73 SD | CC0-1.0 plus README terms of use: no re-identification of subjects | yes |
 | oregon | C | any_ed_visit (lower) | 24,646 | 7,444 | 0.391 | 0.3412 | 0.01873 vs n/a (no external target) | 0.27 SD | NBER click-through terms: no commercial use, no re-identification, cite | no |
-| hillstrom | B | visit_2wk (higher) | 64,000 | 18,994 | 0.667 | 0.1462 | 0.07659 vs 0.0766 (match) | 0.14 SD | not stated (public challenge dataset) | no |
+| hillstrom | B | visit_2wk (higher) | 64,000 | 12,687 | 0.667 | 0.1462 | 0.07659 vs 0.0766 (match) | 0.17 SD | not stated (public challenge dataset) | no |
 | nsw | B | earnings_1978_usd (higher) | 445 | 128 | 0.416 | 5068 | 1794 vs 1794 (match) | 2.12 SD | not stated (author-hosted) | no |
 | ihdp | B | simulated_score (higher) | 74,700 | 7,500 | 0.186 | 12.1 | 4.516 vs n/a (no external target) | 0.07 SD | not stated (author-hosted) | no |
+| gusto | C | death_30d (lower) | 30,510 | 9,115 | 0.339 | 0.0702 | -0.1374 vs -0.14 (match) | 0.20 SD | GPL (CRAN predtools 0.0.3; data source listed as 'Internet'); counsel to confirm | no |
+| sf_email | B | voted_jun2010 (higher) | 47,309 | 9,495 | 0.667 | 0.3355 | 0.00537 vs n/a (no external target) | 0.22 SD | CC0-1.0 | yes |
+| stepup | B | any_gym_visit_wk1_4 (higher) | 61,293 | 18,335 | 0.919 | 0.7887 | 6.129e+04 vs 61293 (match) | 0.54 SD | no license on the OSF node; deidentified data shared with 24 Hour Fitness permission via the view-only link in the paper's data statement | no |
+| elaia1 | C | aki_progression_dialysis_or_death_14d (lower) | 6,030 | 1,790 | 0.507 | 0.2132 | 0.004111 vs 0.005 (match) | 0.47 SD | CC0-1.0 (Dryad) | yes |
+| elaia2 | C | aki_progression_dialysis_or_death_14d (lower) | 5,060 | 1,473 | 0.500 | 0.2367 | -0.02173 vs -0.022 (match) | 0.53 SD | CC0-1.0 (Dryad) | yes |
+| synbiotic | C | sepsis_or_death_60d (lower) | 4,556 | 1,363 | 0.500 | 0.0736 | -0.4029 vs -0.4 (match) | 0.50 SD | CC0-1.0 (Dryad) | yes |
+| karlan_list | B | gave (higher) | 50,083 | 14,949 | 0.667 | 0.02132 | 0.00418 vs n/a (no external target) | 0.15 SD | CC0-1.0 (IPA Dataverse, guestbook) | yes |
 | routerbench__mistral7b_to_gpt4 | A | answer_score (higher) | 36,497 | 10,996 | 0.499 | 0.5469 | 0.4753 vs n/a (no external target) | 0.10 SD | MIT (code); data card states no license | no |
 | routerbench__gpt35_to_gpt4 | A | answer_score (higher) | 36,497 | 10,996 | 0.499 | 0.7019 | 0.1621 vs n/a (no external target) | 0.10 SD | MIT (code); data card states no license | no |
 | routerbench__llama70b_to_claude2 | A | answer_score (higher) | 36,497 | 10,996 | 0.499 | 0.488 | 0.3071 vs n/a (no external target) | 0.10 SD | MIT (code); data card states no license | no |
@@ -22,13 +29,6 @@ Every dataset is public. Raw files live in `data/raw/<dataset>/` (gitignored); `
 | swebench__p50_to_p90 | A | resolved (higher) | 500 | 149 | 0.516 | 0.6353 | 0.214 vs n/a (no external target) | 0.68 SD | no license stated | no |
 | swebench__p10_to_p50 | A | resolved (higher) | 500 | 149 | 0.516 | 0.4188 | 0.282 vs n/a (no external target) | 0.79 SD | no license stated | no |
 | criteo | B | visit (higher) | 13,979,592 | 4,192,885 | 0.850 | 0.04697 | 0.85 vs 0.85 (match) | 0.01 SD | CC-BY-NC-SA-4.0 | no |
-| gusto | C | death_30d (lower) | 30,510 | 9,115 | 0.339 | 0.0702 | -0.1374 vs -0.14 (match) | 0.20 SD | GPL (CRAN predtools 0.0.3; data source listed as 'Internet'); counsel to confirm | no |
-| sf_email | B | voted_jun2010 (higher) | 47,309 | 14,220 | 0.667 | 0.3355 | 0.00537 vs n/a (no external target) | 0.18 SD | CC0-1.0 | yes |
-| stepup | B | any_gym_visit_wk1_4 (higher) | 61,293 | 18,335 | 0.919 | 0.7887 | 6.129e+04 vs 61293 (match) | 0.54 SD | no license on the OSF node; deidentified data shared with 24 Hour Fitness permission via the view-only link in the paper's data statement | no |
-| elaia1 | C | aki_progression_dialysis_or_death_14d (lower) | 6,030 | 1,790 | 0.507 | 0.2132 | 0.004111 vs 0.005 (match) | 0.47 SD | CC0-1.0 (Dryad) | yes |
-| elaia2 | C | aki_progression_dialysis_or_death_14d (lower) | 5,060 | 1,473 | 0.500 | 0.2367 | -0.02173 vs -0.022 (match) | 0.53 SD | CC0-1.0 (Dryad) | yes |
-| synbiotic | C | sepsis_or_death_60d (lower) | 4,556 | 1,363 | 0.500 | 0.0736 | -0.4029 vs -0.4 (match) | 0.50 SD | CC0-1.0 (Dryad) | yes |
-| karlan_list | B | gave (higher) | 50,083 | 14,949 | 0.667 | 0.02132 | 0.00418 vs n/a (no external target) | 0.15 SD | CC0-1.0 (IPA Dataverse, guestbook) | yes |
 
 ## Downloaded but not loaded
 

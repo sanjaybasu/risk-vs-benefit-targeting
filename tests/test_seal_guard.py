@@ -42,22 +42,23 @@ def test_scorer_recovers_known_gap(tmp_path):
     y0 = rng.binomial(1, risk)
     y = np.where(w == 1, np.maximum(y0 - rng.binomial(1, np.minimum(tau / risk, 1)), 0), y0)
     ids = [f"u{i}" for i in range(n)]
-    pd.DataFrame({"row_id": ids, "action": np.where(w == 1, "act", "ref"), "outcome": y,
-                  "propensity": 0.5}).to_parquet(tmp_path / "toy_test.parquet")
-    pdir = tmp_path / "pred"
-    pdir.mkdir()
-    pd.DataFrame({"row_id": ids, "cluster_id": ids, "risk": risk, "scale": risk * (1 - risk),
-                  "benefit": tau, "m0": risk, "m1": np.clip(risk - tau, 0, 1)}).to_parquet(pdir / "toy.parquet")
-    (pdir / "meta.json").write_text(json.dumps({"toy": {"action": "act", "reference": "ref", "better": "lower"}}))
+    sealed = pd.DataFrame({"row_id": ids, "cluster_id": ids, "action": np.where(w == 1, "act", "ref"),
+                           "outcome": y, "propensity": 0.5})
+    pred = pd.DataFrame({"row_id": ids, "risk": risk, "scale": risk * (1 - risk), "benefit": tau,
+                         "m0": risk, "m1": np.clip(risk - tau, 0, 1)})
+    meta = {"action": "act", "reference": "ref", "better": "lower"}
     spec = importlib.util.spec_from_file_location("s", ROOT / "scripts" / "score_sealed.py")
     mod = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(mod)
-    res = mod.score_trial(pd.read_parquet(tmp_path / "toy_test.parquet"),
-                          pd.read_parquet(pdir / "toy.parquet"), {"action": "act", "reference": "ref",
-                                                                   "better": "lower"})
-    row = [r for r in res["table"] if r["ranking"] == "benefit-minus-risk" and r["budget"] == 0.2
-           and r["metric"] == "per_1000"][0]
+    mod.N_BOOT = 300
+    res = mod.score_trial(sealed, pred, meta)
+    row = [r for r in res["table"] if r["ranking"] == "benefit-minus-risk" and r["budget"] == 0.2][0]
     assert row["lo95"] > 0, row
+    import pytest as _pt
+    with _pt.raises(ValueError):  # predictions may not carry sealed-side columns
+        mod.score_trial(sealed, pred.assign(cluster_id=ids), meta)
+    with _pt.raises(ValueError):  # every sealed row needs a prediction
+        mod.score_trial(sealed, pred.iloc[:-1], meta)
 
 
 def test_split_hash_is_stable_and_cluster_level():
