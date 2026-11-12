@@ -10,7 +10,7 @@ License: ODC-By 1.0 (Edinburgh DataShare handle 10283/128).
 
 import pandas as pd
 
-from system_three.loaders._base import RAW, frame
+from system_three.loaders._base import RAW, _is_text, frame
 from system_three.table import DatasetInfo
 
 INFO = DatasetInfo(
@@ -35,7 +35,7 @@ def load() -> pd.DataFrame:
     d = d[d["OCCODE"].isin([1, 2, 3, 4])].reset_index(drop=True)
     x = pd.DataFrame(index=d.index)
     for c in RFORM:
-        if d[c].dtype == object:
+        if _is_text(d[c]):
             if c in ("RCONSC", "STYPE"):
                 x = x.join(pd.get_dummies(d[c], prefix=c, dtype=float))
             else:

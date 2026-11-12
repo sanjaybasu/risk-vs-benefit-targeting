@@ -4,7 +4,7 @@ import numpy as np
 import pandas as pd
 import pyreadr
 
-from system_three.loaders._base import RAW, frame
+from system_three.loaders._base import RAW, _is_text, frame
 from system_three.table import DatasetInfo
 
 # ---------------------------------------------------------------- GUSTO-I
@@ -32,7 +32,7 @@ def load_gusto() -> pd.DataFrame:
     d = d[d["tx"].isin(["tPA", "SK"])].reset_index(drop=True)
     x = d[GUSTO_X].copy()
     for c in x.columns:
-        if x[c].dtype == object or str(x[c].dtype) == "category":
+        if _is_text(x[c]) or str(x[c].dtype) == "category":
             x[c] = x[c].astype("category").cat.codes.replace(-1, np.nan)
     action = d["tx"].map({"tPA": "accelerated_tpa", "SK": "streptokinase"})
     prop = np.where(action == "accelerated_tpa", 1 / 3, 2 / 3)
@@ -145,7 +145,7 @@ def _load_elaia(k: int) -> pd.DataFrame:
     d = d[d["composite_outcome"].notna()].reset_index(drop=True)
     x = d[[c for c in cols if c in d.columns]].copy()
     for c in x.columns:
-        if x[c].dtype == object:
+        if _is_text(x[c]):
             x[c] = x[c].astype("category").cat.codes.replace(-1, np.nan)
     # Individual 1:1 randomization, stratified by hospital (stratum).
     action = d["alert"].map({1: "aki_alert", 0: "usual_care"})
@@ -182,7 +182,7 @@ def load_synbiotic() -> pd.DataFrame:
     d = d[d["SEPSISDEATH"].notna() & d["TX"].notna()].reset_index(drop=True)
     x = d[[c for c in SYN_X if c in d.columns]].copy()
     for c in x.columns:
-        if x[c].dtype == object:
+        if _is_text(x[c]):
             x[c] = x[c].astype("category").cat.codes.replace(-1, np.nan)
     t = pd.to_numeric(d["TX"], errors="coerce")
     action = pd.Series(np.where(t == 1, "synbiotic", "placebo"))

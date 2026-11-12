@@ -128,6 +128,34 @@ def prompt(trial: str, row: pd.Series) -> str:
             f"person under the action compared with the comparison.")
 
 
+def rebuild(trials: list[str]) -> None:
+    """Rebuild requests for the named trials after a loader fix (deviation 2026-11-12): their old
+    answers move to results_superseded.jsonl and their batch entries are retired, so submit only
+    sends the new prompts and collect cannot mix old and new answers."""
+    req = pd.read_parquet(OUT / "requests.parquet")
+    old = req[req["trial"].isin(trials)]
+    res_path = OUT / "results.jsonl"
+    keep, sup = [], []
+    for line in res_path.read_text().splitlines():
+        (sup if json.loads(line)["custom_id"] in set(old["custom_id"]) else keep).append(line)
+    (OUT / "results_superseded.jsonl").open("a").write("\n".join(sup) + "\n")
+    res_path.write_text("\n".join(keep) + "\n")
+    st = json.loads(STATE.read_text())
+    for b in st["batches"]:
+        b["custom_ids"] = [c for c in b["custom_ids"] if c not in set(old["custom_id"])]
+        b.setdefault("retired_ids_superseded", 0)
+    STATE.write_text(json.dumps(st))
+    rows = []
+    for t in trials:
+        smp = sample(t)
+        for _, r in smp.iterrows():
+            rows.append({"custom_id": f"{t}__v2__{hashlib.sha1(str(r['row_id']).encode()).hexdigest()[:16]}",
+                         "trial": t, "row_id": str(r["row_id"]), "prompt": prompt(t, r)})
+    new = pd.concat([req[~req["trial"].isin(trials)], pd.DataFrame(rows)], ignore_index=True)
+    new.to_parquet(OUT / "requests.parquet", index=False)
+    print(f"rebuilt {len(rows):,} requests for {trials}; superseded {len(sup):,} answers")
+
+
 def build() -> Path:
     OUT.mkdir(exist_ok=True)
     rows = []
@@ -192,7 +220,7 @@ def collect() -> None:
                 print(b["id"], info.processing_status, info.request_counts)
                 continue
             for r in c.messages.batches.results(b["id"]):
-                if r.custom_id in have:
+                if r.custom_id in have or r.custom_id not in set(b["custom_ids"]):
                     continue
                 rec = {"custom_id": r.custom_id, "type": r.result.type}
                 if r.result.type == "succeeded":
@@ -238,8 +266,10 @@ def write_predictions() -> None:
 
 if __name__ == "__main__":
     ap = argparse.ArgumentParser()
-    ap.add_argument("mode", choices=["build", "submit", "collect", "predictions"])
+    ap.add_argument("mode", choices=["build", "rebuild", "submit", "collect", "predictions"])
+    ap.add_argument("--trials", default="")
     ap.add_argument("--pilot", type=int, default=None)
     a = ap.parse_args()
-    {"build": build, "submit": lambda: submit(a.pilot), "collect": collect,
+    {"build": build, "rebuild": lambda: rebuild([t for t in a.trials.split(",") if t]),
+     "submit": lambda: submit(a.pilot), "collect": collect,
      "predictions": write_predictions}[a.mode]()

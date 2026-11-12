@@ -1,0 +1,29 @@
+{
+ "seed": 20261113,
+ "tertiles": [
+  [
+   "synbiotic",
+   "gusto",
+   "elaia2",
+   "karlan_list",
+   "ist"
+  ],
+  [
+   "stepup",
+   "x5",
+   "sf_email",
+   "lenta"
+  ],
+  [
+   "sixcity",
+   "newhaven",
+   "voter",
+   "hillstrom"
+  ]
+ ],
+ "holdouts": [
+  "ist",
+  "stepup",
+  "hillstrom"
+ ]
+}

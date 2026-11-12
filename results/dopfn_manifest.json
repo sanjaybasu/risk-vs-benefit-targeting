@@ -1,0 +1,77 @@
+{
+ "elaia1": {
+  "n_context_used": 3000,
+  "n_features": 45,
+  "sha256": "e9229619b19ee07dc2bfb4c71e0e0d3ab7d92da276e7e747673e4a37b7553920"
+ },
+ "elaia2": {
+  "n_context_used": 2528,
+  "n_features": 45,
+  "sha256": "44040fd55120e7a1b3ff8a5022f409a0e6cbbb4e29b194342a4244d36f46642b"
+ },
+ "gusto": {
+  "n_context_used": 3000,
+  "n_features": 25,
+  "sha256": "02c2e8e5ef759f64e9ded034e49f615842805152c41183b751f54281bff21f2f"
+ },
+ "hillstrom": {
+  "n_context_used": 3000,
+  "n_features": 11,
+  "sha256": "109a52c27905c437f684811f8992b407027e8eb7cd7482ba8befc9d3abd36731"
+ },
+ "ist": {
+  "n_context_used": 3000,
+  "n_features": 26,
+  "sha256": "787598e22971988d605540a656fe1e454942cb4c1c78de031f56605847a49d7b"
+ },
+ "karlan_list": {
+  "n_context_used": 3000,
+  "n_features": 26,
+  "sha256": "3eca68b1e413b1dd82f4a4e4cc02d9a3faf0e636ee1f2f86164e435dbc4c6b03"
+ },
+ "lenta": {
+  "n_context_used": 3000,
+  "n_features": 50,
+  "sha256": "603c0e807570797476daaf7ad462107f4c72319e1f0990c48cfbb3742ee3243f"
+ },
+ "newhaven": {
+  "n_context_used": 3000,
+  "n_features": 7,
+  "sha256": "07d52c095cad07149d6ff83431a935a84caa003ca6ec608015165cc3e4748437"
+ },
+ "oregon": {
+  "n_context_used": 3000,
+  "n_features": 49,
+  "sha256": "c0592c140150c56ae0308597b770fb19d17538b4fa6ac87db3a835c839074385"
+ },
+ "sf_email": {
+  "n_context_used": 3000,
+  "n_features": 12,
+  "sha256": "dbc1270e9acd52a868a9c9dfcbedbe9768fdda449c497d94f6d43b2d8c12609a"
+ },
+ "sixcity": {
+  "n_context_used": 3000,
+  "n_features": 17,
+  "sha256": "1de13382cdfebe3173d17f7aebf47566f7cd6f57c37bc503b05cc455f2d75d9f"
+ },
+ "stepup": {
+  "n_context_used": 3000,
+  "n_features": 17,
+  "sha256": "960d47b2e3f7d6cb3ecaf43eba2d36a7e7cba58ddea7523eca01a640b8bf82dd"
+ },
+ "synbiotic": {
+  "n_context_used": 2278,
+  "n_features": 11,
+  "sha256": "59368ecb85e5a2d93a2a9080dbaa11e5f36f34c12ffb73d912905a444e5f8cda"
+ },
+ "voter": {
+  "n_context_used": 3000,
+  "n_features": 8,
+  "sha256": "5721ac45b31034690248d3ae0fbc2c078ae0c9ce59282ccdf1f919840ce0b8f7"
+ },
+ "x5": {
+  "n_context_used": 3000,
+  "n_features": 12,
+  "sha256": "b3bf3a08cd8cf0d071a6fb3ab3d0fe02ab350365b3689b3a43e119011d3f80b5"
+ }
+}

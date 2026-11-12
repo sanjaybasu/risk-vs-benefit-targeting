@@ -17,6 +17,12 @@ import pandas as pd
 RAW = Path(__file__).resolve().parents[3] / "data" / "raw"
 
 
+def _is_text(s: pd.Series) -> bool:
+    """True for text columns under pandas 2 (object) and pandas 3 (str dtype). A check written as
+    `dtype == object` misses pandas 3 text columns, which then coerce to all-missing."""
+    return s.dtype == object or pd.api.types.is_string_dtype(s.dtype)
+
+
 def frame(
     name: str,
     x: pd.DataFrame,

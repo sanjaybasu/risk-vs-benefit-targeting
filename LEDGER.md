@@ -108,3 +108,20 @@ failures included. Never edit a past entry; add a correction entry instead.
   - Cost is about $90 in total. Per-batch token totals were not saved; the estimate extrapolates from the third batch, $17.59 for 4,786 requests.
   - Requests bypassed the local compression proxy.
 - **Scorer:** gained `--allow-subset`. Registration update 1 is drafted (`notebooks/system-three/preregistration/REGISTRATION_UPDATE_1.md`) and will post once r2vsu is approved.
+
+## 2026-11-12 — Deviation 1: pandas 3 text-dtype covariate loss (IST, synbiotic), corrected before unsealing
+
+- **Found:** while checking Do-PFN inputs (IST had 3 features). Under pandas 3, a `dtype == object` check misses `str` columns, so coded covariates coerced to all-missing.
+  - IST lost 17 of 20 covariates.
+  - Synbiotic lost 5 of 11.
+  - A scan of all 19 datasets found no other affected trial.
+- **Fix:** `_is_text` in loaders `_base.py`, plus the regression test `tests/test_loaders_text.py`. The seal hashes are unchanged, so the splits and outcomes are identical.
+- **Recomputed for IST and synbiotic:** moderators on Modal with pinned uv.lock versions (200 half-samples), dev variances, main predictions, split-context and LOEO predictions, CausalPFN, Do-PFN, and the LLM run (3,363 requests, $5.47; superseded answers kept in `llm/results_superseded.jsonl`).
+- **Results:**
+  - IST: β changed from −0.055 to −0.081, the moderator from +5.78 to +14.06, and the AUC from 0.662 to 0.773.
+  - Synbiotic: unchanged in substance (moderator 0).
+  - Power is unchanged: 0.997 at τ = 0, 0.660 at τ = 20, and size 0.024 to 0.029.
+- **Verification:** all copied columns in the contender files match the corrected main predictions, and the forecast β equals the deployed β for both trials.
+- **Dev read:** the corrected IST dev run produced point estimates (scale-minus-risk +93.8). Only their variance enters the weights, and they are recorded here per §4a.
+- **Do-PFN:** all 15 trials ran in an isolated Modal container at commit 90d6743, included at Sanjay's direction despite the missing license. Its levels are inflated (synbiotic CATE −0.11 against a trial effect of −0.036), but only rankings are scored.
+- **Registration update 1:** rebuilt with the deviation section.
