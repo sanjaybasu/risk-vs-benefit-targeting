@@ -38,3 +38,22 @@ failures included. Never edit a past entry; add a correction entry instead.
 - **StepUp:** downloaded through the OSF view-only link printed in the Nature 2021 data statement. The contrast is all 53 programs pooled against Placebo Control; no arm was selected on outcomes. The outcome is any gym visit in weeks 1 to 4. The propensity is the within-cohort treated share. Participants: 61,293, matching the paper.
 - **Failure:** Dryad's dataset and file download APIs return 401 without an account token (ELAIA-1, ELAIA-2, synbiotic sepsis). These need a browser download.
 - **First dev run:** `scripts/05_dev_baselines.py` covered Camden, IST, Hillstrom, and Oregon. It fit on context and scored dev only, with q = 0.2. Every paired contrast CI includes 0. The scale model is at or above the benefit learner in IST and Hillstrom. These are smoke-test results only; nothing was tuned on them.
+
+## 2026-11-12 — last four trials, recalibrated scale model, scorer, forecasts
+
+- **Manual downloads by Sanjay:** ELAIA-1, ELAIA-2, and synbiotic sepsis came from Dryad (CC0) through a browser. Karlan–List came from IPA Dataverse after he completed the guestbook.
+- **Reproductions:**
+
+  | Trial | Reproduced | Published |
+  |---|---|---|
+  | ELAIA-1 | +0.0041 | +0.005 (BMJ 2021) |
+  | ELAIA-2 | −0.0217 | −0.022 (Nat Commun 2023) |
+  | Synbiotic | −40.3% relative | −40% (Nature 2017) |
+
+  Karlan–List: 2.20% against 1.79%. The published value is not yet verified.
+- **Synbiotic duplicates:** two Study_IDs appear twice with identical records. All 4,556 rows are kept, matching the published N, with Study_ID as the cluster.
+- **Fix to the scale model:** the first version fitted only a treatment log-odds shift on an out-of-fold risk offset. The shift absorbed the risk model's miscalibration: ELAIA-1 implied a 5.4-point harm against a raw +0.4. It now fits logit P = α + γ·logit p0 + β·a (`rankers.scale_fit`). The predicted average effects now track the raw context effects.
+- **Forecasts:** `scripts/06_scale_forecast.py` computed scale-predicted gaps on context data only. They are recorded in pre-registration draft v0 and `results/scale_forecast.json`.
+- **Forecast holdouts:** the seeded lottery (20261112) stratified by intervention class drew synbiotic, sf_email, and oregon.
+- **Scorer:** `scripts/score_sealed.py` is the frozen custodian scorer. It takes the sealed path as an argument. Its synthetic recovery test is in `tests/test_seal_guard.py`.
+- **Red-team:** the Fable xhigh adversarial review of the pre-registration ran as workflow `wf_cb641732-837`. Reviewers were not shown the dev results.

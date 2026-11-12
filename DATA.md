@@ -25,6 +25,10 @@ Every dataset is public. Raw files live in `data/raw/<dataset>/` (gitignored); `
 | gusto | C | death_30d (lower) | 30,510 | 9,115 | 0.339 | 0.0702 | -0.1374 vs -0.14 (match) | 0.20 SD | GPL (CRAN predtools 0.0.3; data source listed as 'Internet'); counsel to confirm | no |
 | sf_email | B | voted_jun2010 (higher) | 47,309 | 14,220 | 0.667 | 0.3355 | 0.00537 vs n/a (no external target) | 0.18 SD | CC0-1.0 | yes |
 | stepup | B | any_gym_visit_wk1_4 (higher) | 61,293 | 18,335 | 0.919 | 0.7887 | 6.129e+04 vs 61293 (match) | 0.54 SD | no license on the OSF node; deidentified data shared with 24 Hour Fitness permission via the view-only link in the paper's data statement | no |
+| elaia1 | C | aki_progression_dialysis_or_death_14d (lower) | 6,030 | 1,790 | 0.507 | 0.2132 | 0.004111 vs 0.005 (match) | 0.47 SD | CC0-1.0 (Dryad) | yes |
+| elaia2 | C | aki_progression_dialysis_or_death_14d (lower) | 5,060 | 1,473 | 0.500 | 0.2367 | -0.02173 vs -0.022 (match) | 0.53 SD | CC0-1.0 (Dryad) | yes |
+| synbiotic | C | sepsis_or_death_60d (lower) | 4,556 | 1,363 | 0.500 | 0.0736 | -0.4029 vs -0.4 (match) | 0.50 SD | CC0-1.0 (Dryad) | yes |
+| karlan_list | B | gave (higher) | 50,083 | 14,949 | 0.667 | 0.02132 | 0.00418 vs n/a (no external target) | 0.15 SD | CC0-1.0 (IPA Dataverse, guestbook) | yes |
 
 ## Downloaded but not loaded
 

@@ -93,6 +93,131 @@ def load_stepup() -> pd.DataFrame:
                  stratum=d["cohort"], row_id=d["participant_id"])
 
 
+# ---------------------------------------------------------------- ELAIA-1 and ELAIA-2 (AKI alerts)
+def _elaia_info(k: int) -> DatasetInfo:
+    cite = {1: "Wilson FP, Martin M, Yamamoto Y, et al. Electronic health record alerts for acute "
+               "kidney injury: multicenter, randomized clinical trial. BMJ 2021;372:m4786. "
+               "Data: Dryad doi:10.5061/dryad.4f4qrfj95",
+            2: "Wilson FP, et al. A randomized clinical trial assessing the effect of automated "
+               "medication-targeted alerts on acute kidney injury outcomes. Nat Commun 2023;14:2826. "
+               "Data: Dryad doi:10.5061/dryad.kh189327p"}[k]
+    return DatasetInfo(
+        name=f"elaia{k}", tier="C", outcome_name="aki_progression_dialysis_or_death_14d",
+        better="lower", reference="usual_care", actions=("usual_care", "aki_alert"),
+        license="CC0-1.0 (Dryad)", commercial_use=True, citation=cite)
+
+
+ELAIA1, ELAIA2 = _elaia_info(1), _elaia_info(2)
+# BMJ 2021: composite 653 (21.4%) alert vs 622 (20.9%) usual care.
+ELAIA1_PUBLISHED = {"source": "BMJ 2021 abstract: 21.4% vs 20.9%", "arm": "aki_alert",
+                    "metric": "diff", "value": 0.005, "tol": 0.0015}
+# Nat Commun 2023: composite 23.1% alert vs 25.3% usual care (RR 0.92, 0.83-1.01).
+ELAIA2_PUBLISHED = {"source": "Nat Commun 2023 abstract: 23.1% vs 25.3%", "arm": "aki_alert",
+                    "metric": "diff", "value": -0.022, "tol": 0.0015}
+# Pre-randomization fields only (whitelist).
+ELAIA1_X = ["hospital", "age", "sex", "race", "ethnicity", "admit_medical", "emergency_room", "icu",
+            "ward", "chf", "copd", "diabetes", "hypertension", "liver_disease", "malignancy", "ckd_icd",
+            "elx_score", "sofa", "baseline_creat", "initial_egfr", "creat_at_rand", "bun_at_rand",
+            "anion_gap_at_rand", "bicarbonate_at_rand", "chloride_at_rand", "hemoglobin_at_rand",
+            "plateletcount_at_rand", "potassium_at_rand", "sodium_at_rand", "wbcc_at_rand",
+            "systolic_at_rand", "diastolic_at_rand", "pulse_at_rand", "resp_at_rand", "aki_to_rand",
+            "time_to_rand", "acearbreninpre24", "aminopre24", "nsaidpre24", "prior_acearbrenin72",
+            "prior_contraststudy72", "prior_ctsurgery7", "prior_nsaid72", "prior_ppi72", "bnp_flag"]
+ELAIA2_X = ["hospital", "age", "sex", "icu_at_rand", "ward_at_rand", "er_at_rand", "num_med",
+            "on_acearb", "on_nsaid", "on_ppi", "time_to_rand", "aki_to_rand", "aki_stage_at_rand",
+            "admit_medical", "prior_cs72", "ckd_pmhx", "chf_elx_pmhx", "pulm_disease_elx_pmhx",
+            "diabetes_elx_pmhx", "htn_elx_pmhx", "malignancy_elx_pmhx", "liverdisease_elx_pmhx",
+            "elx_score_pmhx", "creat_at_rand", "mincreat48_prior", "mincreat7_prior",
+            "admit_creatinine", "baseline_creat", "aniongap_at_rand", "bicarbonate_at_rand",
+            "bun_at_rand", "chloride_at_rand", "egfr_at_admit", "hemoglobin_at_rand",
+            "plateletcount_at_rand", "potassium_at_rand", "sodium_at_rand", "wbcc_at_rand",
+            "systolic_at_rand", "diastolic_at_rand", "pulse_at_rand", "resp_at_rand", "spo2_at_rand",
+            "temp_at_rand", "sofa_at_rand"]
+
+
+def _load_elaia(k: int) -> pd.DataFrame:
+    if k == 1:
+        d = pd.read_csv(RAW / "elaia1" / "ELAIA-1_deidentified_data_10-6-2020.csv", low_memory=False)
+        cols, info = ELAIA1_X, ELAIA1
+    else:
+        d = pd.read_csv(RAW / "elaia2" / "deidentified_elaia2_data_missing_NaN3.csv", low_memory=False)
+        cols, info = ELAIA2_X, ELAIA2
+    d = d[d["composite_outcome"].notna()].reset_index(drop=True)
+    x = d[[c for c in cols if c in d.columns]].copy()
+    for c in x.columns:
+        if x[c].dtype == object:
+            x[c] = x[c].astype("category").cat.codes.replace(-1, np.nan)
+    # Individual 1:1 randomization, stratified by hospital (stratum).
+    action = d["alert"].map({1: "aki_alert", 0: "usual_care"})
+    return frame(info.name, x, action, d["composite_outcome"], info, propensity=0.5,
+                 stratum=d["hospital"], row_id=d["id"])
+
+
+def load_elaia1() -> pd.DataFrame:
+    return _load_elaia(1)
+
+
+def load_elaia2() -> pd.DataFrame:
+    return _load_elaia(2)
+
+
+# ---------------------------------------------------------------- Synbiotic neonatal sepsis (Odisha)
+SYNBIOTIC = DatasetInfo(
+    name="synbiotic", tier="C", outcome_name="sepsis_or_death_60d", better="lower",
+    reference="placebo", actions=("placebo", "synbiotic"), license="CC0-1.0 (Dryad)",
+    commercial_use=True,
+    citation="Panigrahi P, Parida S, Nanda NC, et al. A randomized synbiotic trial to prevent sepsis "
+    "among infants in rural India. Nature 2017;548:407-412. Data: Dryad doi:10.5061/dryad.275d4",
+)
+# Nature 2017: sepsis or death 9.0% placebo vs 5.4% synbiotic (RR 0.60).
+SYNBIOTIC_PUBLISHED = {"source": "Nature 2017: RR 0.60 (0.48-0.74)", "arm": "synbiotic",
+                       "metric": "relative_change", "value": -0.40, "tol": 0.02}
+SYN_X = ["Sex_of_Infant", "BWT", "GA", "MOMAGE", "MOMPAR", "Twins", "DELIV", "DELIV_MODE",
+         "Delivered_by", "Weight_Enroll", "POPBLOCK12"]
+
+
+def load_synbiotic() -> pd.DataFrame:
+    d = pd.read_csv(RAW / "synbiotic" / "Panigrahi+et+al.SEPSSIF.CSV", low_memory=False,
+                    encoding="latin-1")
+    d = d[d["SEPSISDEATH"].notna() & d["TX"].notna()].reset_index(drop=True)
+    x = d[[c for c in SYN_X if c in d.columns]].copy()
+    for c in x.columns:
+        if x[c].dtype == object:
+            x[c] = x[c].astype("category").cat.codes.replace(-1, np.nan)
+    t = pd.to_numeric(d["TX"], errors="coerce")
+    action = pd.Series(np.where(t == 1, "synbiotic", "placebo"))
+    # Two Study_IDs appear twice with identical records; the published N (4,556) counts all rows.
+    # Rows keep their own id; Study_ID is the cluster so duplicates share a split.
+    return frame("synbiotic", x, action, pd.to_numeric(d["SEPSISDEATH"]), SYNBIOTIC,
+                 propensity=0.5, stratum=d["POPBLOCK12"], cluster=d["Study_ID"],
+                 row_id=d["Study_ID"] + "_" + d.index.astype(str))
+
+
+# ---------------------------------------------------------------- Karlan-List matching grants
+KARLAN = DatasetInfo(
+    name="karlan_list", tier="B", outcome_name="gave", better="higher", reference="no_match",
+    actions=("no_match", "matching_grant"), license="CC0-1.0 (IPA Dataverse, guestbook)",
+    commercial_use=True,
+    citation="Karlan D, List JA. Does price matter in charitable giving? Evidence from a large-scale "
+    "natural field experiment. Am Econ Rev 2007;97:1774-1793. Data: doi:10.7910/DVN/27853",
+)
+KARLAN_PUBLISHED = {"source": "AER 2007 Table 2 response rate difference [value UNVERIFIED]",
+                    "arm": "matching_grant", "metric": "diff", "value": None, "tol": None}
+# Pre-treatment fields. stateresponse* are excluded: they aggregate this experiment's outcomes.
+KARLAN_X = ["hpa", "ltmedmra", "freq", "years", "year5", "mrm2", "dormant", "female", "couple",
+            "nonlit", "cases", "statecnt", "perbush", "close25", "red0", "blue0", "redcty", "bluecty",
+            "pwhite", "pblack", "page18_39", "ave_hh_sz", "median_hhincome", "powner",
+            "psch_atlstba", "pop_propurban"]
+
+
+def load_karlan_list() -> pd.DataFrame:
+    d = pd.read_stata(RAW / "karlan_list" / "AER merged.dta", convert_categoricals=False)
+    p = d["treatment"].mean()  # design share assigned to any match (about 2/3)
+    action = d["treatment"].map({1: "matching_grant", 0: "no_match"})
+    prop = np.where(d["treatment"] == 1, p, 1 - p)
+    return frame("karlan_list", d[KARLAN_X], action, d["gave"], KARLAN, propensity=pd.Series(prop))
+
+
 # ---------------------------------------------------------------- San Francisco official email, June 2010
 SF_ARMS = {0: "control", 1: "registrar_email", 2: "advocacy_email"}
 SF_ARM_PROBS = {a: 1 / 3 for a in SF_ARMS.values()}

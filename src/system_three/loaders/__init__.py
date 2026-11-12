@@ -26,6 +26,10 @@ def registry() -> dict:
         "gusto": (expansion.GUSTO, expansion.GUSTO_PUBLISHED, expansion.load_gusto),
         "sf_email": (expansion.SF_EMAIL, expansion.SF_PUBLISHED, expansion.load_sf_email),
         "stepup": (expansion.STEPUP, expansion.STEPUP_PUBLISHED, expansion.load_stepup),
+        "elaia1": (expansion.ELAIA1, expansion.ELAIA1_PUBLISHED, expansion.load_elaia1),
+        "elaia2": (expansion.ELAIA2, expansion.ELAIA2_PUBLISHED, expansion.load_elaia2),
+        "synbiotic": (expansion.SYNBIOTIC, expansion.SYNBIOTIC_PUBLISHED, expansion.load_synbiotic),
+        "karlan_list": (expansion.KARLAN, expansion.KARLAN_PUBLISHED, expansion.load_karlan_list),
     }
     for pair in tier_a.RB_PAIRS:
         info = tier_a.rb_info(pair)

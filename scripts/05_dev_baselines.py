@@ -26,8 +26,9 @@ from system_three.splits import PROCESSED, load
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / "results" / "dev_baselines.json"
 # Pre-specified contrast arm for multi-arm trials (the published headline arm).
-ARM = {"voter": "neighbors", "hillstrom": "mens_email"}
-BINARY = ["voter", "hillstrom", "oregon", "ist", "camden", "criteo"]
+ARM = {"voter": "neighbors", "hillstrom": "mens_email", "sf_email": "registrar_email"}
+BINARY = ["gusto", "ist", "elaia1", "elaia2", "synbiotic", "voter", "sf_email", "karlan_list",
+          "stepup", "oregon", "hillstrom", "camden", "criteo"]
 CAP = {"criteo": (1_000_000, 500_000)}  # (context rows, dev rows) sampled for local runs
 BUDGETS = (0.10, 0.20, 0.30)
 

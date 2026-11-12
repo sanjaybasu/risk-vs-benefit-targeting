@@ -36,6 +36,27 @@ class Fitted:
     beta: float  # scale model log-odds shift
     tau: object  # DR-learner regressor
     better: str
+    alpha: float = 0.0  # recalibration intercept for logit p0
+    gamma: float = 1.0  # recalibration slope for logit p0
+
+
+def scale_fit(off: np.ndarray, w: np.ndarray, y: np.ndarray) -> tuple[float, float, float]:
+    """Fit logit P(Y=1) = alpha + gamma * off + beta * w by Newton-Raphson (unpenalized).
+
+    alpha and gamma recalibrate the cross-fitted risk score, so beta carries only the
+    constant relative effect of the action.
+    """
+    Z = np.column_stack([np.ones_like(off), off, w])
+    theta = np.array([0.0, 1.0, 0.0])
+    for _ in range(100):
+        p = expit(Z @ theta)
+        grad = Z.T @ (y - p)
+        hess = (Z * (p * (1 - p))[:, None]).T @ Z + 1e-8 * np.eye(3)
+        step = np.linalg.solve(hess, grad)
+        theta += step
+        if np.max(np.abs(step)) < 1e-9:
+            break
+    return float(theta[0]), float(theta[1]), float(theta[2])
 
 
 def _clf():
@@ -57,22 +78,13 @@ def fit(X: np.ndarray, w: np.ndarray, y: np.ndarray, e: np.ndarray, better: str,
             idx = tr[w[tr] == arm]
             store[te] = _clf().fit(X[idx], y[idx]).predict_proba(X[te])[:, 1]
     m0, m1 = _clip(m0), _clip(m1)
-    # Scale model: one log-odds shift on the treated, offset by cross-fitted logit p0.
-    off = logit(m0)
-    beta = 0.0
-    for _ in range(50):  # Newton steps for a single coefficient with an offset
-        p = expit(off + beta * w)
-        g = np.sum(w * (y - p))
-        h = np.sum(w * p * (1 - p))
-        step = g / max(h, 1e-9)
-        beta += step
-        if abs(step) < 1e-8:
-            break
+    # Scale model: recalibrated cross-fitted logit p0 plus one log-odds shift for the action.
+    alpha, gamma, beta = scale_fit(logit(m0), w, y)
     pseudo = m1 - m0 + w * (y - m1) / e - (1 - w) * (y - m0) / (1 - e)
     tau = HistGradientBoostingRegressor(**GB).fit(X, pseudo)
     p0 = _clf().fit(X[w == 0], y[w == 0])
     p1 = _clf().fit(X[w == 1], y[w == 1])
-    return Fitted(p0=p0, p1=p1, beta=float(beta), tau=tau, better=better)
+    return Fitted(p0=p0, p1=p1, beta=beta, tau=tau, better=better, alpha=alpha, gamma=gamma)
 
 
 def scores(f: Fitted, X: np.ndarray) -> dict[str, np.ndarray]:
@@ -81,7 +93,8 @@ def scores(f: Fitted, X: np.ndarray) -> dict[str, np.ndarray]:
     p0 = _clip(f.p0.predict_proba(X)[:, 1])
     p1 = _clip(f.p1.predict_proba(X)[:, 1])
     undesirable = p0 if f.better == "lower" else 1 - p0
-    scale = s * (expit(logit(p0) + f.beta) - p0)
+    lin = f.alpha + f.gamma * logit(p0)
+    scale = s * (expit(lin + f.beta) - expit(lin))
     benefit = s * f.tau.predict(X)
     return {"risk": undesirable, "scale": scale, "benefit": benefit, "_m0": p0, "_m1": p1}
 
