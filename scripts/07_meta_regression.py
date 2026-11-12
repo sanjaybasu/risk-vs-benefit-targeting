@@ -36,6 +36,7 @@ ROOT = Path(__file__).resolve().parents[1]
 RES = ROOT / "results"
 Q = "0.2"
 SEED = 20261112
+BIOLOGICAL = {"gusto", "ist", "synbiotic"}  # Section 3 class rule
 V_FLOOR = 2.0 ** 2  # floor on primary sampling variance, (per 1,000)^2
 FORECAST_MARGIN_NATS = 1.0  # H1 forecasts must beat the intercept-only forecast by 1 nat (summed)
 
@@ -158,13 +159,24 @@ def simulate(n_sims=4000) -> dict:
                     grid[f"noise={noise},slope={slope},tau={tau},trunc={trunc}"] = {
                         "p_weak_form_positive": rej_weak / n_sims,
                         "p_reject_joint_0_1": rej_joint / n_sims}
+    # Size of the weak form when fitting with the conservative design weights under realistic
+    # (paired) noise: the reason the primary weights are the paired variances.
+    if has_paired:
+        vd = v_true["conservative"]
+        for tau in (0, 10, 20, 30):
+            rej = 0
+            for _ in range(n_sims):
+                y = rng.normal(0, tau, len(x)) + rng.normal(0, np.sqrt(v_true["paired"]))
+                rej += slope_test(fit_re(y, X, vd))["lo95"] > 0
+            grid[f"weights=design,noise=paired,slope=0.0,tau={tau},trunc=False"] = {
+                "p_weak_form_positive": rej / n_sims}
     w = 1 / v
     Xw = X * w[:, None]
     H = X @ np.linalg.inv(X.T @ Xw) @ Xw.T
     xc = x - np.average(x, weights=w)
     info = w * xc**2 / np.sum(w * xc**2)
     influence = {t: {"hat": float(H[i, i]), "slope_information_share": float(info[i]),
-                     "x": float(x[i]), "design_se": float(np.sqrt(v[i])),
+                     "x": float(x[i]), "primary_se": float(np.sqrt(v[i])),
                      "paired_se": float(np.sqrt(post[t]["v_paired"])) if has_paired else None}
                  for i, t in enumerate(trials)}
     return {"confirmatory_trials": trials, "excluded_by_sign_rule": [t for t in post if t not in trials],
@@ -198,7 +210,7 @@ def analyze(scored: list[Path], holdouts: list[str]) -> dict:
     for trunc in (False, True):
         f = fit_re(y, X, v, truncate=trunc)
         res[f"H1_{'truncated' if trunc else 'primary'}"] = {**slope_test(f), "joint_0_1": joint_test(f)}
-    v_obs = np.array([max(obs[t]["scale_minus_risk_sd"] ** 2, 1e-6) for t in trials])
+    v_obs = np.array([max(obs[t]["scale_minus_risk_sd"] ** 2, V_FLOOR) for t in trials])
     res["H1_observed_variance_weights"] = slope_test(fit_re(y, X, v_obs))
     res["H1_design_variance_weights"] = slope_test(fit_re(y, X, v_design))
     # H1b: residual benefit - scale has no association with the moderator.
@@ -249,6 +261,19 @@ def analyze(scored: list[Path], holdouts: list[str]) -> dict:
     pq = np.array([post[t]["base"] * (1 - post[t]["base"]) for t in trials])
     yd = np.array([obs[t]["benefit_minus_risk"] for t in trials])
     res["H3_exploratory"] = slope_test(fit_re(yd, np.column_stack([np.ones_like(pq), pq]), v))
+    # Exploratory H2: residual benefit - scale on the biological-class indicator.
+    bio = np.array([1.0 if t in BIOLOGICAL else 0.0 for t in trials])
+    if 0 < bio.sum() < len(bio):
+        res["H2_exploratory"] = slope_test(fit_re(yb, np.column_stack([np.ones_like(bio), bio]), v))
+    # Sign-flip sensitivity: H1 weak form with the trials excluded by the sign rule included.
+    flips = [t for t, r in post.items() if not r["beneficial"] and t in obs and "v_primary" in r]
+    if flips:
+        tt = trials + flips
+        xf = np.array([post[t]["x"] for t in tt])
+        res["H1_with_sign_flip_trials"] = slope_test(fit_re(
+            np.array([obs[t]["scale_minus_risk"] for t in tt]), np.column_stack([np.ones_like(xf), xf]),
+            np.array([post[t]["v_primary"] for t in tt])))
+        res["H1_with_sign_flip_trials"]["added"] = flips
     return res
 
 
@@ -264,7 +289,7 @@ def main() -> None:
         (RES / "h1_power_simulation.json").write_text(json.dumps(out, indent=1))
         print("confirmatory:", out["confirmatory_trials"], "| excluded:", out["excluded_by_sign_rule"])
         for k, r in out["grid"].items():
-            print(f"{k:32s} weak={r['p_weak_form_positive']:.3f} joint_reject={r['p_reject_joint_0_1']:.3f}")
+            print(f"{k:32s} weak={r['p_weak_form_positive']:.3f} joint_reject={r.get('p_reject_joint_0_1', float('nan')):.3f}")
         for t, r in sorted(out["influence"].items(), key=lambda kv: -kv[1]["slope_information_share"]):
             print(f"  {t:12s} x={r['x']:+7.2f} se={r['design_se']:7.2f} hat={r['hat']:.2f} "
                   f"info={r['slope_information_share']:.2f}")

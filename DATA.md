@@ -17,7 +17,7 @@ Every dataset is public. Raw files live in `data/raw/<dataset>/` (gitignored); `
 | gusto | C | death_30d (lower) | 30,510 | 9,115 | 0.339 | 0.0702 | -0.1374 vs -0.14 (match) | 0.20 SD | GPL (CRAN predtools 0.0.3; data source listed as 'Internet'); counsel to confirm | no |
 | sf_email | B | voted_jun2010 (higher) | 47,309 | 9,495 | 0.667 | 0.3355 | 0.00537 vs n/a (no external target) | 0.22 SD | CC0-1.0 | yes |
 | stepup | B | any_gym_visit_wk1_4 (higher) | 61,293 | 18,335 | 0.919 | 0.7887 | 6.129e+04 vs 61293 (match) | 0.54 SD | no license on the OSF node; deidentified data shared with 24 Hour Fitness permission via the view-only link in the paper's data statement | no |
-| elaia1 | C | aki_progression_dialysis_or_death_14d (lower) | 6,030 | 1,790 | 0.507 | 0.2132 | 0.004111 vs 0.005 (match) | 0.47 SD | CC0-1.0 (Dryad) | yes |
+| elaia1 | C | aki_progression_dialysis_or_death_14d (lower) | 6,030 | 1,790 | 0.507 | 0.2132 | 0.004111 vs 0.004 (match) | 0.47 SD | CC0-1.0 (Dryad) | yes |
 | elaia2 | C | aki_progression_dialysis_or_death_14d (lower) | 5,060 | 1,473 | 0.500 | 0.2367 | -0.02173 vs -0.022 (match) | 0.53 SD | CC0-1.0 (Dryad) | yes |
 | synbiotic | C | sepsis_or_death_60d (lower) | 4,556 | 1,363 | 0.500 | 0.0736 | -0.4029 vs -0.4 (match) | 0.50 SD | CC0-1.0 (Dryad) | yes |
 | karlan_list | B | gave (higher) | 50,083 | 14,949 | 0.667 | 0.02132 | 0.00418 vs n/a (no external target) | 0.15 SD | CC0-1.0 (IPA Dataverse, guestbook) | yes |
@@ -29,6 +29,10 @@ Every dataset is public. Raw files live in `data/raw/<dataset>/` (gitignored); `
 | swebench__p50_to_p90 | A | resolved (higher) | 500 | 149 | 0.516 | 0.6353 | 0.214 vs n/a (no external target) | 0.68 SD | no license stated | no |
 | swebench__p10_to_p50 | A | resolved (higher) | 500 | 149 | 0.516 | 0.4188 | 0.282 vs n/a (no external target) | 0.79 SD | no license stated | no |
 | criteo | B | visit (higher) | 13,979,592 | 4,192,885 | 0.850 | 0.04697 | 0.85 vs 0.85 (match) | 0.01 SD | CC-BY-NC-SA-4.0 | no |
+| sixcity | B | voted_2001 (higher) | 18,930 | 5,713 | 0.461 | 0.2918 | 0.02061 vs n/a (no external target) | 0.29 SD | CC0-1.0 | yes |
+| newhaven | B | voted_1998 (higher) | 31,098 | 9,351 | 0.197 | 0.4358 | 0.02842 vs n/a (no external target) | 0.31 SD | CC0-1.0 | yes |
+| lenta | B | visit_after_sms (higher) | 687,029 | 205,780 | 0.751 | 0.1082 | 0.7509 vs n/a (no external target) | 0.05 SD | not stated (BigTarget hackathon data via scikit-uplift) | no |
+| x5 | B | purchase_after_sms (higher) | 200,039 | 60,628 | 0.500 | 0.6194 | 0.4998 vs n/a (no external target) | 0.12 SD | not stated (X5 RetailHero 2019 competition data via scikit-uplift) | no |
 
 ## Downloaded but not loaded
 

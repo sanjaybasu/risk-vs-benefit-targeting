@@ -108,9 +108,9 @@ def _elaia_info(k: int) -> DatasetInfo:
 
 
 ELAIA1, ELAIA2 = _elaia_info(1), _elaia_info(2)
-# BMJ 2021: composite 653 (21.4%) alert vs 622 (20.9%) usual care.
-ELAIA1_PUBLISHED = {"source": "BMJ 2021 abstract: 21.4% vs 20.9%", "arm": "aki_alert",
-                    "metric": "diff", "value": 0.005, "tol": 0.0015}
+# BMJ 2021 abstract (PMID 33461986): composite 21.3% alert vs 20.9% usual care.
+ELAIA1_PUBLISHED = {"source": "BMJ 2021 abstract: 21.3% vs 20.9%", "arm": "aki_alert",
+                    "metric": "diff", "value": 0.004, "tol": 0.0015}
 # Nat Commun 2023: composite 23.1% alert vs 25.3% usual care (RR 0.92, 0.83-1.01).
 ELAIA2_PUBLISHED = {"source": "Nat Commun 2023 abstract: 23.1% vs 25.3%", "arm": "aki_alert",
                     "metric": "diff", "value": -0.022, "tol": 0.0015}

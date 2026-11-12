@@ -210,6 +210,18 @@
   "noise=paired,slope=1.0,tau=30,trunc=True": {
    "p_weak_form_positive": 0.428,
    "p_reject_joint_0_1": 0.059
+  },
+  "weights=design,noise=paired,slope=0.0,tau=0,trunc=False": {
+   "p_weak_form_positive": 0.06633333333333333
+  },
+  "weights=design,noise=paired,slope=0.0,tau=10,trunc=False": {
+   "p_weak_form_positive": 0.06333333333333334
+  },
+  "weights=design,noise=paired,slope=0.0,tau=20,trunc=False": {
+   "p_weak_form_positive": 0.06533333333333333
+  },
+  "weights=design,noise=paired,slope=0.0,tau=30,trunc=False": {
+   "p_weak_form_positive": 0.052
   }
  },
  "influence": {
@@ -217,91 +229,91 @@
    "hat": 0.46807930082669014,
    "slope_information_share": 0.03050074770973474,
    "x": 3.469446951953614e-15,
-   "design_se": 2.0,
+   "primary_se": 2.0,
    "paired_se": 5.87562605297107e-15
   },
   "ist": {
    "hat": 0.0016385341475948752,
    "slope_information_share": 0.0003849660809721858,
    "x": 5.784146951219137,
-   "design_se": 37.36664012822307,
+   "primary_se": 37.36664012822307,
    "paired_se": 37.36664012822307
   },
   "synbiotic": {
    "hat": 0.46807930082669025,
    "slope_information_share": 0.03050074770973486,
    "x": 0.0,
-   "design_se": 2.0,
+   "primary_se": 2.0,
    "paired_se": 0.0
   },
   "elaia2": {
    "hat": 0.003391618610844964,
    "slope_information_share": 0.00014259973758008846,
    "x": 0.3853936052492235,
-   "design_se": 23.210360855561905,
+   "primary_se": 23.210360855561905,
    "paired_se": 23.210360855561905
   },
   "voter": {
    "hat": 0.42267815261520436,
    "slope_information_share": 0.4136267289461401,
    "x": 49.65656804394521,
-   "design_se": 13.905914760582567,
+   "primary_se": 13.905914760582567,
    "paired_se": 13.905914760582567
   },
   "sf_email": {
    "hat": 0.005911302893900738,
    "slope_information_share": 0.00300408481134997,
    "x": 9.05283043208212,
-   "design_se": 24.536872375787325,
+   "primary_se": 24.536872375787325,
    "paired_se": 24.536872375787325
   },
   "karlan_list": {
    "hat": 0.029684696555280474,
    "slope_information_share": 0.003147793920103703,
    "x": 4.301301438132715,
-   "design_se": 8.121437269232471,
+   "primary_se": 8.121437269232471,
    "paired_se": 8.121437269232471
   },
   "stepup": {
    "hat": 0.004746610514321802,
    "slope_information_share": 0.0016946525429871512,
    "x": 7.1344317116126685,
-   "design_se": 23.947971647843165,
+   "primary_se": 23.947971647843165,
    "paired_se": 23.947971647843165
   },
   "hillstrom": {
    "hat": 0.2967377620742321,
    "slope_information_share": 0.29182525101919765,
    "x": 56.354579729152206,
-   "design_se": 18.87583790750239,
+   "primary_se": 18.87583790750239,
    "paired_se": 18.87583790750239
   },
   "sixcity": {
    "hat": 0.044539791791573156,
    "slope_information_share": 0.04253471860164522,
    "x": 34.42754294729117,
-   "design_se": 29.545605492419195,
+   "primary_se": 29.545605492419195,
    "paired_se": 29.545605492419195
   },
   "newhaven": {
    "hat": 0.026635220934555535,
    "slope_information_share": 0.02549964003260094,
    "x": 35.366872713784886,
-   "design_se": 39.259880162791724,
+   "primary_se": 39.259880162791724,
    "paired_se": 39.259880162791724
   },
   "lenta": {
    "hat": 0.20778321967086813,
    "slope_information_share": 0.14962797199853548,
    "x": 13.206228440545965,
-   "design_se": 5.4860979181233125,
+   "primary_se": 5.4860979181233125,
    "paired_se": 5.4860979181233125
   },
   "x5": {
    "hat": 0.020094488538243332,
    "slope_information_share": 0.0075100968894179585,
    "x": 7.327797592163229,
-   "design_se": 11.79347787698133,
+   "primary_se": 11.79347787698133,
    "paired_se": 11.79347787698133
   }
  },

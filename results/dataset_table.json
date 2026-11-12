@@ -356,9 +356,9 @@
     "license": "CC0-1.0 (Dryad)",
     "commercial_use": true,
     "reproduction": {
-      "source": "BMJ 2021 abstract: 21.4% vs 20.9%",
+      "source": "BMJ 2021 abstract: 21.3% vs 20.9%",
       "metric": "diff",
-      "published": 0.005,
+      "published": 0.004,
       "tol": 0.0015,
       "reproduced": 0.0041113349278395495,
       "status": "match"

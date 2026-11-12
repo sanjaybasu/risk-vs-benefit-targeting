@@ -31,7 +31,7 @@ import numpy as np
 import pandas as pd
 
 from system_three.estimators.dr import aipw_scores
-from system_three.metrics import per_1000
+from system_three.metrics import per_1000, rate
 
 BUDGETS = (0.10, 0.20, 0.30)
 N_BOOT = 2000
@@ -79,7 +79,12 @@ def score_trial(sealed: pd.DataFrame, pred: pd.DataFrame, meta: dict) -> dict:
             est, lo, hi, sd = boot(fn, cl)
             rows.append({"ranking": name, "budget": q, "estimate": est, "lo95": lo, "hi95": hi,
                          "boot_sd": sd})
-    return {"n": int(len(d)), "n_clusters": int(pd.Series(cl).nunique()),
+    rates = {}
+    for k in RANKS:
+        for kind in ("autoc", "qini"):
+            est, lo, hi, sd = boot(lambda i, k=k, kind=kind: rate(g[i], s[k][i], kind, SEED), cl)
+            rates[f"{k}_{kind}"] = {"estimate": est, "lo95": lo, "hi95": hi, "boot_sd": sd}
+    return {"n": int(len(d)), "n_clusters": int(pd.Series(cl).nunique()), "rate": rates,
             "ate_per_1000": float(1000 * g.mean()), "max_ipw_weight": float(np.max(1 / np.minimum(e, 1 - e))),
             "table": rows}
 

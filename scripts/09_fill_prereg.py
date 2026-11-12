@@ -70,13 +70,17 @@ def main() -> None:
     (RES / "holdouts.json").write_text(json.dumps({"seed": HOLDOUT_SEED, "tertiles": [list(map(str, g)) for g in tert],
                                                     "holdouts": holdouts}, indent=1))
     # Table D
-    rows = ["| Trial | Class (basis) | n (contrast) | Unit / clusters | Design SE | Max IPW weight | "
+    rows = ["| Trial | Class (basis) | n (contrast) | Unit / clusters, all arms | Design SE | Max IPW weight | "
             "Reproduction |", "|---|---|---|---|---|---|---|"]
     for t in list(conf) + list(excluded):
         r, f = dt_[t], fc[t]
         rep = r["reproduction"]
-        repro = ("no verified target" if rep["published"] is None
-                 else f"{rep['reproduced']:.4g} vs {rep['published']:g} ({rep['status']})")
+        if rep["published"] is None:
+            repro = "no verified target"
+        elif rep["metric"] == "n_units":
+            repro = f"{int(rep['reproduced']):,} vs {int(rep['published']):,} participants ({rep['status']})"
+        else:
+            repro = f"{rep['reproduced']:.4g} vs {rep['published']:g} ({rep['status']})"
         cls, basis = CLASS[t]
         se = 1000 * r["mde_per_action_at_q20"] / 2.8
         # Exact two-arm count: context and dev from the frozen prep, test from the seal step.
@@ -85,14 +89,15 @@ def main() -> None:
                     f"{n_contrast:,} | {UNIT.get(t, 'individual')} / {r['clusters']:,} | {se:.1f} | "
                     f"{f['max_ipw_weight']:.1f} | {repro} |")
     # Table M
-    m = ["| Trial | Base rate | β (95% CI) | AUC of p̂0 | Posted gap x at 20% (SE) | Beneficial sign |",
-         "|---|---|---|---|---|---|"]
+    m = ["| Trial | Base rate | β (95% CI) | AUC of p̂0 | Posted gap x at 20% (SE) | Half-sample mean | "
+         "Beneficial sign |", "|---|---|---|---|---|---|---|"]
     for t in list(conf) + list(excluded):
         f = fc[t]
         m.append(f"| {LABEL[t]} | {f['control_base_rate']:.3f} | {f['beta']:+.3f} "
                  f"({f['beta_ci95'][0]:+.3f}, {f['beta_ci95'][1]:+.3f}) | {f['auc_p0_oof']:.3f}"
                  f"{' (no risk signal)' if f['auc_p0_oof'] < 0.60 else ''} | {f['gap'][Q]:+.2f} "
-                 f"({f['gap_se'][Q]:.2f}) | {'yes' if f['beneficial_sign'] else 'no'} |")
+                 f"({f['gap_se'][Q]:.2f}) | {f['gap_halfsample_mean'][Q]:+.2f} | "
+                 f"{'yes' if f['beneficial_sign'] else 'no'} |")
     # Power table
     g = sim["grid"]
     p = ["| Sampling noise | True slope | τ = 0 | τ = 10 | τ = 20 | τ = 30 |", "|---|---|---|---|---|---|"]
@@ -103,7 +108,12 @@ def main() -> None:
             if None in cells:
                 continue
             p.append(f"| {noise} | {slope} | " + " | ".join(f"{c:.2f}" for c in cells) + " |")
-    type1 = [g[k]["p_weak_form_positive"] for k in g if ",slope=0.0," in k and "trunc=False" in k]
+    type1 = [g[k]["p_weak_form_positive"] for k in g if ",slope=0.0," in k and "trunc=False" in k
+             and not k.startswith("weights=")]
+    size_p = [g[k]["p_weak_form_positive"] for k in g if k.startswith("noise=paired,slope=0.0,") and "trunc=False" in k]
+    size_d = [g[k]["p_weak_form_positive"] for k in g if k.startswith("weights=design")]
+    max_x = max(fc[t]["gap"][Q] for t in conf)
+    low = [LABEL[t] for t in conf if 1000 * dt_[t]["mde_per_action_at_q20"] / 2.8 > max_x]
     inf = ["| Trial | Posted gap | Hat value | Share of slope information |", "|---|---|---|---|"]
     for t, r in sorted(sim["influence"].items(), key=lambda kv: -kv[1]["slope_information_share"]):
         inf.append(f"| {LABEL[t]} | {r['x']:+.2f} | {r['hat']:.2f} | {r['slope_information_share']:.2f} |")
@@ -125,6 +135,10 @@ def main() -> None:
         "SHA_META": sha(ROOT / "scripts" / "07_meta_regression.py")[:16],
         "SHA_FORECAST": f"script {sha(ROOT / 'scripts' / '06_scale_forecast.py')[:16]}, src {src_hash[:16]}",
         "SHA_DEV": sha(RES / "dev_baselines.json")[:16] if (RES / "dev_baselines.json").exists() else "MISSING",
+        "SHA_UVLOCK": sha(ROOT / "uv.lock")[:16],
+        "SIZE_PAIRED": f"{min(size_p):.3f} to {max(size_p):.3f}",
+        "SIZE_DESIGN": f"{min(size_d):.3f} to {max(size_d):.3f}",
+        "LOW_POWER": ", ".join(low), "MAX_X": f"{max_x:.1f}",
     }
     text = (NB / "PREREGISTRATION_v1.md").read_text()
     for k, v in fill.items():
