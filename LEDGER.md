@@ -29,3 +29,12 @@ failures included. Never edit a past entry; add a correction entry instead.
   - The first Illinois attempt used a strata-weighted difference and gave −25.49. It was replaced by the source specification: no controls, weighted by `covg_0816_0717`.
 - **Seal:** test actions and outcomes were written to `../system-three-sealed/` (outside the repository). The SHA-256 hashes are in `results/seal_manifest.json`. No development code reads that folder (`tests/test_seal_guard.py`).
 - **Panel:** the six-lens design review ran as workflow `wf_959612c3-83b`. Its outputs are in `notebooks/system-three/panel/` (`02_panel_record.json`, `03_plan_amendment.md`). Of 70 candidate changes, the panel adopted 51, marked 11 to consider, and rejected 8.
+
+## 2026-11-12 — confirmatory-set expansion and first dev run
+
+- **Decisions:** `notebooks/system-three/DECISIONS.md`. The confirmatory set is 11 individually randomized trials with binary outcomes, balanced 5 clinical to 6 behavioral, informational, or financial.
+- **GUSTO-I:** loaded from the CRAN `predtools` 0.0.3 file `gusto.rda` (GPL; data source listed as "Internet"). The comparison is accelerated tPA against both streptokinase arms; the tPA plus streptokinase combination arm is excluded. P(tPA) = 1/3. `ttr` is excluded because it is measured after allocation. The relative change in 30-day death reproduces at −0.1374 against −0.14 (NEJM 1993, PMID 8204123).
+- **San Francisco official email, June 2010:** loaded from Yale Dataverse doi:10.60600/YU/SCUYUK (CC0). Only 47,463 voters were randomized, 1/3 per arm, clustered by email address (`caseid_first`); 47,309 merged to outcomes. The registrar-email ITT is +0.0054. The published value is not yet verified.
+- **StepUp:** downloaded through the OSF view-only link printed in the Nature 2021 data statement. The contrast is all 53 programs pooled against Placebo Control; no arm was selected on outcomes. The outcome is any gym visit in weeks 1 to 4. The propensity is the within-cohort treated share. Participants: 61,293, matching the paper.
+- **Failure:** Dryad's dataset and file download APIs return 401 without an account token (ELAIA-1, ELAIA-2, synbiotic sepsis). These need a browser download.
+- **First dev run:** `scripts/05_dev_baselines.py` covered Camden, IST, Hillstrom, and Oregon. It fit on context and scored dev only, with q = 0.2. Every paired contrast CI includes 0. The scale model is at or above the benefit learner in IST and Hillstrom. These are smoke-test results only; nothing was tuned on them.

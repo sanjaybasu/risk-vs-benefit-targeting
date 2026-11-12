@@ -9,7 +9,7 @@ Not loaded in Phase 1 (reported in the dataset table instead):
 
 from functools import partial
 
-from system_three.loaders import camden, ist, tier_a, tier_b, tier_c, voter
+from system_three.loaders import camden, expansion, ist, tier_a, tier_b, tier_c, voter
 
 
 def registry() -> dict:
@@ -23,6 +23,9 @@ def registry() -> dict:
         "criteo": (tier_b.CRITEO, tier_b.CRITEO_PUBLISHED, tier_b.load_criteo),
         "nsw": (tier_b.NSW, tier_b.NSW_PUBLISHED, tier_b.load_nsw),
         "ihdp": (tier_b.IHDP, tier_b.IHDP_PUBLISHED, tier_b.load_ihdp),
+        "gusto": (expansion.GUSTO, expansion.GUSTO_PUBLISHED, expansion.load_gusto),
+        "sf_email": (expansion.SF_EMAIL, expansion.SF_PUBLISHED, expansion.load_sf_email),
+        "stepup": (expansion.STEPUP, expansion.STEPUP_PUBLISHED, expansion.load_stepup),
     }
     for pair in tier_a.RB_PAIRS:
         info = tier_a.rb_info(pair)

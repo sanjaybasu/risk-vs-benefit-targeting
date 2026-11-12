@@ -22,6 +22,9 @@ Every dataset is public. Raw files live in `data/raw/<dataset>/` (gitignored); `
 | swebench__p50_to_p90 | A | resolved (higher) | 500 | 149 | 0.516 | 0.6353 | 0.214 vs n/a (no external target) | 0.68 SD | no license stated | no |
 | swebench__p10_to_p50 | A | resolved (higher) | 500 | 149 | 0.516 | 0.4188 | 0.282 vs n/a (no external target) | 0.79 SD | no license stated | no |
 | criteo | B | visit (higher) | 13,979,592 | 4,192,885 | 0.850 | 0.04697 | 0.85 vs 0.85 (match) | 0.01 SD | CC-BY-NC-SA-4.0 | no |
+| gusto | C | death_30d (lower) | 30,510 | 9,115 | 0.339 | 0.0702 | -0.1374 vs -0.14 (match) | 0.20 SD | GPL (CRAN predtools 0.0.3; data source listed as 'Internet'); counsel to confirm | no |
+| sf_email | B | voted_jun2010 (higher) | 47,309 | 14,220 | 0.667 | 0.3355 | 0.00537 vs n/a (no external target) | 0.18 SD | CC0-1.0 | yes |
+| stepup | B | any_gym_visit_wk1_4 (higher) | 61,293 | 18,335 | 0.919 | 0.7887 | 6.129e+04 vs 61293 (match) | 0.54 SD | no license on the OSF node; deidentified data shared with 24 Hour Fitness permission via the view-only link in the paper's data statement | no |
 
 ## Downloaded but not loaded
 

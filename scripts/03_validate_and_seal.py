@@ -56,6 +56,10 @@ def reproduce(df: pd.DataFrame, info, pub: dict) -> dict:
         w = pair["aux_weight"]
         got = (np.average(pair.loc[t, "outcome"], weights=w[t])
                - np.average(pair.loc[~t, "outcome"], weights=w[~t]))
+    elif metric == "relative_change":
+        got = pair.loc[t, "outcome"].mean() / pair.loc[~t, "outcome"].mean() - 1
+    elif metric == "n_units":
+        got = float(df["cluster_id"].nunique())
     elif metric == "treated_share":
         got = t.mean()
     elif metric in ("exact_gap", "ihdp_ate"):
