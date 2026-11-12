@@ -1,0 +1,65 @@
+{
+ "routerbench__gpt35_to_gpt4": {
+  "auc_p0_oof": 0.6634182270411555,
+  "beta": 1.1305584500245802,
+  "evals_or_repos_kept": 80,
+  "n_context": 14282,
+  "n_test_scored": 8621,
+  "scale_forecast_gap_q20": 1.9009670982794158,
+  "sha256": "37ad2d6baa07c3deccc57273bc2737d17d9ba8dba9eba7f4eed2b83363dd2d12"
+ },
+ "routerbench__llama70b_to_claude2": {
+  "auc_p0_oof": 0.8552354111250285,
+  "beta": 1.8202098072845303,
+  "evals_or_repos_kept": 80,
+  "n_context": 14282,
+  "n_test_scored": 8621,
+  "scale_forecast_gap_q20": 104.61004239322186,
+  "sha256": "9fb75285a59ed5b0bad345aa9572363a0de8ab153f8b292af676cc1037e990fb"
+ },
+ "routerbench__mistral7b_to_gpt4": {
+  "auc_p0_oof": 0.6142203815094343,
+  "beta": 2.5975289432833284,
+  "evals_or_repos_kept": 80,
+  "n_context": 14282,
+  "n_test_scored": 8621,
+  "scale_forecast_gap_q20": 29.35232318418457,
+  "sha256": "79e2f0985b2c06b50e6e8e8eb622a5c365ddb8346079e8e0ca5bdc5be20424a5"
+ },
+ "routerbench__mixtral_to_gpt4": {
+  "auc_p0_oof": 0.7068702524228473,
+  "beta": 1.4564788118010814,
+  "evals_or_repos_kept": 80,
+  "n_context": 14282,
+  "n_test_scored": 8621,
+  "scale_forecast_gap_q20": 4.024582009054534,
+  "sha256": "e3bab2d6e99a033189cdaee83451550bdbebdd9ccdf04aa8112efde63c18d466"
+ },
+ "swebench__p10_to_p50": {
+  "auc_p0_oof": 0.4547422274695002,
+  "beta": 0.8863116076938096,
+  "evals_or_repos_kept": 11,
+  "n_context": 238,
+  "n_test_scored": 148,
+  "scale_forecast_gap_q20": 0.0,
+  "sha256": "c174d61bf0a33fd3621860889f01bb37c60fa36904785e00da62133bca68c631"
+ },
+ "swebench__p25_to_p75": {
+  "auc_p0_oof": 0.42639678822348603,
+  "beta": 0.8595678457836423,
+  "evals_or_repos_kept": 11,
+  "n_context": 238,
+  "n_test_scored": 148,
+  "scale_forecast_gap_q20": 8.855858994875703,
+  "sha256": "0a828909eebb3e57a8e967205b70f0fcf528b025cbb10ce9d5bbdb7a676548fc"
+ },
+ "swebench__p50_to_p90": {
+  "auc_p0_oof": 0.43145161290322587,
+  "beta": 0.3755554982259476,
+  "evals_or_repos_kept": 11,
+  "n_context": 238,
+  "n_test_scored": 148,
+  "scale_forecast_gap_q20": 12.308048110190484,
+  "sha256": "e9f71c765af7e4c80b2a887c91f75a0efcf1d9353f2eb2b22301f1c47db20355"
+ }
+}

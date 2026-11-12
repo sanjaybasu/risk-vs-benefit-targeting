@@ -125,3 +125,15 @@ failures included. Never edit a past entry; add a correction entry instead.
 - **Dev read:** the corrected IST dev run produced point estimates (scale-minus-risk +93.8). Only their variance enters the weights, and they are recorded here per §4a.
 - **Do-PFN:** all 15 trials ran in an isolated Modal container at commit 90d6743, included at Sanjay's direction despite the missing license. Its levels are inflated (synbiotic CATE −0.11 against a trial effect of −0.036), but only rankings are scored.
 - **Registration update 1:** rebuilt with the deviation section.
+
+## 2026-11-12 — Tier A exact-truth predictions (Paper 2)
+
+- **Script:** `scripts/16_tierA_predictions.py`. Only binary-scored evals are used, decided from context: 80 of 86 RouterBench evals. GSM8K and other partial-credit evals are excluded.
+- **Features:** a TF-IDF of the prompt reduced to 64 SVD dimensions, plus eval indicators. SWE-bench uses repository indicators only.
+- **RouterBench forecasts at 20%:**
+  - Mistral-7B to GPT-4: +29.4
+  - GPT-3.5 to GPT-4: +1.9
+  - Llama-70B to Claude 2: +104.6
+  - Mixtral to GPT-4: +4.0
+- **SWE-bench:** AUC of p̂0 is 0.43 to 0.46, so it is labeled "no risk signal".
+- **Registration update 1:** an addendum adds this layer. It will be re-uploaded to the private OSF `update_1` folder.
