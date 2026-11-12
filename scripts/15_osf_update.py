@@ -42,7 +42,7 @@ def folder(s: requests.Session, name: str) -> str:
 
 def upload_all() -> None:
     s = session()
-    up = folder(s, "update_1")
+    up = folder(s, "update_1").split("?")[0]  # the folder link may already carry ?kind=...
     files = [NB / "REGISTRATION_UPDATE_1.md"]
     files += [ROOT / "results" / f for f in ("loeo_manifest.json", "scale_forecast_splitctx.json",
                                              "causalpfn_manifest.json", "dopfn_manifest.json",
