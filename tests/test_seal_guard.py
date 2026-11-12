@@ -59,6 +59,8 @@ def test_scorer_recovers_known_gap(tmp_path):
         mod.score_trial(sealed, pred.assign(cluster_id=ids), meta)
     with _pt.raises(ValueError):  # every sealed row needs a prediction
         mod.score_trial(sealed, pred.iloc[:-1], meta)
+    sub = mod.score_trial(sealed, pred.iloc[:1000], meta, subset=True)  # explicit subset mode
+    assert sub["n"] == 1000
 
 
 def test_split_hash_is_stable_and_cluster_level():

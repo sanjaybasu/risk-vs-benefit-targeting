@@ -45,13 +45,15 @@ def sha256(p: Path) -> str:
     return hashlib.sha256(p.read_bytes()).hexdigest()
 
 
-def score_trial(sealed: pd.DataFrame, pred: pd.DataFrame, meta: dict) -> dict:
+def score_trial(sealed: pd.DataFrame, pred: pd.DataFrame, meta: dict, subset: bool = False) -> dict:
     bad = FORBIDDEN & set(pred.columns)
     if bad:
         raise ValueError(f"predictions carry sealed-side columns {sorted(bad)}")
     if "cluster_id" not in sealed:
         raise ValueError("sealed file lacks cluster_id")
     two = sealed[sealed["action"].isin([meta["action"], meta["reference"]])]
+    if subset:  # pre-registered subset (rows chosen by hash of row_id, no outcome read)
+        two = two[two["row_id"].isin(set(pred["row_id"]))]
     d = two.merge(pred, on="row_id", how="left", validate="1:1", indicator=True)
     if (d["_merge"] != "both").any():
         raise ValueError(f"{int((d['_merge'] != 'both').sum())} sealed rows lack a prediction")
@@ -118,6 +120,8 @@ def main() -> None:
     ap.add_argument("--manifest", required=True, type=Path)
     ap.add_argument("--trials", required=True)
     ap.add_argument("--out", required=True, type=Path)
+    ap.add_argument("--allow-subset", action="store_true",
+                    help="score only predicted rows (the LLM comparator's hashed sample)")
     a = ap.parse_args()
     manifest = json.loads(a.manifest.read_text())
     out = {"environment": environment(), "trials": {}}
@@ -127,7 +131,7 @@ def main() -> None:
             raise ValueError(f"{t}: predictions hash does not match the posted manifest")
         meta = json.loads((a.sealed / f"{t}_meta.json").read_text())
         sealed = pd.read_parquet(a.sealed / f"{t}_test.parquet")
-        out["trials"][t] = score_trial(sealed, pd.read_parquet(pf), meta)
+        out["trials"][t] = score_trial(sealed, pd.read_parquet(pf), meta, subset=a.allow_subset)
         print(f"scored {t}", flush=True)
     a.out.write_text(json.dumps(out, indent=1, default=float))
 

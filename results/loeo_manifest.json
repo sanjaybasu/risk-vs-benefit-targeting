@@ -1,0 +1,18 @@
+{
+ "elaia2": {
+  "environments": 4,
+  "sha256": "4588aac1323332b27d2a4fa9e4ce418391845ebd577b42f9d416ee5f43daf9c2"
+ },
+ "stepup": {
+  "environments": 5,
+  "sha256": "b62dc7b76485872fe6604cf23ff0e5a5fcbc8879cf20a73f8471002521edaadf"
+ },
+ "synbiotic": {
+  "environments": 2,
+  "sha256": "84de858f8f1ec3707ec7eebdceb2c20282911d7850bec05905e56a5aaec6673d"
+ },
+ "voter": {
+  "environments": 5,
+  "sha256": "78040974058d81f59189c3e25abebfdd360d869f70bb165986d68d025e905dad"
+ }
+}

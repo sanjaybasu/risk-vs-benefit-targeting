@@ -18,3 +18,8 @@ __pycache__/
 .ruff_cache/
 .gstack/
 predictions/
+predictions_loeo/
+predictions_splitctx/
+predictions_causalpfn/
+llm/
+predictions_llm/

@@ -1,0 +1,62 @@
+{
+ "elaia1": {
+  "n_context_used": 3012,
+  "sha256": "ebba084496da821b8b6a6286fa76aa8ce11ad40736a28edb4576afbe1ca1865d"
+ },
+ "elaia2": {
+  "n_context_used": 2528,
+  "sha256": "233b049baf7f968c183ebb27c46d00c8525851f5a7861303eacc9973310e7ead"
+ },
+ "gusto": {
+  "n_context_used": 15409,
+  "sha256": "87472411a6b4adbf9c877935ae93079cf96c48831fe0f471bc401f26c8a96286"
+ },
+ "hillstrom": {
+  "n_context_used": 20000,
+  "sha256": "d845c41b19015c58611e236f9ac76d8c345320152419abd39c24eb438ea6bff2"
+ },
+ "ist": {
+  "n_context_used": 9589,
+  "sha256": "8fade38a6bb320e3c652c786f769d9d244b6fb40f3c6bd87b383d3b727e05b2b"
+ },
+ "karlan_list": {
+  "n_context_used": 20000,
+  "sha256": "d05cfdeb789e14618b22df13b5b6be909fd2e3d3cee55e7b8a2e749411a5293d"
+ },
+ "lenta": {
+  "n_context_used": 20000,
+  "sha256": "2a9044079f92e21c1a94847fccba4cb2a4dc202280460e0ddd033ec134b554e2"
+ },
+ "newhaven": {
+  "n_context_used": 15485,
+  "sha256": "0c3db4b88723e1cfb16685b1f043e3b0146fefda5f2b1d669e5ac9395ab7b59d"
+ },
+ "oregon": {
+  "n_context_used": 12250,
+  "sha256": "950af025102635a2fd5a0bcdf5caee6466fada91f1a2a06cf28449b8c12f21df"
+ },
+ "sf_email": {
+  "n_context_used": 15716,
+  "sha256": "00c734d0c5c6dcdebfe5827fdb6ac491a5978a422b3743f718c00b67a12ae15b"
+ },
+ "sixcity": {
+  "n_context_used": 9385,
+  "sha256": "5038476dae9a07b45644576c9ea1d2b4769ef057cd3840375e4155d6a4f61708"
+ },
+ "stepup": {
+  "n_context_used": 20000,
+  "sha256": "016ccae8731c09536f037c04a66191034e15877a20375aaf7fabce64bea7f7f7"
+ },
+ "synbiotic": {
+  "n_context_used": 2278,
+  "sha256": "e0a21c3944520ba8fb6b24aaf6b06be7e4352a3202a9cbf5b99bc250ea4c7866"
+ },
+ "voter": {
+  "n_context_used": 20000,
+  "sha256": "b8118903192c26f33a970695f0f991a184771a541df90a3dd44f586f2f2978e8"
+ },
+ "x5": {
+  "n_context_used": 20000,
+  "sha256": "89ed05eae6002801b276552c4ca90f394cf9474d36a296f6cf80ffff5a484e04"
+ }
+}
