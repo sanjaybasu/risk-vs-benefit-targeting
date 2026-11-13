@@ -26,3 +26,4 @@ predictions_llm/
 predictions_dopfn/
 predictions_tierA/
 predictions_rose/
+scoring/*.parquet
