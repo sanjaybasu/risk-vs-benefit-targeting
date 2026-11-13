@@ -41,11 +41,15 @@ POSTED = {"predictions": ("predictions/manifest.json", "predictions"),
           "predictions_rose": ("results/rose_manifest.json", "sha256"),
           "predictions_loeo": ("results/loeo_manifest.json", "sha256"),
           "predictions_splitctx": ("results/scale_forecast_splitctx.json", "sha256"),
-          "predictions_llm_masked": ("results/llm_masked_manifest.json", "sha256")}
+          "predictions_llm_masked": ("results/llm_masked_manifest.json", "sha256"),
+          "predictions_rose_v2": ("results/rose_v2_manifest.json", "sha256")}
 
 
 def jobs(stage: str) -> list[tuple[str, str, bool, str]]:
     """(prediction set, trial, subset mode, scorer) for a stage, in the registered order."""
+    if stage == "rose_v2":  # registration update 6
+        return ([("predictions_rose_v2", t, False, "contract") for t in NONHOLD + HOLD]
+                + [("predictions_rose_v2", t, True, "contract") for t in RB])
     if stage == "masked":  # registration updates 4-5
         return [("predictions_llm_masked", t, True, "policy") for t in NONHOLD + HOLD]
     tr = NONHOLD if stage == "stage1" else HOLD
@@ -81,7 +85,7 @@ def now() -> str:
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--sealed", required=True, type=Path)
-    ap.add_argument("--stage", required=True, choices=["stage1", "stage2", "masked"])
+    ap.add_argument("--stage", required=True, choices=["stage1", "stage2", "masked", "rose_v2"])
     ap.add_argument("--workers", type=int, default=12)
     a = ap.parse_args()
     out_dir = ROOT / "scoring" / a.stage
