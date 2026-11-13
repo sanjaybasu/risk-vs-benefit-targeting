@@ -14,6 +14,7 @@ import argparse
 import datetime as dt
 import importlib.util
 import json
+import sys
 from pathlib import Path
 
 import numpy as np
@@ -22,6 +23,7 @@ from scipy import stats
 ROOT = Path(__file__).resolve().parents[1]
 spec = importlib.util.spec_from_file_location("mr", ROOT / "scripts" / "07_meta_regression.py")
 mr = importlib.util.module_from_spec(spec)
+sys.modules["mr"] = mr  # dataclasses need the module registered
 spec.loader.exec_module(mr)
 HOLD = json.loads((ROOT / "results" / "holdouts.json").read_text())
 
