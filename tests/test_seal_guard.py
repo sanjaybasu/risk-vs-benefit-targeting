@@ -67,3 +67,27 @@ def test_split_hash_is_stable_and_cluster_level():
     a = splits.hash_unit("camden", "25264")
     assert a == splits.hash_unit("camden", "25264")
     assert 0 <= a < 1
+
+
+def test_contract_scorer_exact_truth_coverage():
+    """Contract scorer on synthetic exact truth: a well-calibrated interval covers about 90%."""
+    import importlib.util
+
+    import numpy as np
+    import pandas as pd
+
+    spec = importlib.util.spec_from_file_location("c", ROOT / "scripts" / "19_score_contract.py")
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    rng = np.random.default_rng(3)
+    n = 5000
+    mu = rng.normal(0, 1, n)
+    tau = mu + rng.normal(0, 1, n)
+    ids = [f"u{i}" for i in range(n)]
+    sealed = pd.DataFrame({"row_id": ids, "cluster_id": ids, "action": "act", "outcome": 0.0,
+                           "propensity": 0.5, "y_ref": 0.0, "y_act": tau, "truth_exact": True})
+    z = 1.6449
+    pred = pd.DataFrame({"row_id": ids, "benefit": mu, "lo90": mu - z, "hi90": mu + z,
+                         "p_harm": 0.5, "support": 1.0, "abstain": False, "m0": 0.0, "m1": 0.0})
+    out = mod.score(sealed, pred, {"better": "higher", "action": "act", "reference": "ref"}, False)
+    assert abs(out["unit_coverage_90"] - 0.90) < 0.02, out

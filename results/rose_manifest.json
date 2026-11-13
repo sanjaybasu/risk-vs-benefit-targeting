@@ -1,0 +1,104 @@
+{
+ "elaia2": {
+  "abstain_rate": 0.012219959266802444,
+  "calibrated": false,
+  "conformal_c": 1.0,
+  "sha256": "59b743abe63f6f394eb91e5786201e492085de8c53e1efd2b67d64697a2ff7e0"
+ },
+ "gusto": {
+  "abstain_rate": 0.020735052111903456,
+  "calibrated": false,
+  "conformal_c": 1.0,
+  "sha256": "49768c80afa53c25a24134974d28b9998a6a342d1e7959d3d588c92f4c1cb12e"
+ },
+ "hillstrom": {
+  "abstain_rate": 0.01821627882489207,
+  "calibrated": false,
+  "conformal_c": 1.0,
+  "sha256": "3e08a6d98cec95ad91d3234753260eb41672ea25bdc110c3fc3837ac85160c26"
+ },
+ "ist": {
+  "abstain_rate": 0.017676334305817745,
+  "calibrated": false,
+  "conformal_c": 1.0,
+  "sha256": "462db725de4b5fadb15952214bc3383ecb8c12ce670dddcaddf6b281752b95a8"
+ },
+ "karlan_list": {
+  "abstain_rate": 0.021004749481570675,
+  "calibrated": false,
+  "conformal_c": 1.0,
+  "sha256": "98ab6df76f660acff801dcd11ef4303b6ccb904247fb92c98f1e4cd6336dee45"
+ },
+ "lenta": {
+  "abstain_rate": 0.01679463504713772,
+  "calibrated": false,
+  "conformal_c": 1.0,
+  "sha256": "af537d04050ff0bccf739fd6e035cfb88eaf3294df662617828eec8b2882d3dd"
+ },
+ "newhaven": {
+  "abstain_rate": 0.01935621858624746,
+  "calibrated": false,
+  "conformal_c": 1.0,
+  "sha256": "3d2d9492c9acbd33a4b070c270307852b3cfa147ce5835c416a1c527ccdc7ac9"
+ },
+ "routerbench__gpt35_to_gpt4": {
+  "abstain_rate": 0.014267486370490662,
+  "calibrated": true,
+  "conformal_c": 5.034740118081983,
+  "sha256": "50eb077e64f61ccd5fa2f788b640b582f13110abe0df9036decc8f99aba02fb3"
+ },
+ "routerbench__llama70b_to_claude2": {
+  "abstain_rate": 0.014267486370490662,
+  "calibrated": true,
+  "conformal_c": 4.923886578968346,
+  "sha256": "b68434c73654b8b1ad8ce22ed26bcf9c8fd94efb42eaead2472d022d5c855290"
+ },
+ "routerbench__mistral7b_to_gpt4": {
+  "abstain_rate": 0.014267486370490662,
+  "calibrated": true,
+  "conformal_c": 4.670684131996195,
+  "sha256": "95c1bc00910a5ced12f9de9810f5a11ff0c529c00c1af325b81b080fadb02f98"
+ },
+ "routerbench__mixtral_to_gpt4": {
+  "abstain_rate": 0.014267486370490662,
+  "calibrated": true,
+  "conformal_c": 4.599139880087357,
+  "sha256": "848fb938d5d9de08a21c5a560c50a8e9fd103684e03599abc6845595687dcb1d"
+ },
+ "sf_email": {
+  "abstain_rate": 0.01779184247538678,
+  "calibrated": false,
+  "conformal_c": 1.0,
+  "sha256": "78571939d992cf8534ae05698a146adbcaa638ef7e2b618925e8a09f85ce0112"
+ },
+ "sixcity": {
+  "abstain_rate": 0.01750393838613688,
+  "calibrated": false,
+  "conformal_c": 1.0,
+  "sha256": "dd1706230831fd2a14c49a9388e2b0fb7333cd902bcce561688207b73160916e"
+ },
+ "stepup": {
+  "abstain_rate": 0.018761930733569677,
+  "calibrated": false,
+  "conformal_c": 1.0,
+  "sha256": "3d27d624a3ea5f84c17c0037daaf01a5ed1b4e336968d1ae3889508c3ce27284"
+ },
+ "synbiotic": {
+  "abstain_rate": 0.019809244314013204,
+  "calibrated": false,
+  "conformal_c": 1.0,
+  "sha256": "c29aa6cac0046fb02725bfb6981414ce48a5b7ecc1493d029c3d4ceb4d454a8e"
+ },
+ "voter": {
+  "abstain_rate": 0.020717015820794427,
+  "calibrated": false,
+  "conformal_c": 1.0,
+  "sha256": "04f8bf92fc02b89437e47b0be7aaf76e90dc671fa89e253244c6448cc4d7e4cf"
+ },
+ "x5": {
+  "abstain_rate": 0.02030414989773702,
+  "calibrated": false,
+  "conformal_c": 1.0,
+  "sha256": "bb7b71f1518a51134f05fca221aba0bc222d8e2feb8aa084159438a9f06b8a93"
+ }
+}
