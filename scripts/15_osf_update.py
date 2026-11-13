@@ -43,12 +43,13 @@ def folder(s: requests.Session, name: str) -> str:
 def upload_all() -> None:
     s = session()
     up = folder(s, "update_1").split("?")[0]  # the folder link may already carry ?kind=...
-    files = [NB / "REGISTRATION_UPDATE_1.md"]
+    files = [NB / "REGISTRATION_UPDATE_1.md", NB / "REGISTRATION_UPDATE_2.md"]
     files += [ROOT / "results" / f for f in ("loeo_manifest.json", "scale_forecast_splitctx.json",
                                              "causalpfn_manifest.json", "dopfn_manifest.json",
-                                             "llm_manifest.json", "tierA_manifest.json")]
+                                             "llm_manifest.json", "tierA_manifest.json",
+                                             "rose_manifest.json")]
     for d in ("predictions_loeo", "predictions_splitctx", "predictions_causalpfn",
-              "predictions_dopfn", "predictions_llm", "predictions_tierA"):
+              "predictions_dopfn", "predictions_llm", "predictions_tierA", "predictions_rose"):
         files += [(f, f"{d}__{f.name}") for f in sorted((ROOT / d).glob("*.parquet"))]
     listing = {}
     lr = s.get(f"{API}/nodes/{NODE}/files/osfstorage/?page%5Bsize%5D=100").json()["data"]

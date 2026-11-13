@@ -137,3 +137,15 @@ failures included. Never edit a past entry; add a correction entry instead.
   - Mixtral to GPT-4: +4.0
 - **SWE-bench:** AUC of p̂0 is 0.43 to 0.46, so it is labeled "no risk signal".
 - **Registration update 1:** an addendum adds this layer. It will be re-uploaded to the private OSF `update_1` folder.
+
+## 2026-11-12 — Rose v0, contract scorer, custodian package
+
+- **Rose v0** (`src/system_three/rose.py`; Modal CPU, 30 bags).
+  - Conformal factor c is 4.6 to 5.0 on the RouterBench dev splits, so the bag spread understates uncertainty for individual effects.
+  - Abstention is 1.2% to 2.1%.
+  - All 17 datasets complete, with no missing values.
+- **Contract scorer:** `scripts/19_score_contract.py`, with a synthetic coverage test.
+- **Custodian package:** `~/Downloads/system-three-custodian-package.zip` (147 MB). It contains the sealed folder, all prediction sets with flat scorer manifests that match the posted hashes, code at 24e0426, and the README.
+  - The dry run used fake sealed data (random outcomes) and scored Michigan in about 20 to 25 minutes.
+  - When run from the archive, the scorer records the commit as "unknown"; the README covers this.
+- **Registration update 2** is written.
