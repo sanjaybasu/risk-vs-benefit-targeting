@@ -1,0 +1,104 @@
+{
+ "elaia2": {
+  "abstain_rate": 0.012219959266802444,
+  "c": 0.7879702564257591,
+  "calibrated_on": "pseudo",
+  "sha256": "c3f530d2b49cf4086ce5d4ef41b9d455789a1d6a4168afd037fb8cab15cd1afd"
+ },
+ "gusto": {
+  "abstain_rate": 0.020735052111903456,
+  "c": 0.6108883062883324,
+  "calibrated_on": "pseudo",
+  "sha256": "0b9d5821cd46d0637a86ade022af66a62e74684f0bc26c3caa693904a0290f8b"
+ },
+ "hillstrom": {
+  "abstain_rate": 0.01821627882489207,
+  "c": 0.930307663339883,
+  "calibrated_on": "pseudo",
+  "sha256": "05607263c08534a62bb8d0b17ddf9994114118694dc7419f399a22298dc98b28"
+ },
+ "ist": {
+  "abstain_rate": 0.017676334305817745,
+  "c": 0.7725966472813164,
+  "calibrated_on": "pseudo",
+  "sha256": "ca24061423a46264f056af04d1c29991d64b7651021c70e0199603ef23ee5e65"
+ },
+ "karlan_list": {
+  "abstain_rate": 0.021004749481570675,
+  "c": 0.6312964659977116,
+  "calibrated_on": "pseudo",
+  "sha256": "bc7482a1e31ca5aaaa1b71b9bdd4492cbef1b2a7eb252d8565368bd77415233b"
+ },
+ "lenta": {
+  "abstain_rate": 0.01679463504713772,
+  "c": 1.145983005177699,
+  "calibrated_on": "pseudo",
+  "sha256": "ad59bf60e36346f1b9d11355f5b8dc6f0d0d64acb82a7fc7ec20db12cd7fa763"
+ },
+ "newhaven": {
+  "abstain_rate": 0.01935621858624746,
+  "c": 1.0366660876202287,
+  "calibrated_on": "pseudo",
+  "sha256": "0900a5495c8be4688de353609c5396fbb3a0dbf646d193064d8fdffc3ad833ac"
+ },
+ "routerbench__gpt35_to_gpt4": {
+  "abstain_rate": 0.014267486370490662,
+  "c": 5.138760688518618,
+  "calibrated_on": "exact",
+  "sha256": "8bcc23197fba3a50a5a25f375933f48a639bc6947c51b560b5ed3a7b2c5b296c"
+ },
+ "routerbench__llama70b_to_claude2": {
+  "abstain_rate": 0.014267486370490662,
+  "c": 4.831999332813518,
+  "calibrated_on": "exact",
+  "sha256": "ebd43d51634610ee3167823cc7b878812a72692d66a1fa354e0589f508b65a8f"
+ },
+ "routerbench__mistral7b_to_gpt4": {
+  "abstain_rate": 0.014267486370490662,
+  "c": 4.586869525686412,
+  "calibrated_on": "exact",
+  "sha256": "6da710ad80541b0465f46ae3481334c02809b154454ab0b97cedef3c5adf0bc2"
+ },
+ "routerbench__mixtral_to_gpt4": {
+  "abstain_rate": 0.014267486370490662,
+  "c": 4.628331042689561,
+  "calibrated_on": "exact",
+  "sha256": "aaf0108ffb9d9fd81d30a94a92991a0c37f9f3f031e903a0d5c819b46dd3f5fa"
+ },
+ "sf_email": {
+  "abstain_rate": 0.01779184247538678,
+  "c": 0.7837570903112135,
+  "calibrated_on": "pseudo",
+  "sha256": "b5a76efaa840512b1aa2b376c499dea4cc20e7f1ed5088fb3b3fe6e2fc455a1a"
+ },
+ "sixcity": {
+  "abstain_rate": 0.01750393838613688,
+  "c": 0.9576586945217656,
+  "calibrated_on": "pseudo",
+  "sha256": "5b6e93d76bca8e7c6fa24145673ecec1dc7468ae31deec30fbcddc045ece3a0d"
+ },
+ "stepup": {
+  "abstain_rate": 0.018761930733569677,
+  "c": 0.6566881317577811,
+  "calibrated_on": "pseudo",
+  "sha256": "194dac97ea9543f7273060e759c63d0a5ff2bfa61a16c168faf7402da5007ac8"
+ },
+ "synbiotic": {
+  "abstain_rate": 0.019809244314013204,
+  "c": 0.9840012990411595,
+  "calibrated_on": "pseudo",
+  "sha256": "771f6049806de39e2a39e2513e9223ea9b25d9e79dc4d102069126722f7035d8"
+ },
+ "voter": {
+  "abstain_rate": 0.020717015820794427,
+  "c": 0.865435677626555,
+  "calibrated_on": "pseudo",
+  "sha256": "2fb7bf14aa7efb3bc502c879ec9a479a168988f97f5d33c0e6db9ec5743e356a"
+ },
+ "x5": {
+  "abstain_rate": 0.02030414989773702,
+  "c": 0.8048197307592218,
+  "calibrated_on": "pseudo",
+  "sha256": "19128b7b3058bafa4a058cf54127699f65a2740a0da2c9c79decf7c8680406ce"
+ }
+}
