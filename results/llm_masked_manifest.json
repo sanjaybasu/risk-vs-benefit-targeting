@@ -1,0 +1,67 @@
+{
+ "elaia2": {
+  "missing_answers": 0,
+  "n": 1473,
+  "sha256": "793ec2d3d07c40da7837b9d12e8abc15306994997903e3cb1ee38e20a63f5373"
+ },
+ "gusto": {
+  "missing_answers": 0,
+  "n": 2000,
+  "sha256": "326a8bc8dde6cd1be6f98cd7df42d8c2229557ee393041d196e7ca97d4caf4dd"
+ },
+ "hillstrom": {
+  "missing_answers": 0,
+  "n": 2000,
+  "sha256": "266a12a8420c5adfd3da7808216b309807968ff4a579a70bac2b80a700feb867"
+ },
+ "ist": {
+  "missing_answers": 0,
+  "n": 2000,
+  "sha256": "b48b79d54af2b57945c79027aa5df4ad3a46a0512497b15d59e727699dc26c06"
+ },
+ "karlan_list": {
+  "missing_answers": 0,
+  "n": 2000,
+  "sha256": "a89fad1fadad53e8ba557a76929984a509d180e4291e6b0a2cb8b5471a483b59"
+ },
+ "lenta": {
+  "missing_answers": 0,
+  "n": 2000,
+  "sha256": "c45d0f388770bd8ff6211dd444a6afccc9f2b410bb2f655bdb73df66a9716c2c"
+ },
+ "newhaven": {
+  "missing_answers": 0,
+  "n": 2000,
+  "sha256": "e41783fa3708c94e550826d727cd04b714074790a8fee834efaaa90931a0233d"
+ },
+ "sf_email": {
+  "missing_answers": 0,
+  "n": 2000,
+  "sha256": "b2b4d8ccd517ef4802168c93aa3adb1876c26378cda6166b9ea9981c233d39f8"
+ },
+ "sixcity": {
+  "missing_answers": 0,
+  "n": 2000,
+  "sha256": "c3a17db9fecf9c9b94f1dbb413c571c335a4dd408fa2bad2292a315dc8574c71"
+ },
+ "stepup": {
+  "missing_answers": 0,
+  "n": 2000,
+  "sha256": "5c95ce1cf500778c72322fd1c0e8cf54b61c124d89309852ebe6ca049c9a7a28"
+ },
+ "synbiotic": {
+  "missing_answers": 0,
+  "n": 1363,
+  "sha256": "37def5e7cef8834d440c4d63923c21fa3e622b4935c74334ec3c7b8e6aa7fa6a"
+ },
+ "voter": {
+  "missing_answers": 0,
+  "n": 2000,
+  "sha256": "4c165b07adf12ac136979728056a81106bd60d929f5583bf5f353b4f6b712af3"
+ },
+ "x5": {
+  "missing_answers": 0,
+  "n": 2000,
+  "sha256": "ffb3dd5a3e73a64e3d436ad1df7684f10bed22d05fcc5e4fa5e7e9565ae7326a"
+ }
+}
