@@ -24,7 +24,9 @@ import modal
 
 ROOT = Path(__file__).resolve().parents[1]
 TRIALS = ["gusto", "ist", "synbiotic", "elaia1", "elaia2", "voter", "sf_email", "karlan_list",
-          "stepup", "hillstrom", "oregon", "sixcity", "newhaven", "lenta", "x5"]
+          "stepup", "hillstrom", "oregon", "sixcity", "newhaven", "lenta", "x5",
+          "w2_robocall2008", "w2_sanmateo_email", "w2_wisconsin_recall", "w2_ffh_charity", "w2_sa_loan", "w2_mooc_megastudy",
+          "w2_wa_bonus", "w2_jsa_florida", "w2_jtpa", "w2_turkey_overdraft"]  # wave 2 (registration PREREGISTRATION_WAVE2.md)
 BUDGETS = (0.10, 0.20, 0.30)
 N_DRAWS = 200
 

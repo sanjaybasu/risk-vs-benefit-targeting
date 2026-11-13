@@ -55,6 +55,46 @@
   "n_context_used": 20000,
   "sha256": "b8118903192c26f33a970695f0f991a184771a541df90a3dd44f586f2f2978e8"
  },
+ "w2_ffh_charity": {
+  "n_context_used": 5614,
+  "sha256": "4e86a237ececded4230b763e36b8980645af0bededb54b7d70a8759debe3d934"
+ },
+ "w2_jsa_florida": {
+  "n_context_used": 2995,
+  "sha256": "bc0298821e53855772d0dd30c40f01b3ce7b8588e7fa258858bd22d4c4206e7c"
+ },
+ "w2_jtpa": {
+  "n_context_used": 5478,
+  "sha256": "3e249e3c4490bf737e81517f64f4d605d3e457d54162ce99207e0188de5396f5"
+ },
+ "w2_mooc_megastudy": {
+  "n_context_used": 20000,
+  "sha256": "2914337b0053293f43aaa0c23730db61e217a82e5b3fc9355207541da1ed4f71"
+ },
+ "w2_robocall2008": {
+  "n_context_used": 20000,
+  "sha256": "52e01fec97227c7568ef60366481fbfb40fbcbf5ce0b310ce47da52b6711f7cc"
+ },
+ "w2_sa_loan": {
+  "n_context_used": 20000,
+  "sha256": "6d8bfbce1fb0b4ec517227c515c49badb0ce6a1652008f0f226814f5ed044328"
+ },
+ "w2_sanmateo_email": {
+  "n_context_used": 15868,
+  "sha256": "549f0892763302049cd62bfff93f64df59fc7cf95d8c03b5cf3dece789a2546c"
+ },
+ "w2_turkey_overdraft": {
+  "n_context_used": 20000,
+  "sha256": "054b5b0eb1059a494722ee7af8bb20dd5772796a7fb9673384929331c61d2c9c"
+ },
+ "w2_wa_bonus": {
+  "n_context_used": 2308,
+  "sha256": "45054d72b4ec4278ce5690d32c76fdec19541eafd3263b30efed95ae1ecb79dc"
+ },
+ "w2_wisconsin_recall": {
+  "n_context_used": 5080,
+  "sha256": "9a581f10bf694ad501f636d3908c1d5990f7e88c5c78f85c19391dae6f12aa43"
+ },
  "x5": {
   "n_context_used": 20000,
   "sha256": "89ed05eae6002801b276552c4ca90f394cf9474d36a296f6cf80ffff5a484e04"

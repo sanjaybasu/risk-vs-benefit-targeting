@@ -1,0 +1,92 @@
+{
+ "w2_robocall2008": {
+  "delta": 0.027690027936812456,
+  "delta_se": 0.05469615798898543,
+  "delta_lo95": -0.079514441721599,
+  "delta_hi95": 0.1348944975952239,
+  "gap_scale": 9.518821686664628,
+  "gap_interaction": 17.29248937703103,
+  "flag_not_applicable": false
+ },
+ "w2_sanmateo_email": {
+  "delta": -0.03446799047451293,
+  "delta_se": 0.04264971038670491,
+  "delta_lo95": -0.11806142283245456,
+  "delta_hi95": 0.0491254418834287,
+  "gap_scale": 2.710706128313561,
+  "gap_interaction": 0.3275433843406162,
+  "flag_not_applicable": false
+ },
+ "w2_wisconsin_recall": {
+  "delta": -0.07949368745580598,
+  "delta_se": 0.08467924995306896,
+  "delta_lo95": -0.24546501736382112,
+  "delta_hi95": 0.08647764245220915,
+  "gap_scale": 7.512605130725214,
+  "gap_interaction": 0.0,
+  "flag_not_applicable": false
+ },
+ "w2_ffh_charity": {
+  "delta": -0.04559407525488242,
+  "delta_se": 0.05033019031967666,
+  "delta_lo95": -0.14424124828144866,
+  "delta_hi95": 0.05305309777168382,
+  "gap_scale": 0.0,
+  "gap_interaction": 0.003625217836023681,
+  "flag_not_applicable": false
+ },
+ "w2_sa_loan": {
+  "delta": 0.019145633124513294,
+  "delta_se": 0.079302682767513,
+  "delta_lo95": -0.13628762509981218,
+  "delta_hi95": 0.17457889134883875,
+  "gap_scale": 7.087546278652995,
+  "gap_interaction": 9.81274048730739,
+  "flag_not_applicable": false
+ },
+ "w2_mooc_megastudy": {
+  "delta": 0.006855237294775294,
+  "delta_se": 0.04576387690596992,
+  "delta_lo95": -0.08284196144092575,
+  "delta_hi95": 0.09655243603047632,
+  "gap_scale": 0.0,
+  "gap_interaction": 0.0020460206664909934,
+  "flag_not_applicable": false
+ },
+ "w2_wa_bonus": {
+  "delta": 0.1620951915265956,
+  "delta_se": 0.08154755463397936,
+  "delta_lo95": 0.002261984443996057,
+  "delta_hi95": 0.32192839860919514,
+  "gap_scale": 0.0,
+  "gap_interaction": 63.82164834167331,
+  "flag_not_applicable": true
+ },
+ "w2_jsa_florida": {
+  "delta": -0.09872639703701588,
+  "delta_se": 0.05976006885709403,
+  "delta_lo95": -0.21585613199692016,
+  "delta_hi95": 0.01840333792288841,
+  "gap_scale": 0.20336034910380887,
+  "gap_interaction": 0.0,
+  "flag_not_applicable": false
+ },
+ "w2_jtpa": {
+  "delta": -0.04600132551316714,
+  "delta_se": 0.05496389481493152,
+  "delta_lo95": -0.15373055935043292,
+  "delta_hi95": 0.061727908324098635,
+  "gap_scale": 0.0,
+  "gap_interaction": 0.0,
+  "flag_not_applicable": false
+ },
+ "w2_turkey_overdraft": {
+  "delta": -0.008161407078408615,
+  "delta_se": 0.02810242123264473,
+  "delta_lo95": -0.06324215269439229,
+  "delta_hi95": 0.04691933853757505,
+  "gap_scale": 0.39765842409423396,
+  "gap_interaction": 0.0,
+  "flag_not_applicable": false
+ }
+}

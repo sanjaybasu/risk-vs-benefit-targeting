@@ -95,6 +95,66 @@
   "calibrated_on": "pseudo",
   "sha256": "2fb7bf14aa7efb3bc502c879ec9a479a168988f97f5d33c0e6db9ec5743e356a"
  },
+ "w2_ffh_charity": {
+  "abstain_rate": 0.020857814336075205,
+  "c": 0.8474452687233183,
+  "calibrated_on": "pseudo",
+  "sha256": "88fb0ba931fe7b939d57da2dac622725e8ec9ef5180ce145aa4475d06827cafe"
+ },
+ "w2_jsa_florida": {
+  "abstain_rate": 0.02155887230514096,
+  "c": 0.7294505581740884,
+  "calibrated_on": "pseudo",
+  "sha256": "75930a0ef73f314c4b696e0a494111a8a74e86f53fecdbfb2c957a1469f01956"
+ },
+ "w2_jtpa": {
+  "abstain_rate": 0.02384456873712099,
+  "c": 0.862959152476625,
+  "calibrated_on": "pseudo",
+  "sha256": "517a752fa37343f1be8864a388d18904985a63547464ee10ee3dd3625f4c47b8"
+ },
+ "w2_mooc_megastudy": {
+  "abstain_rate": 0.017635891286970424,
+  "c": 0.5991265860058836,
+  "calibrated_on": "pseudo",
+  "sha256": "2a47f5c317b4018543223c25ade0391b920c52c47b00a735ddfa9e7c36a7fb83"
+ },
+ "w2_robocall2008": {
+  "abstain_rate": 0.02056404855370802,
+  "c": 1.8830906563246597,
+  "calibrated_on": "pseudo",
+  "sha256": "806093c8364c6ba1be1b8260c22f64fe2e19e7a1bf1295a1a05b2deab5eadb69"
+ },
+ "w2_sa_loan": {
+  "abstain_rate": 0.004055252819667976,
+  "c": 1.5854841799352886,
+  "calibrated_on": "pseudo",
+  "sha256": "4af7a3b7a97c0a98116278ba89c1b378afced76cccf195a712a4cc0b643bcf33"
+ },
+ "w2_sanmateo_email": {
+  "abstain_rate": 0.019334719334719336,
+  "c": 0.9793859120419623,
+  "calibrated_on": "pseudo",
+  "sha256": "78687b7288bf6e564c212c8f122ad8630e781f15db8553439c22911567936583"
+ },
+ "w2_turkey_overdraft": {
+  "abstain_rate": 0.02124018896700517,
+  "c": 0.6437491017387651,
+  "calibrated_on": "pseudo",
+  "sha256": "5cd3b9bc0f20314724fb6782cfe5c668a72255c85b44f4460df93c9474b8d3a6"
+ },
+ "w2_wa_bonus": {
+  "abstain_rate": 0.020275162925416364,
+  "c": 0.8721292070174093,
+  "calibrated_on": "pseudo",
+  "sha256": "a0bb3f64722a74ed113e65a44c121c5c978dbd6b319401a9882bb8254fcc4ed8"
+ },
+ "w2_wisconsin_recall": {
+  "abstain_rate": 0.01834862385321101,
+  "c": 0.8408224139112548,
+  "calibrated_on": "pseudo",
+  "sha256": "1f8124f60a81407d2cb7b27f03fece7bdbca5b7fed6a2d795beeeb7711c39a3f"
+ },
  "x5": {
   "abstain_rate": 0.02030414989773702,
   "c": 0.8048197307592218,

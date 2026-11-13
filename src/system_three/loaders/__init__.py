@@ -9,7 +9,7 @@ Not loaded in Phase 1 (reported in the dataset table instead):
 
 from functools import partial
 
-from system_three.loaders import camden, expansion, ist, tier_a, tier_b, tier_c, voter
+from system_three.loaders import camden, expansion, ist, tier_a, tier_b, tier_c, voter, wave2, wave2_labor, wave2_turkey
 
 
 def registry() -> dict:
@@ -34,6 +34,16 @@ def registry() -> dict:
         "newhaven": (expansion.NEWHAVEN, expansion.NEWHAVEN_PUBLISHED, expansion.load_newhaven),
         "lenta": (expansion.LENTA, expansion.LENTA_PUBLISHED, expansion.load_lenta),
         "x5": (expansion.X5, expansion.X5_PUBLISHED, expansion.load_x5),
+        "w2_robocall2008": (wave2.ROBOCALL, wave2.ROBOCALL_PUBLISHED, wave2.load_robocall),
+        "w2_sanmateo_email": (wave2.SANMATEO, wave2.SANMATEO_PUBLISHED, wave2.load_sanmateo),
+        "w2_wisconsin_recall": (wave2.WISCONSIN, wave2.WISCONSIN_PUBLISHED, wave2.load_wisconsin),
+        "w2_ffh_charity": (wave2.FFH, wave2.FFH_PUBLISHED, wave2.load_ffh),
+        "w2_sa_loan": (wave2.SALOAN, wave2.SALOAN_PUBLISHED, wave2.load_sa_loan),
+        "w2_mooc_megastudy": (wave2.MOOC, wave2.MOOC_PUBLISHED, wave2.load_mooc),
+        "w2_wa_bonus": (wave2_labor.WA_BONUS, wave2_labor.WA_BONUS_PUBLISHED, wave2_labor.load_wa_bonus),
+        "w2_jsa_florida": (wave2_labor.JSA_FL, wave2_labor.JSA_FL_PUBLISHED, wave2_labor.load_jsa_florida),
+        "w2_jtpa": (wave2_labor.JTPA, wave2_labor.JTPA_PUBLISHED, wave2_labor.load_jtpa),
+        "w2_turkey_overdraft": (wave2_turkey.INFO, wave2_turkey.PUBLISHED, wave2_turkey.load_turkey),
     }
     for pair in tier_a.RB_PAIRS:
         info = tier_a.rb_info(pair)

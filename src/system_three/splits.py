@@ -24,13 +24,15 @@ import pandas as pd
 ROOT = Path(__file__).resolve().parents[2]
 PROCESSED = ROOT / "data" / "processed"
 SALT = "system-three-v0.1-2026-11-12"
+SALT_W2 = "system-three-wave2-2026-11-13"  # wave-2 registration, Section 4
 SHARES = {"context": 0.50, "dev": 0.20, "test": 0.30}
 TEST_PUBLIC_COLUMNS = ["dataset", "row_id", "cluster_id", "stratum", "state"]
 NATIVE_SPLIT = {"ihdp", "upworthy"}
 
 
 def hash_unit(dataset: str, cluster_id: str) -> float:
-    h = hashlib.sha256(f"{SALT}|{dataset}|{cluster_id}".encode()).digest()
+    salt = SALT_W2 if dataset.startswith("w2_") else SALT
+    h = hashlib.sha256(f"{salt}|{dataset}|{cluster_id}".encode()).digest()
     return int.from_bytes(h[:8], "big") / 2**64
 
 

@@ -103,6 +103,46 @@
     "meta": "301a8e03c7f2953ec5832770200f50e237357eaab61f4db05ebcda9826a0232d",
     "test": "784f6ae746a5eaef54f962ee6863d2e93bcc2f687b916bb23e740d9c1211527f"
   },
+  "w2_ffh_charity": {
+    "meta": "4b9e589c7b38df435c6cb4addb752c517fa6d1371815485949c020b5bb30aafe",
+    "test": "41587435f90e3578c6457b2330bb3e4fb0851f608fd7a83559cdf7cc0603f0ce"
+  },
+  "w2_jsa_florida": {
+    "meta": "24b9bed52ac4ff266c30c17e87ef0b1bca6dc5d6e25f8f839eb7508a35ad24df",
+    "test": "4d1ede9fbe3e8b37a86a76c7e3b421fe4741a5b95b7602ab5e3b2eecb335f36e"
+  },
+  "w2_jtpa": {
+    "meta": "3c5bd68b6b48e4227ef2576a10fabb5ad465f81bcacfc061aa8fbbb398990ba4",
+    "test": "b18260bf7b2babe3d15da5c940c68604513adc623ce1a84642a9fb579038df6d"
+  },
+  "w2_mooc_megastudy": {
+    "meta": "737f113085c16fb2e03babb579de98a84a4d84d36a9fed588f38493161705090",
+    "test": "ad38c3cbe10c2057d1bcb475f5c0b871b93130d0e1ad72bf57d7bdab862043bf"
+  },
+  "w2_robocall2008": {
+    "meta": "bcc2d46ad12ae563d883c99b68e359c67ae256044fdb6b0ec914434b715cec45",
+    "test": "7fe5d43d11f0381e7de661baf9fff5f51743c4ee7825e3ab5a30e54c0e8bef2f"
+  },
+  "w2_sa_loan": {
+    "meta": "f63805be3364512106f3b614d2264a53afc9b62f953f2769f830750d08efdbf0",
+    "test": "a5e7336c1ba8321596dda532ffef75bbec23bb9dec931fbc84544d653c151909"
+  },
+  "w2_sanmateo_email": {
+    "meta": "56ad9a54bf1d188d6cd63516fd4034d7ae7322739c468a184bd3fd616d48c1a8",
+    "test": "dec28b4779691b02e0edc2731f5f5ed07ed1c8bb9584fd91b315018823622297"
+  },
+  "w2_turkey_overdraft": {
+    "meta": "5149576f9c98994d909b8f6ea07002426a8323e63a0b531faeffd2eb5ce5c345",
+    "test": "45d3a034ef6fdcc1adbdc2a2e68a512e7883f311b400ce3a5d7c6cc65b0e09ca"
+  },
+  "w2_wa_bonus": {
+    "meta": "884abdb58d1a415b4447a8908dcbc165f3a6ebbc934abdcac700aa19a7823ea3",
+    "test": "2a7a70f57435f7d984ba466034f44b634d3d56b5224f230767eade067d12ce8f"
+  },
+  "w2_wisconsin_recall": {
+    "meta": "23e9ba118ddef8c80ae9e9eed49d92c0568390a87c31c594127059e6f0e63462",
+    "test": "9548c957714ea0285cc11cff80e5b45f89752c535b7b9d74a50e638764a6c9a6"
+  },
   "x5": {
     "meta": "958be486bae3023dad5859a660c612c2071c6afa4a9c47748669ac2e2ea2c6bf",
     "test": "fb7a902d9cf6640d0e23b90888419ac5ffccc7fc7861e4b62bf4b17b7e6530e4"
