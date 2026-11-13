@@ -1,0 +1,17 @@
+gusto {'delta': 0.024, 'delta_se': 0.05, 'delta_lo95': -0.074, 'delta_hi95': 0.123, 'gap_scale': -0.0, 'gap_interaction': 0.014, 'flag_not_applicable': False}
+ist {'delta': 0.058, 'delta_se': 0.04, 'delta_lo95': -0.021, 'delta_hi95': 0.136, 'gap_scale': 14.064, 'gap_interaction': 38.803, 'flag_not_applicable': False}
+synbiotic {'delta': -0.262, 'delta_se': 0.116, 'delta_lo95': -0.49, 'delta_hi95': -0.034, 'gap_scale': 0.0, 'gap_interaction': 0.0, 'flag_not_applicable': False}
+elaia2 {'delta': 0.035, 'delta_se': 0.056, 'delta_lo95': -0.075, 'delta_hi95': 0.146, 'gap_scale': 0.385, 'gap_interaction': 16.837, 'flag_not_applicable': False}
+voter {'delta': -0.004, 'delta_se': 0.031, 'delta_lo95': -0.064, 'delta_hi95': 0.057, 'gap_scale': 49.657, 'gap_interaction': 48.728, 'flag_not_applicable': False}
+sf_email {'delta': -0.067, 'delta_se': 0.03, 'delta_lo95': -0.126, 'delta_hi95': -0.007, 'gap_scale': 9.053, 'gap_interaction': 6.997, 'flag_not_applicable': False}
+karlan_list {'delta': -0.01, 'delta_se': 0.059, 'delta_lo95': -0.125, 'delta_hi95': 0.105, 'gap_scale': 4.301, 'gap_interaction': 3.381, 'flag_not_applicable': False}
+stepup {'delta': -0.055, 'delta_se': 0.035, 'delta_lo95': -0.124, 'delta_hi95': 0.015, 'gap_scale': 7.134, 'gap_interaction': 2.044, 'flag_not_applicable': False}
+hillstrom {'delta': -0.13, 'delta_se': 0.051, 'delta_lo95': -0.23, 'delta_hi95': -0.031, 'gap_scale': 56.355, 'gap_interaction': 25.926, 'flag_not_applicable': True}
+sixcity {'delta': -0.05, 'delta_se': 0.037, 'delta_lo95': -0.123, 'delta_hi95': 0.023, 'gap_scale': 34.428, 'gap_interaction': 29.787, 'flag_not_applicable': False}
+newhaven {'delta': -0.024, 'delta_se': 0.045, 'delta_lo95': -0.112, 'delta_hi95': 0.063, 'gap_scale': 35.367, 'gap_interaction': 30.78, 'flag_not_applicable': False}
+lenta {'delta': -0.011, 'delta_se': 0.012, 'delta_lo95': -0.035, 'delta_hi95': 0.013, 'gap_scale': 13.206, 'gap_interaction': 10.793, 'flag_not_applicable': False}
+x5 {'delta': -0.005, 'delta_se': 0.015, 'delta_lo95': -0.035, 'delta_hi95': 0.024, 'gap_scale': 7.328, 'gap_interaction': 6.536, 'flag_not_applicable': False}
+routerbench__mistral7b_to_gpt4 {'delta': -0.253, 'delta_se': 0.041, 'delta_lo95': -0.334, 'delta_hi95': -0.172, 'gap_scale': 29.352, 'gap_interaction': 8.962, 'flag_not_applicable': True}
+routerbench__gpt35_to_gpt4 {'delta': -0.031, 'delta_se': 0.046, 'delta_lo95': -0.121, 'delta_hi95': 0.059, 'gap_scale': 1.901, 'gap_interaction': 1.255, 'flag_not_applicable': False}
+routerbench__llama70b_to_claude2 {'delta': -0.73, 'delta_se': 0.022, 'delta_lo95': -0.773, 'delta_hi95': -0.686, 'gap_scale': 104.61, 'gap_interaction': 8.87, 'flag_not_applicable': True}
+routerbench__mixtral_to_gpt4 {'delta': -0.242, 'delta_se': 0.041, 'delta_lo95': -0.323, 'delta_hi95': -0.161, 'gap_scale': 4.025, 'gap_interaction': 0.084, 'flag_not_applicable': True}

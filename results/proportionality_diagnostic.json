@@ -1,0 +1,155 @@
+{
+ "gusto": {
+  "delta": 0.02437394202397666,
+  "delta_se": 0.05042273539842452,
+  "delta_lo95": -0.0744546193569354,
+  "delta_hi95": 0.12320250340488872,
+  "gap_scale": -3.469446951953614e-15,
+  "gap_interaction": 0.014041678544646913,
+  "flag_not_applicable": false
+ },
+ "ist": {
+  "delta": 0.05787447393929096,
+  "delta_se": 0.04007608142285355,
+  "delta_lo95": -0.020674645649502,
+  "delta_hi95": 0.13642359352808392,
+  "gap_scale": 14.063524641726191,
+  "gap_interaction": 38.802850791891125,
+  "flag_not_applicable": false
+ },
+ "synbiotic": {
+  "delta": -0.2618642797530333,
+  "delta_se": 0.1163246711942702,
+  "delta_lo95": -0.48986063529380286,
+  "delta_hi95": -0.0338679242122637,
+  "gap_scale": 0.0,
+  "gap_interaction": 0.0,
+  "flag_not_applicable": false
+ },
+ "elaia2": {
+  "delta": 0.035267735702519544,
+  "delta_se": 0.05636615203822634,
+  "delta_lo95": -0.07520992229240409,
+  "delta_hi95": 0.14574539369744316,
+  "gap_scale": 0.3853936052492235,
+  "gap_interaction": 16.837354098467276,
+  "flag_not_applicable": false
+ },
+ "voter": {
+  "delta": -0.003589888685538897,
+  "delta_se": 0.03090172248056121,
+  "delta_lo95": -0.06415726474743887,
+  "delta_hi95": 0.056977487376361075,
+  "gap_scale": 49.656568043944894,
+  "gap_interaction": 48.72761682903475,
+  "flag_not_applicable": false
+ },
+ "sf_email": {
+  "delta": -0.0666289759517309,
+  "delta_se": 0.030456797136937858,
+  "delta_lo95": -0.1263242983401291,
+  "delta_hi95": -0.006933653563332698,
+  "gap_scale": 9.052830432082091,
+  "gap_interaction": 6.9972878539246475,
+  "flag_not_applicable": false
+ },
+ "karlan_list": {
+  "delta": -0.010250661279321437,
+  "delta_se": 0.05873418758352711,
+  "delta_lo95": -0.12536966894303458,
+  "delta_hi95": 0.1048683463843917,
+  "gap_scale": 4.301301438132668,
+  "gap_interaction": 3.3810011817090704,
+  "flag_not_applicable": false
+ },
+ "stepup": {
+  "delta": -0.05459908833050403,
+  "delta_se": 0.03546227892788942,
+  "delta_lo95": -0.12410515502916729,
+  "delta_hi95": 0.014906978368159227,
+  "gap_scale": 7.134431711612682,
+  "gap_interaction": 2.044001937518247,
+  "flag_not_applicable": false
+ },
+ "hillstrom": {
+  "delta": -0.13047668978954421,
+  "delta_se": 0.0507138848542196,
+  "delta_lo95": -0.22987590410381464,
+  "delta_hi95": -0.0310774754752738,
+  "gap_scale": 56.35457972915222,
+  "gap_interaction": 25.926420612273862,
+  "flag_not_applicable": true
+ },
+ "sixcity": {
+  "delta": -0.05006156253410033,
+  "delta_se": 0.03742617179418882,
+  "delta_lo95": -0.12341685925071041,
+  "delta_hi95": 0.02329373418250976,
+  "gap_scale": 34.42754294729113,
+  "gap_interaction": 29.787345524019855,
+  "flag_not_applicable": false
+ },
+ "newhaven": {
+  "delta": -0.024465723906219497,
+  "delta_se": 0.04450269971041951,
+  "delta_lo95": -0.11169101533864173,
+  "delta_hi95": 0.06275956752620274,
+  "gap_scale": 35.36687271378486,
+  "gap_interaction": 30.77958941718981,
+  "flag_not_applicable": false
+ },
+ "lenta": {
+  "delta": -0.010807535657919299,
+  "delta_se": 0.012274606676346252,
+  "delta_lo95": -0.03486576474355795,
+  "delta_hi95": 0.013250693427719354,
+  "gap_scale": 13.206228440545937,
+  "gap_interaction": 10.792621907898644,
+  "flag_not_applicable": false
+ },
+ "x5": {
+  "delta": -0.005230731775575222,
+  "delta_se": 0.015031529472361728,
+  "delta_lo95": -0.034692529541404206,
+  "delta_hi95": 0.024231065990253764,
+  "gap_scale": 7.327797592163242,
+  "gap_interaction": 6.536425880265533,
+  "flag_not_applicable": false
+ },
+ "routerbench__mistral7b_to_gpt4": {
+  "delta": -0.2527416624846251,
+  "delta_se": 0.04137070956854533,
+  "delta_lo95": -0.3338282532389739,
+  "delta_hi95": -0.17165507173027628,
+  "gap_scale": 29.35232318418446,
+  "gap_interaction": 8.962133586319364,
+  "flag_not_applicable": true
+ },
+ "routerbench__gpt35_to_gpt4": {
+  "delta": -0.031339847083675244,
+  "delta_se": 0.045895636934808186,
+  "delta_lo95": -0.12129529547589929,
+  "delta_hi95": 0.058615601308548794,
+  "gap_scale": 1.9009670982793603,
+  "gap_interaction": 1.2554014868829122,
+  "flag_not_applicable": false
+ },
+ "routerbench__llama70b_to_claude2": {
+  "delta": -0.7298137870103464,
+  "delta_se": 0.02227935200789582,
+  "delta_lo95": -0.7734813169458222,
+  "delta_hi95": -0.6861462570748705,
+  "gap_scale": 104.61004239322186,
+  "gap_interaction": 8.869910442677709,
+  "flag_not_applicable": true
+ },
+ "routerbench__mixtral_to_gpt4": {
+  "delta": -0.2419997929168091,
+  "delta_se": 0.04130082135190556,
+  "delta_lo95": -0.322949402766544,
+  "delta_hi95": -0.1610501830670742,
+  "gap_scale": 4.024582009054645,
+  "gap_interaction": 0.08370399218710078,
+  "flag_not_applicable": true
+ }
+}

@@ -1,0 +1,26 @@
+{
+ "routerbench__gpt35_to_gpt4": {
+  "better": "higher",
+  "dev_harm_rate": 0.056676609931566944,
+  "n": 8621,
+  "sha256": "e9c3ddb292e2c980157e3e847924844868e97a2201d4c71e394715d35b2f504c"
+ },
+ "routerbench__llama70b_to_claude2": {
+  "better": "higher",
+  "dev_harm_rate": 0.05285338015803336,
+  "n": 8621,
+  "sha256": "5ec81dc3a8b0b03f50dec52fef002bea13f894523c4a5c8ccd0252370aaf7a79"
+ },
+ "routerbench__mistral7b_to_gpt4": {
+  "better": "higher",
+  "dev_harm_rate": 0.03424657534246575,
+  "n": 8621,
+  "sha256": "b0691490521845ef62315ad46ddff54ebbfead537f66847884c17844c1474bde"
+ },
+ "routerbench__mixtral_to_gpt4": {
+  "better": "higher",
+  "dev_harm_rate": 0.04161545215100966,
+  "n": 8621,
+  "sha256": "adfd3c505b5821f63b59585fefcbc8109bd8d1764a8f0fcc6bb65ee3efbe4233"
+ }
+}
