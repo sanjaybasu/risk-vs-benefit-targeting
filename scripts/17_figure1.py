@@ -33,7 +33,7 @@ LABEL = {"gusto": "GUSTO-I", "ist": "IST", "synbiotic": "Synbiotic", "elaia2": "
          "x5": "X5"}
 
 # Fixed label offsets (points) to avoid collisions between neighboring trials.
-OFFSET = {"voter": (-28, 10), "hillstrom": (6, -14), "ist": (6, -12), "stepup": (6, 4)}
+OFFSET = {"voter": (-28, 10), "hillstrom": (6, -14), "ist": (8, 2), "gusto": (-4, -30), "stepup": (-44, 4)}
 OFFSET_B = {"routerbench__gpt35_to_gpt4": (6, -12), "routerbench__mixtral_to_gpt4": (6, 6)}
 
 spec = importlib.util.spec_from_file_location("meta", ROOT / "scripts" / "07_meta_regression.py")
@@ -89,8 +89,8 @@ def panel_a(ax, scored: dict):
         hollow = t in holdouts
         ax.scatter([xi], [yi], s=44, color=SURFACE if hollow else col, edgecolor=col, linewidth=1.8,
                    zorder=3)
-        if abs(xi) > 20 or hollow:
-            ax.annotate(LABEL[t], (xi, yi), xytext=OFFSET.get(t, (6, 4)), textcoords="offset points",
+        if abs(xi) > 20 or hollow or t == "gusto":
+            ax.annotate("GUSTO-I and Synbiotic" if t == "gusto" else LABEL[t], (xi, yi), xytext=OFFSET.get(t, (6, 4)), textcoords="offset points",
                         fontsize=8, color=INK)
     ax.set_xlabel("Posted scale-predicted gap (per 1,000 actions)", fontsize=9, color=INK)
     ax.set_ylabel("Observed gain of scale over risk ranking\n(per 1,000 actions, 95% CI)", fontsize=9,
