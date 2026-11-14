@@ -44,11 +44,21 @@ POSTED = {"predictions": ("predictions/manifest.json", "predictions"),
           "predictions_llm_masked": ("results/llm_masked_manifest.json", "sha256"),
           "predictions_rose_v2": ("results/rose_v2_manifest.json", "sha256"),
           "predictions_cforest": ("results/cforest_manifest.json", "sha256"),
-          "predictions_response": ("results/response_manifest.json", "sha256")}
+          "predictions_response": ("results/response_manifest.json", "sha256"),
+          "predictions_resp_vs_risk": ("results/resp_vs_risk_manifest.json", "sha256"),
+          "predictions_cforest_vs_resp": ("results/cforest_vs_resp_manifest.json", "sha256"),
+          "predictions_causalpfn_vs_resp": ("results/causalpfn_vs_resp_manifest.json", "sha256"),
+          "predictions_rose_vs_resp": ("results/rose_vs_resp_manifest.json", "sha256")}
 
 
 def jobs(stage: str) -> list[tuple[str, str, bool, str]]:
     """(prediction set, trial, subset mode, scorer) for a stage, in the registered order."""
+    if stage == "response_paired":  # exploratory; files derived from hashed columns (script 46)
+        w2 = ["w2_robocall2008", "w2_sanmateo_email", "w2_wisconsin_recall", "w2_ffh_charity", "w2_sa_loan",
+              "w2_mooc_megastudy", "w2_jsa_florida", "w2_jtpa", "w2_turkey_overdraft"]
+        return [(sn, t, False, "policy") for sn in ("predictions_resp_vs_risk", "predictions_cforest_vs_resp",
+                                                    "predictions_causalpfn_vs_resp", "predictions_rose_vs_resp")
+                for t in NONHOLD + HOLD + w2]
     if stage == "response":  # exploratory practitioner comparator; files derived from hashed m1 (script 46)
         w2 = ["w2_robocall2008", "w2_sanmateo_email", "w2_wisconsin_recall", "w2_ffh_charity", "w2_sa_loan",
               "w2_mooc_megastudy", "w2_jsa_florida", "w2_jtpa", "w2_turkey_overdraft"]
@@ -102,7 +112,7 @@ def now() -> str:
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--sealed", required=True, type=Path)
-    ap.add_argument("--stage", required=True, choices=["stage1", "stage2", "masked", "rose_v2", "wave2", "rose_v2_policy", "cforest", "response"])
+    ap.add_argument("--stage", required=True, choices=["stage1", "stage2", "masked", "rose_v2", "wave2", "rose_v2_policy", "cforest", "response", "response_paired"])
     ap.add_argument("--workers", type=int, default=12)
     a = ap.parse_args()
     out_dir = ROOT / "scoring" / a.stage
