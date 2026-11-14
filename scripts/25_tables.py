@@ -15,6 +15,13 @@ ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT.parents[1] / "notebooks" / "system-three" / "paper" / "tables"
 CONF = ["gusto", "ist", "synbiotic", "elaia2", "voter", "sf_email", "karlan_list", "stepup", "hillstrom",
         "sixcity", "newhaven", "lenta", "x5"]
+W2 = ["w2_robocall2008", "w2_sanmateo_email", "w2_wisconsin_recall", "w2_ffh_charity", "w2_sa_loan",
+      "w2_mooc_megastudy", "w2_wa_bonus", "w2_jsa_florida", "w2_jtpa", "w2_turkey_overdraft"]
+W2_LABEL = {"w2_robocall2008": "Michigan 2008 robocall", "w2_sanmateo_email": "San Mateo registrar email",
+            "w2_wisconsin_recall": "Wisconsin recall letter", "w2_ffh_charity": "Freedom from Hunger mailing",
+            "w2_sa_loan": "South Africa loan offer", "w2_mooc_megastudy": "edX plan-making",
+            "w2_wa_bonus": "Washington reemployment bonus", "w2_jsa_florida": "Job Search Assistance, Florida",
+            "w2_jtpa": "Job Training Partnership Act", "w2_turkey_overdraft": "Turkey overdraft message"}
 LABEL = {"gusto": "GUSTO-I", "ist": "IST", "synbiotic": "Synbiotic (neonatal sepsis)", "elaia2": "ELAIA-2",
          "voter": "Michigan social pressure", "sf_email": "SF email", "karlan_list": "Karlan–List matching",
          "stepup": "StepUp megastudy", "hillstrom": "Hillstrom email", "sixcity": "Six-city canvass",
@@ -43,7 +50,13 @@ def main() -> None:
         name = LABEL[t] + (" (holdout)" if t in HOLD else "")
         t1.append(f"| {name} | {'Biological' if t in BIO else 'Behavioral'} | {dt[t]['outcome']} "
                   f"({dt[t]['better']}) | {pt[t]['predictions']['n']:,} | {fc[t]['gap']['0.2']:.1f} |")
-    (OUT / "table1.md").write_text("Table 1. Confirmatory trials.\n\n" + "\n".join(t1) + "\n")
+    w2f = json.loads((ROOT / "results" / "w2_forecasts.json").read_text())["trials"]
+    t1.append("| *Wave 2* | | | | |")
+    for t in W2:
+        name = W2_LABEL[t] + ("" if w2f[t]["in_H1_W2"] else " (sign rule: not in slope test)")
+        tst = dt[t]["test"]
+        t1.append(f"| {name} | Behavioral | {dt[t]['outcome']} ({dt[t]['better']}) | {tst:,} | {fc[t]['gap']['0.2']:.1f} |")
+    (OUT / "table1.md").write_text("Table 1. Trials in waves 1 and 2.\n\n" + "\n".join(t1) + "\n")
     head = "| Trial | " + " | ".join(lbl for _, _, lbl in SETS) + " |"
     t2 = [head, "|" + "---|" * (len(SETS) + 1)]
     for t in CONF:

@@ -22,7 +22,9 @@ from system_three import rankers  # noqa: E402
 from system_three.analysis import prep  # noqa: E402
 
 TRIALS = ["gusto", "ist", "synbiotic", "elaia2", "voter", "sf_email", "karlan_list", "stepup", "hillstrom",
-          "sixcity", "newhaven", "lenta", "x5"]
+          "sixcity", "newhaven", "lenta", "x5",
+          "w2_robocall2008", "w2_sanmateo_email", "w2_wisconsin_recall", "w2_ffh_charity", "w2_sa_loan",
+          "w2_mooc_megastudy", "w2_wa_bonus", "w2_jsa_florida", "w2_jtpa", "w2_turkey_overdraft"]
 
 
 def main() -> None:

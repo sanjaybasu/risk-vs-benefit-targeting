@@ -30,10 +30,11 @@ INK, MUTED, SURFACE = "#0b0b0b", "#52514e", "#fcfcfb"
 LABEL = {"gusto": "GUSTO-I", "ist": "IST", "synbiotic": "Synbiotic", "elaia2": "ELAIA-2",
          "voter": "Michigan", "sf_email": "SF email", "karlan_list": "Karlan–List", "stepup": "StepUp",
          "hillstrom": "Hillstrom", "sixcity": "Six-city", "newhaven": "New Haven", "lenta": "Lenta",
-         "x5": "X5"}
+         "x5": "X5", "w2_robocall2008": "Robocall", "w2_sanmateo_email": "San Mateo", "w2_wisconsin_recall": "Wisconsin",
+         "w2_sa_loan": "SA loan", "w2_wa_bonus": "WA bonus", "w2_jsa_florida": "JSA Florida", "w2_jtpa": "JTPA"}
 
 # Fixed label offsets (points) to avoid collisions between neighboring trials.
-OFFSET = {"voter": (-28, 10), "hillstrom": (6, -14), "ist": (8, 2), "gusto": (-4, -30), "stepup": (-44, 4)}
+OFFSET = {"voter": (-28, 10), "hillstrom": (6, -14), "ist": (8, 2), "gusto": (6, 10), "stepup": (-44, 4)}
 OFFSET_B = {"routerbench__gpt35_to_gpt4": (6, -12), "routerbench__mixtral_to_gpt4": (6, 6)}
 
 spec = importlib.util.spec_from_file_location("meta", ROOT / "scripts" / "07_meta_regression.py")
@@ -88,20 +89,25 @@ def panel_a(ax, scored: dict):
         ax.plot([xi, xi], [lo, hi], color=col, linewidth=1.2, alpha=0.8)
         hollow = t in holdouts
         ax.scatter([xi], [yi], s=44, color=SURFACE if hollow else col, edgecolor=col, linewidth=1.8,
-                   zorder=3)
-        if abs(xi) > 20 or hollow or t == "gusto":
-            ax.annotate("GUSTO-I and Synbiotic" if t == "gusto" else LABEL[t], (xi, yi), xytext=OFFSET.get(t, (6, 4)), textcoords="offset points",
+                   marker="s" if t.startswith("w2_") else "o", zorder=3)
+        if abs(xi) > 20:
+            ax.annotate(LABEL[t], (xi, yi), xytext=OFFSET.get(t, (6, 4)), textcoords="offset points",
                         fontsize=8, color=INK)
+        if t == "gusto":
+            ax.annotate("Gap 0 by construction\n(GUSTO-I, synbiotic,\nWA bonus, JTPA)", (xi, yi), xytext=(18, -80),
+                        textcoords="data", fontsize=7.5, color=MUTED,
+                        arrowprops={"arrowstyle": "-", "color": MUTED, "linewidth": 0.8})
     ax.set_xlabel("Posted scale-predicted gap (per 1,000 actions)", fontsize=9, color=INK)
     ax.set_ylabel("Observed gain of scale over risk ranking\n(per 1,000 actions, 95% CI)", fontsize=9,
                   color=INK)
     s = meta.slope_test(f)
-    ax.set_title(f"A. Randomized trials (k = {len(trials)}); slope {s['slope']:.2f} "
-                 f"(95% CI {s['lo95']:.2f} to {s['hi95']:.2f})", fontsize=9, loc="left", color=INK)
+    ax.set_title(f"A. {len(trials)} randomized trials; slope {s['slope']:.2f} "
+                 f"(95% CI, {s['lo95']:.2f} to {s['hi95']:.2f})", fontsize=9, loc="left", color=INK)
     handles = [plt.Line2D([], [], marker="o", linestyle="", color=BEHAVIORAL, label="Behavioral"),
                plt.Line2D([], [], marker="o", linestyle="", color=BIOLOGICAL, label="Biological"),
                plt.Line2D([], [], marker="o", linestyle="", markerfacecolor=SURFACE,
-                          markeredgecolor=MUTED, color=MUTED, label="Forecast holdout")]
+                          markeredgecolor=MUTED, color=MUTED, label="Wave-1 forecast holdout"),
+               plt.Line2D([], [], marker="s", linestyle="", color=MUTED, label="Wave 2")]
     ax.legend(handles=handles + ax.get_legend_handles_labels()[0], frameon=False, fontsize=7.5,
               loc="upper left")
     style(ax)
@@ -122,7 +128,7 @@ def panel_b(ax, tier_scored: dict):
     ax.plot(lim, lim, color=MUTED, linewidth=1.2, linestyle=(0, (4, 3)))
     ax.set_xlabel("Context-only forecast (per 1,000)", fontsize=9, color=INK)
     ax.set_ylabel("Observed gain, exact truth (per 1,000)", fontsize=9, color=INK)
-    ax.set_title("B. Exact-truth layer (LLM routing)", fontsize=9, loc="left", color=INK)
+    ax.set_title("B. Model routing, known effects", fontsize=9, loc="left", color=INK)
     style(ax)
 
 

@@ -117,6 +117,96 @@
    "umax_plus_uq": 3.476954186534908,
    "condition_holds": true,
    "posted_gap": 7.327797592163229
+  },
+  "w2_robocall2008": {
+   "gamma": 0.9980110320345508,
+   "c": 0.05664155006249254,
+   "r_star": 0.5070797205636982,
+   "max_recalibrated_risk": 0.9984340797532886,
+   "umax_plus_uq": 9.049661090938296,
+   "condition_holds": true,
+   "posted_gap": 9.518821686664634
+  },
+  "w2_sanmateo_email": {
+   "gamma": 0.8245494206551485,
+   "c": 0.021571011578090247,
+   "r_star": 0.5026963503090864,
+   "max_recalibrated_risk": 0.9950652662383425,
+   "umax_plus_uq": 6.736527511248182,
+   "condition_holds": true,
+   "posted_gap": 2.7107061283135003
+  },
+  "w2_wisconsin_recall": {
+   "gamma": 0.1887725543073651,
+   "c": 0.1694507574913438,
+   "r_star": 0.5211686831129178,
+   "max_recalibrated_risk": 0.9261208147829401,
+   "umax_plus_uq": 4.635370980491133,
+   "condition_holds": true,
+   "posted_gap": 7.512605130725211
+  },
+  "w2_ffh_charity": {
+   "gamma": 0.5870791826159505,
+   "c": 0.061740036282149885,
+   "r_star": 0.5077168917221804,
+   "max_recalibrated_risk": 0.9873805807450483,
+   "umax_plus_uq": 7.151721650286406,
+   "condition_holds": true,
+   "posted_gap": 0.0
+  },
+  "w2_sa_loan": {
+   "gamma": 0.8923740556647259,
+   "c": 0.07125651520128058,
+   "r_star": 0.5089061223210165,
+   "max_recalibrated_risk": 0.9815974948083821,
+   "umax_plus_uq": 7.080026048363642,
+   "condition_holds": true,
+   "posted_gap": 7.087546278652832
+  },
+  "w2_mooc_megastudy": {
+   "gamma": 0.7504221329107564,
+   "c": 0.019741487608081445,
+   "r_star": 0.5024676659153263,
+   "max_recalibrated_risk": 0.9948938055026193,
+   "umax_plus_uq": 7.713923791450892,
+   "condition_holds": true,
+   "posted_gap": 0.0
+  },
+  "w2_wa_bonus": {
+   "gamma": 0.37926990089513807,
+   "c": 0.24363875247504901,
+   "r_star": 0.5304172374763617,
+   "max_recalibrated_risk": 0.6502137789480956,
+   "umax_plus_uq": -0.12427548543302291,
+   "condition_holds": false,
+   "posted_gap": 0.0
+  },
+  "w2_jsa_florida": {
+   "gamma": 0.3102904697498816,
+   "c": 0.02320459462233792,
+   "r_star": 0.5029005417902394,
+   "max_recalibrated_risk": 0.7407269307165016,
+   "umax_plus_uq": 1.187091948263213,
+   "condition_holds": true,
+   "posted_gap": 0.20336034910380887
+  },
+  "w2_jtpa": {
+   "gamma": 0.32913372171611943,
+   "c": 0.05315236384936608,
+   "r_star": 0.506643654454974,
+   "max_recalibrated_risk": 0.39863089249511474,
+   "umax_plus_uq": -1.977155884981192,
+   "condition_holds": false,
+   "posted_gap": 0.0
+  },
+  "w2_turkey_overdraft": {
+   "gamma": 0.9050387502910836,
+   "c": 0.003377852289246246,
+   "r_star": 0.5004222314357889,
+   "max_recalibrated_risk": 0.9383724276857695,
+   "umax_plus_uq": 2.520151604000487,
+   "condition_holds": true,
+   "posted_gap": 0.3976584240944362
   }
  }
 }
