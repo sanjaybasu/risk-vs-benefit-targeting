@@ -47,6 +47,8 @@ POSTED = {"predictions": ("predictions/manifest.json", "predictions"),
 
 def jobs(stage: str) -> list[tuple[str, str, bool, str]]:
     """(prediction set, trial, subset mode, scorer) for a stage, in the registered order."""
+    if stage == "rose_v2_policy":  # exploratory: one Rose version (v2) across both waves; hashes in update 6
+        return [("predictions_rose_v2", t, False, "policy") for t in NONHOLD + HOLD]
     if stage == "wave2":  # wave-2 registration; forecasts and hashes posted first (results/w2_forecasts.json)
         w2 = ["w2_robocall2008", "w2_sanmateo_email", "w2_wisconsin_recall", "w2_ffh_charity", "w2_sa_loan",
               "w2_mooc_megastudy", "w2_wa_bonus", "w2_jsa_florida", "w2_jtpa", "w2_turkey_overdraft"]
@@ -90,7 +92,7 @@ def now() -> str:
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--sealed", required=True, type=Path)
-    ap.add_argument("--stage", required=True, choices=["stage1", "stage2", "masked", "rose_v2", "wave2"])
+    ap.add_argument("--stage", required=True, choices=["stage1", "stage2", "masked", "rose_v2", "wave2", "rose_v2_policy"])
     ap.add_argument("--workers", type=int, default=12)
     a = ap.parse_args()
     out_dir = ROOT / "scoring" / a.stage
