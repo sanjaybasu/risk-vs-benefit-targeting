@@ -91,7 +91,7 @@
 | dr_resp | (doubly robust, 1.8; 95% CI, −9.2 to 12.8) | Q3.learners_over_response.dr | True |
 | learn_resp_rng | −0.8 to 1.8 per 1,000 over the response ranking | Q3.learners_over_response | True |
 | learn_scale_rng | 1.0 to 2.4 per 1,000 over the scale ranking | Q3.learners_over_scale | True |
-| brier_red | by 0.0002 to 0.0027 | rose_interval_detail.brier_diff_vs_constant | True |
+| brier_red | by 0.0002 to 0.0027 | rose_interval_detail.brier_diff_vs_constant | False |
 | brier_red_n | excluded 0 in 3 of 4 pairs | rose_interval_detail.brier_diff_vs_constant | True |
 | zeros | GUSTO-I, the neonatal synbiotic trial, and the Job Training Partnership Act study | Q1.zero_gap_trials | True |
 | sim | 3,000 simulated populations | theory_checks.simulation_agreement | True |
