@@ -260,7 +260,7 @@
     "treated_share": 0.3391674860701409,
     "outcome_mean_context_dev": 0.07020331853236737,
     "truth_exact": false,
-    "license": "GPL (CRAN predtools 0.0.3; data source listed as 'Internet'); counsel to confirm",
+    "license": "distributed with the GPL R package predtools (CRAN, 0.0.3); underlying data terms not stated by the package",
     "commercial_use": false,
     "reproduction": {
       "source": "NEJM 1993 abstract, 14% relative reduction",

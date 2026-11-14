@@ -14,7 +14,7 @@ Every dataset is public. Raw files live in `data/raw/<dataset>/` (gitignored); `
 | hillstrom | B | visit_2wk (higher) | 64,000 | 12,687 | 0.667 | 0.1462 | 0.07659 vs 0.0766 (match) | 0.17 SD | not stated (public challenge dataset) | no |
 | nsw | B | earnings_1978_usd (higher) | 445 | 128 | 0.416 | 5068 | 1794 vs 1794 (match) | 2.12 SD | not stated (author-hosted) | no |
 | ihdp | B | simulated_score (higher) | 74,700 | 7,500 | 0.186 | 12.1 | 4.516 vs n/a (no external target) | 0.07 SD | not stated (author-hosted) | no |
-| gusto | C | death_30d (lower) | 30,510 | 9,115 | 0.339 | 0.0702 | -0.1374 vs -0.14 (match) | 0.20 SD | GPL (CRAN predtools 0.0.3; data source listed as 'Internet'); counsel to confirm | no |
+| gusto | C | death_30d (lower) | 30,510 | 9,115 | 0.339 | 0.0702 | -0.1374 vs -0.14 (match) | 0.20 SD | distributed with the GPL R package predtools (CRAN, 0.0.3); underlying data terms not stated by the package | no |
 | sf_email | B | voted_jun2010 (higher) | 47,309 | 9,495 | 0.667 | 0.3355 | 0.00537 vs n/a (no external target) | 0.22 SD | CC0-1.0 | yes |
 | stepup | B | any_gym_visit_wk1_4 (higher) | 61,293 | 18,335 | 0.919 | 0.7887 | 6.129e+04 vs 61293 (match) | 0.54 SD | no license on the OSF node; deidentified data shared with 24 Hour Fitness permission via the view-only link in the paper's data statement | no |
 | elaia1 | C | aki_progression_dialysis_or_death_14d (lower) | 6,030 | 1,790 | 0.507 | 0.2132 | 0.004111 vs 0.004 (match) | 0.47 SD | CC0-1.0 (Dryad) | yes |
