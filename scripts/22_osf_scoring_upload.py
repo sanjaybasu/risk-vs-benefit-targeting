@@ -12,6 +12,7 @@ from __future__ import annotations
 import hashlib
 import importlib.util
 import sys
+import time
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -43,9 +44,14 @@ def main() -> None:
             link, remote = listing[name]
             if remote == hashlib.sha256(data).hexdigest():
                 continue
-            r = s.put(f"{link.split('?')[0]}?kind=file", data=data, timeout=600)
+            url = f"{link.split('?')[0]}?kind=file"
         else:
-            r = s.put(f"{up}?kind=file&name={name}", data=data, timeout=600)
+            url = f"{up}?kind=file&name={name}"
+        for attempt in range(6):  # OSF returns intermittent 403/5xx on bursts of writes
+            r = s.put(url, data=data, timeout=600)
+            if r.status_code in (200, 201):
+                break
+            time.sleep(3 * 2 ** attempt)
         if r.status_code not in (200, 201):
             raise RuntimeError(f"{name}: {r.status_code} {r.text[:200]}")
         n += 1
