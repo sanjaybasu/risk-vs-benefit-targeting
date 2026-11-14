@@ -377,6 +377,81 @@ def main() -> None:
                                                      "without": pool_set("predictions_response", "scale-minus-risk", nl)},
                              "dr_over_response": {"weight": wshare("predictions_response", "benefit-minus-risk"),
                                                   "without": pool_set("predictions_response", "benefit-minus-risk", nl)}}
+    # --- Final-panel additions (all from posted scorer outputs; nothing reads the sealed split) ---
+    def pool_keep(e, sd):
+        """Random-effects pool that keeps zero-variance trials at the registered floor (as the Q2 fits do)."""
+        e, sd = np.asarray(e, float), np.asarray(sd, float)
+        v = np.maximum(sd ** 2, mr.V_FLOOR)
+        f = mr.fit_re(e, np.ones((len(e), 1)), v)
+        se = float(np.sqrt(f.vcov[0, 0])); c = stats.t.ppf(0.975, f.df)
+        return {"k": len(e), "mean": float(f.beta[0]), "lo95": float(f.beta[0] - c * se), "hi95": float(f.beta[0] + c * se),
+                "tau": float(np.sqrt(f.tau2))}
+    sr_rows = [cell(table("predictions", t), "scale-minus-risk") for t in ALL]
+    q3["scale_over_risk"]["all_22_zero_gap_at_floor"] = pool_keep([r["estimate"] for r in sr_rows], [r["boot_sd"] for r in sr_rows])
+    ew_m = float(np.mean([r["estimate"] for r in sr_rows]))
+    ew_se = float(np.sqrt(sum(r["boot_sd"] ** 2 for r in sr_rows)) / len(sr_rows))
+    ew_c = stats.t.ppf(0.975, len(sr_rows) - 1)
+    q3["scale_over_risk"]["equal_weight_mean_22"] = {"k": len(sr_rows), "mean": ew_m, "se": ew_se,
+                                                     "lo95": ew_m - ew_c * ew_se, "hi95": ew_m + ew_c * ew_se}
+    # Each learned ranking over the scale and response rankings at every budget (same test units).
+    q3["budgets_learners"] = {}
+    for b in (0.1, 0.2, 0.3):
+        bb = {"over_scale": {k: pool(*zip(*[(cell(table(s_, t), "benefit-minus-scale", b)["estimate"],
+                                            cell(table(s_, t), "benefit-minus-scale", b)["boot_sd"]) for t in ALL]))
+                             for k, s_ in SETS.items()}}
+        if "learners_over_response" in q3:
+            bb["over_response"] = {k: pool(*zip(*[(cell(table(s_, t), "benefit-minus-risk", b)["estimate"],
+                                                   cell(table(s_, t), "benefit-minus-risk", b)["boot_sd"]) for t in ALL]))
+                                   for k, s_ in vs.items()}
+            bb["response_over_risk"] = pool(*zip(*[(cell(table("predictions_resp_vs_risk", t), "benefit-minus-risk", b)["estimate"],
+                                                    cell(table("predictions_resp_vs_risk", t), "benefit-minus-risk", b)["boot_sd"]) for t in ALL]))
+            bb["scale_over_response"] = pool(*zip(*[(cell(table("predictions_response", t), "scale-minus-risk", b)["estimate"],
+                                                     cell(table("predictions_response", t), "scale-minus-risk", b)["boot_sd"]) for t in ALL]))
+        q3["budgets_learners"][str(b)] = bb
+    # Wave-1 prediction interval as a forecast of each learned ranking's wave-2 per-trial gains.
+    q3["wave1_pi_forecast_wave2"] = {}
+    for k in SETS:
+        pi = q3[k]["wave1"]["pi95"]
+        w2v = {t: v["estimate"] for t, v in q3[k]["per_trial"].items() if t.startswith("w2_")}
+        q3["wave1_pi_forecast_wave2"][k] = {"pi95_wave1": pi, "n_wave2": len(w2v),
+                                            "n_inside": int(sum(pi[0] <= v <= pi[1] for v in w2v.values())),
+                                            "outside": {t: v for t, v in w2v.items() if not pi[0] <= v <= pi[1]},
+                                            "wave2_mean_minus_wave1_center": float(q3[k]["wave2"]["mean"] - q3[k]["wave1"]["mean"])}
+    # Wave difference within the voting trials only (the one domain present in both waves with >= 3 trials each).
+    def wave_diff_on(set_name, rk, trials):
+        rows = [(t, cell(table(set_name, t), rk)) for t in trials]
+        rows = [(t, r) for t, r in rows if not (r["boot_sd"] < 1e-9 and abs(r["estimate"]) < 1e-9)]
+        ee = np.array([r["estimate"] for _, r in rows]); vv = np.maximum(np.array([r["boot_sd"] for _, r in rows]) ** 2, mr.V_FLOOR)
+        w2v = np.array([1.0 if t.startswith("w2_") else 0.0 for t, _ in rows])
+        fw = mr.fit_re(ee, np.column_stack([np.ones_like(w2v), w2v]), vv)
+        se, c = float(np.sqrt(fw.vcov[1, 1])), stats.t.ppf(0.975, fw.df)
+        return {"k": len(rows), "est": float(fw.beta[1]), "lo95": float(fw.beta[1] - c * se), "hi95": float(fw.beta[1] + c * se)}
+    voting = [t for t in ALL if DOMAIN.get(t) == "voting"]
+    q3["voting_only_wave_diff"] = {"dr_over_risk": wave_diff_on("predictions", "benefit-minus-risk", voting),
+                                   "scale_over_risk": wave_diff_on("predictions", "scale-minus-risk", voting)}
+    if "by_domain" in q3:
+        nv = [t for t in ALL if DOMAIN.get(t, "other") != "voting"]
+        q3["by_domain"]["non_voting"] = {"trials": nv, "dr_over_risk": pool_set("predictions", "benefit-minus-risk", nv),
+                                         "scale_over_risk": pool_set("predictions", "scale-minus-risk", nv),
+                                         "response_over_risk": pool_set("predictions_resp_vs_risk", "benefit-minus-risk", nv),
+                                         "dr_over_scale": pool_set("predictions", "benefit-minus-scale", nv),
+                                         "dr_over_response": pool_set("predictions_response", "benefit-minus-risk", nv)}
+    # Risk ranking's 20% policy value against the trial's average effect (TOC(0.2) < 0), per trial.
+    q3["autoc"]["n_risk_q20_below_ate"] = int(sum(cell(table("predictions", t), "risk")["estimate"] < table("predictions", t)["ate_per_1000"]
+                                                 for t in ALL))
+    # Holm-adjusted P values for the family of four abstract-level claims (Knapp–Hartung t, df = k - 1).
+    def p_from(r):
+        c = stats.t.ppf(0.975, r["k"] - 1); se = (r["hi95"] - r["lo95"]) / (2 * c)
+        return float(2 * stats.t.sf(abs(r["mean"] / se), r["k"] - 1))
+    fam = {"risk_autoc": q3["autoc"]["risk"], "scale_over_risk_17": q3["scale_over_risk"]["all"],
+           "dr_over_risk_22": q3["dr"]["all"]}
+    if "response_over_risk_paired" in q3:
+        fam["response_over_risk_22"] = q3["response_over_risk_paired"]["all"]
+    raw = {k: p_from(r) for k, r in fam.items()}
+    order = sorted(raw, key=raw.get); m = len(raw); holm = {}; run = 0.0
+    for i, k in enumerate(order):
+        run = max(run, (m - i) * raw[k]); holm[k] = min(1.0, run)
+    q3["holm_family"] = {k: {"p": raw[k], "p_holm": holm[k]} for k in raw}
     out["Q3"] = q3
     # Q4
     gc = {}

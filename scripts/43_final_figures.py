@@ -33,7 +33,7 @@ LABEL = {"gusto": "GUSTO-I", "ist": "IST", "synbiotic": "Synbiotic", "elaia2": "
          "w2_turkey_overdraft": "Turkey overdraft"}
 RBL = {"routerbench__mistral7b_to_gpt4": "Mistral-7B → GPT-4", "routerbench__gpt35_to_gpt4": "GPT-3.5 → GPT-4",
        "routerbench__llama70b_to_claude2": "Llama-70B → Claude 2", "routerbench__mixtral_to_gpt4": "Mixtral → GPT-4"}
-LEARNER = {"scale_over_risk": "Scale ranking", "dr": "Doubly robust", "causal_forest": "Causal forest", "causalpfn": "CausalPFN",
+LEARNER = {"scale_over_risk": "Scale ranking", "dr": "Doubly robust learner", "causal_forest": "Causal forest", "causalpfn": "CausalPFN",
            "rose": "Calibrated ensemble"}
 
 
@@ -107,15 +107,14 @@ def figure2(fr):
     se = np.sqrt(np.einsum("ij,jk,ik->i", G, vcov, G))
     crit = stats.t.ppf(0.975, df)
     a.fill_between(grid, G @ beta - crit * se, G @ beta + crit * se, color=MUTED, alpha=0.14, linewidth=0)
-    a.plot(grid, G @ beta, color=INK, linewidth=2, label="19 trials: {:.2f} ({:.2f} to {:.2f})".format(q2["primary"]["slope"], q2["primary"]["lo95"], q2["primary"]["hi95"]))
+    w1 = q2["wave1_only"]
+    a.plot(grid, G @ beta, color=INK, linewidth=2,
+           label="19 trials: {:.2f} ({:.2f} to {:.2f})\nWave 1 alone, registered primary: {:.2f} ({:.2f} to {:.2f})".format(
+               q2["primary"]["slope"], q2["primary"]["lo95"], q2["primary"]["hi95"], w1["slope"], w1["lo95"], w1["hi95"]))
     o = q2["informative_through_origin"]
     a.plot(grid, o["slope"] * grid, color=INK, linewidth=1.4, linestyle=(0, (1, 1.5)),
            label=f"16 trials, through origin: {o['slope']:.2f} ({o['lo95']:.2f} to {o['hi95']:.2f})")
     a.plot(grid, grid, color=MUTED, linewidth=1.2, linestyle=(0, (4, 3)), label="Observed equals forecast")
-    w1 = q2["wave1_only"]
-    gw = np.linspace(-5, 60, 50)
-    a.plot(gw, w1["intercept"] + w1["slope"] * gw, color=W1C, linewidth=1.2, linestyle=(0, (6, 2, 1, 2)),
-           label=f"Wave 1 (registered primary): {w1['slope']:.2f} ({w1['lo95']:.2f} to {w1['hi95']:.2f})")
     a.annotate("3 trials at 0, 0 by construction", (0, 0), xytext=(18, -64), textcoords="data", ha="left",
                fontsize=7.5, color=MUTED, arrowprops={"arrowstyle": "->", "color": MUTED, "linewidth": 0.8})
     for t, p in pts.items():
@@ -141,10 +140,13 @@ def figure2(fr):
         xs, ys = r["forecast"], r["scale_minus_risk"]
         col = INK if r["flag"] else MUTED
         b.plot([xs, xs], [ys["lo95"], ys["hi95"]], color=col, linewidth=1.2)
-        b.scatter([xs], [ys["estimate"]], s=40, color=col if r["flag"] else SURFACE, edgecolor=col, linewidth=1.6,
-                  zorder=3)
-        b.annotate(RBL[t], (xs, ys["estimate"]), xytext={"routerbench__mixtral_to_gpt4": (8, 8), "routerbench__gpt35_to_gpt4": (8, -16), "routerbench__mistral7b_to_gpt4": (8, -24)}.get(t, (6, 4)), textcoords="offset points",
-                   fontsize=7.5, color=INK)
+        b.scatter([xs], [ys["estimate"]], s=55 if not r["flag"] else 40, color=col if r["flag"] else SURFACE, edgecolor=col,
+                  linewidth=1.8, zorder=4 if not r["flag"] else 3)
+        off = {"routerbench__mixtral_to_gpt4": (14, 26), "routerbench__gpt35_to_gpt4": (26, 44),
+               "routerbench__mistral7b_to_gpt4": (16, -30), "routerbench__llama70b_to_claude2": (8, 6)}[t]
+        b.annotate(RBL[t], (xs, ys["estimate"]), xytext=off, textcoords="offset points", fontsize=7.5, color=INK,
+                   ha="right" if off[0] < 0 else "left",
+                   arrowprops={"arrowstyle": "-", "color": MUTED, "linewidth": 0.6, "shrinkA": 0, "shrinkB": 4})
     lim = [-5, 115]
     b.plot(lim, lim, color=MUTED, linewidth=1.2, linestyle=(0, (4, 3)))
     b.axhline(0, color=MUTED, linewidth=0.8)
@@ -163,7 +165,9 @@ def figure2(fr):
 
 def figure3(fr):
     q3 = fr["Q3"]
-    fig, (a, b) = plt.subplots(1, 2, figsize=(11.4, 7.2), facecolor=SURFACE, gridspec_kw={"width_ratios": [1.05, 1]})
+    fig = plt.figure(figsize=(11.4, 8.4), facecolor=SURFACE)
+    gs = fig.add_gridspec(2, 2, width_ratios=[1.05, 1], height_ratios=[2.6, 1], hspace=0.32, wspace=0.95)
+    a = fig.add_subplot(gs[:, 0]); b = fig.add_subplot(gs[0, 1]); c = fig.add_subplot(gs[1, 1])
     pt = q3["dr"]["per_trial"]
     w1 = sorted([t for t in pt if not t.startswith("w2_")], key=lambda t: -pt[t]["estimate"])
     w2 = sorted([t for t in pt if t.startswith("w2_")], key=lambda t: -pt[t]["estimate"])
@@ -209,12 +213,30 @@ def figure3(fr):
     b.set_yticklabels(labels, fontsize=7.5, color=INK)
     b.tick_params(axis="y", length=0)
     b.set_xlabel("Pooled gain over risk ranking (per 1,000 actions, 95% CI)", fontsize=9, color=INK)
-    b.set_title("B. Pooled gain over the risk ranking, by ranking and wave", fontsize=9, loc="left", color=INK)
+    b.set_title("B. Pooled gain over the risk ranking", fontsize=9, loc="left", color=INK)
     b.text(0.99, 0.01, "Gray band: 95% prediction interval for a new trial", transform=b.transAxes, ha="right",
            va="bottom", fontsize=7.5, color=MUTED)
     style(b, grid=False)
     b.spines["left"].set_visible(False)
-    fig.tight_layout()
+    y, ticks, labels = 0, [], []
+    for k, name in LEARNER.items():
+        if k == "scale_over_risk":
+            continue
+        for src, lab in (("learners_over_scale", "over the scale ranking"), ("learners_over_response", "over the response ranking")):
+            r = q3[src][k]
+            c.fill_between(r["pi95"], y - 0.3, y + 0.3, color=MUTED, alpha=0.18, linewidth=0)
+            c.plot([r["lo95"], r["hi95"]], [y, y], color=INK, linewidth=1.8)
+            c.scatter([r["mean"]], [y], s=30, color=INK, marker="D", zorder=3)
+            ticks.append(y); labels.append(f"{name} {lab}"); y -= 1
+        y -= 0.5
+    c.axvline(0, color=MUTED, linewidth=0.8)
+    c.set_yticks(ticks); c.set_yticklabels(labels, fontsize=7.5, color=INK); c.tick_params(axis="y", length=0)
+    c.set_xlim(-30, 55)
+    c.set_xlabel("Pooled gain over the alternative (per 1,000 actions, 95% CI)", fontsize=9, color=INK)
+    c.set_title("C. Learned rankings over the simple alternatives", fontsize=9, loc="left", color=INK)
+    style(c, grid=False)
+    c.spines["left"].set_visible(False)
+    fig.subplots_adjust(top=0.96, bottom=0.07, left=0.12, right=0.97)
     save(fig, "figure3")
 
 

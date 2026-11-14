@@ -2,6 +2,31 @@
 
 | Claim | Value as reported | Source | In manuscript |
 |---|---|---|---|
+| tau_w1_inf | between-trial SD was 10.6 per 1,000 | Q2.wave1_informative_only.tau2 | True |
+| tau_inf16 | between-trial SD was 11.2 (Table 2) | Q2.informative_only.tau2 | True |
+| oos_voting | forecasts for the 3 voting trials (1.6 to 5.2 per 1,000) were below their observed gains (34.4 to 41.7) | Q2.wave2_out_of_sample.per_trial | True |
+| routing_dr_rng | gained 39.5 to 188.4 per 1,000 over the risk ranking | Q2.routing.*.dr_minus_risk | True |
+| routing_dr_llama | including 188.4 (95% CI, 148.1 to 228.7) | Q2.routing.llama.dr_minus_risk | True |
+| risk_ci_below0 | lay below 0 in 4 of 22 | Q3.autoc.n_risk_autoc_ci_below_0 | True |
+| risk_below_ate | in 15 of 22 (sign test P = 0.13) | Q3.autoc.n_risk_q20_below_ate | True |
+| eqw22 | entered as 0, was 14.6 (95% CI, 3.1 to 26.1) | Q3.scale_over_risk.equal_weight_mean_22 | True |
+| voting_scale | largest in the 7 voting trials (32.7; 95% CI, 20.6 to 44.9) | Q3.by_domain.voting.scale_over_risk | True |
+| nonvoting_scale | other 10 trials in which the rankings differed (8.2; 95% CI, −4.6 to 20.9) | Q3.by_domain.non_voting.scale_over_risk | True |
+| resp_b10 | was 19.0 at a 10% budget (95% CI, 3.7 to 34.4) | Q3.budgets_learners.0.1.response_over_risk | True |
+| resp_b30 | and 10.0 at 30% (95% CI, 1.1 to 18.9) | Q3.budgets_learners.0.3.response_over_risk | True |
+| voting_wave_diff | wave difference was −13.8 (95% CI, −83.0 to 55.3) | Q3.voting_only_wave_diff.dr_over_risk | True |
+| w1pi_dr | (−28.5 to 70.6) contained 8 of the 9 wave-2 | Q3.wave1_pi_forecast_wave2.dr | True |
+| w1pi_florida | at −35.4, fell outside | Q3.wave1_pi_forecast_wave2.dr.outside | True |
+| med_dr | (doubly robust, 2.9 per 1,000; 95% CI, −13.6 to 19.3; response, 1.5; 95% CI, −64.2 to 67.2) | Q3.by_domain.medicine | True |
+| learn_scale_hi | upper bounds of 6.6 to 9.6 | Q3.learners_over_scale.*.hi95 | True |
+| nonvoting_dr_scale | gained 7.9 per 1,000 over the scale ranking in the 15 trials outside voting (95% CI, 1.1 to 14.7) | Q3.by_domain.non_voting.dr_over_scale | True |
+| voting_dr_scale | and −17.4 in the 7 voting trials (95% CI, −45.2 to 10.5) | Q3.by_domain.voting.dr_over_scale | True |
+| pi_scale | scale, −12.0 to 41.8 | Q3.scale_over_risk.all.pi95 | True |
+| pi_resp | response, −9.8 to 36.0 | Q3.response_over_risk_paired.all.pi95 | True |
+| pi_dr | doubly robust, −23.9 to 55.3 | Q3.dr.all.pi95 | True |
+| context_rng | ranged from 2,278 to 343,870 people | dataset_table.context | True |
+| mistral_cov | (85.0% to 100%) | rose_interval_detail.coverage_effect_zero | True |
+| resp_lower | (4.4 per 1,000; 95% CI, −24.6 to 33.4) | Q3.response_over_risk_paired.lower_is_better | True |
 | n_trials | 22 randomized trials | len(wave1)+len(wave2) | True |
 | n_individuals | 2,157,068 | sum dataset_table rows | True |
 | n_test | 601,690 | n_test_units | True |
@@ -18,7 +43,7 @@
 | loo_hill | 0.44 (95% CI, −0.06 to 0.94) | Q2.leave_one_out.hillstrom | True |
 | b10 | 0.69 (95% CI, −0.21 to 1.59) | Q2.budget_0.1 | True |
 | oos | 0.28 nats | Q2.wave2_out_of_sample | True |
-| oos_in | all 6 observed gains | Q2.wave2_out_of_sample | True |
+| oos_in | All 6 observed gains | Q2.wave2_out_of_sample | True |
 | llama_fc | 104.6 per 1,000 | Q2.routing.llama | True |
 | llama_obs | by 227.7 per 1,000 (95% CI, 171.3 to 285.4) | Q2.routing.llama | True |
 | autoc_risk | −4.2 per 1,000 (95% CI, −7.5 to −0.9) | Q3.autoc.risk | True |
@@ -38,8 +63,8 @@
 | corr | 0.36 to 0.90 | Q3.between_learner_correlation_range | True |
 | dr_scale | 4.4 per 1,000 at a 20% budget (95% CI, −4.3 to 13.1) | Q3.dr_over_scale.all | True |
 | llm | 9.0 per 1,000; 95% CI, −7.4 to 25.5 | Q3.language_model_wave1 | True |
-| llm_mask | −2.6 (95% CI, −21.5 to 16.3) | Q3.language_model_masked_wave1 | True |
-| dopfn | 11.4 per 1,000 in the first wave (95% CI, −1.0 to 23.7) | Q3.dopfn_wave1 | True |
+| llm_mask | −2.6; 95% CI, −21.5 to 16.3 | Q3.language_model_masked_wave1 | True |
+| dopfn | Do-PFN, gained 11.4 per 1,000 (95% CI, −1.0 to 23.7) | Q3.dopfn_wave1 | True |
 | cov | 89.6% to 90.6% | Q4.unit_coverage | True |
 | width | 1.63 to 1.89 | Q4.interval_detail.median_width | True |
 | excl | 0% to 17.3% | Q4.interval_detail.share_excluding_zero | True |
@@ -55,7 +80,7 @@
 | resp_hi | 15.2 in the 16 trials in which a higher outcome was better (95% CI, 3.9 to 26.5) | Q3.response_over_risk_paired.higher_is_better | True |
 | resp_lo | 4.4 in the 6 trials in which a lower outcome was better (95% CI, −24.6 to 33.4) | Q3.response_over_risk_paired.lower_is_better | True |
 | scale_resp | −2.2 per 1,000; 95% CI, −5.2 to 0.8 | Q3.response.scale_over_response.all | True |
-| lenta_w | 73% of the weight | Q3.lenta_check.scale_over_response.weight | True |
+| lenta_w | 73.4% of the weight | Q3.lenta_check.scale_over_response.weight | True |
 | lenta_wo | −1.7 (95% CI, −7.6 to 4.3) | Q3.lenta_check.scale_over_response.without | True |
 | dr_resp | (1.8; 95% CI, −9.2 to 12.8) | Q3.learners_over_response.dr | True |
 | learn_resp_rng | −0.8 to 1.8 per 1,000 over the response ranking | Q3.learners_over_response | True |

@@ -94,10 +94,14 @@ def main_tables() -> str:
             ("Both waves, without the 3 trials whose gap is 0 by construction", io["k"], io),
             ("Same 16 trials, line through the origin (not pre-specified)", o16["k"], o16)]
     o += ["\n## Table 2. Does the scale-predicted gap forecast the observed gain of the scale ranking over the risk ranking?\n",
-          "| Analysis | Trials | Slope (95% CI) | P |", "|---|---|---|---|"]
+          "| Analysis | Trials | Slope (95% CI) | P | Between-trial SD |", "|---|---|---|---|---|"]
     for name, k, r in rows:
-        o.append(f"| {name} | {k} | {ci(r['slope'], r['lo95'], r['hi95'], 2)} | {r['p_two_sided']:.3f} |")
-    o.append(f"\nSlope 1 means that observed gains equal forecast gains; slope 0 means no relation. In the 19-trial fit, the 3 trials whose "
+        tau = "–" if r.get("tau2") is None else f"{r['tau2'] ** 0.5:.1f}"
+        o.append(f"| {name} | {k} | {ci(r['slope'], r['lo95'], r['hi95'], 2)} | {r['p_two_sided']:.3f} | {tau} |")
+    o.append(f"\nSlope 1 means that observed gains equal forecast gains; slope 0 means no relation. The between-trial SD is the square root "
+             "of the restricted maximum likelihood estimate of the between-trial variance, in outcomes per 1,000 actions; the trials whose gap "
+             "is 0 by construction have zero residual and the floor variance, so the fits that include them estimate this SD as 0 and "
+             "behave as fixed-effect fits. In the 19-trial fit, the 3 trials whose "
              f"gap is 0 by construction carry {100 * q2['weight_share_zero_gap_trials']:.1f}% of the weight; in the wave-1 fit, the 2 such trials "
              f"carry {100 * q2['weight_share_zero_gap_trials_wave1']:.1f}%. In each of these trials the two rankings selected the same test units, "
              "so the observed gain was 0 with no sampling variance. SI Appendix, Table S9 gives the registered "
@@ -110,8 +114,9 @@ def main_tables() -> str:
         w_ = r.get("wave2_minus_wave1") if isinstance(r, dict) else None
         return ci(w_["est"], w_["lo95"], w_["hi95"]) if w_ and "lo95" in w_ else "–"
     sr = q3["scale_over_risk"]
-    o.append(f"| Scale ranking | {pooled(sr['wave1'])} [{sr['wave1']['k']}] | {pooled(sr['wave2'])} [{sr['wave2']['k']}] | – | "
-             f"{pooled(sr['all'])} | {wd(sr)} | {sr['all']['pi95'][0]:.1f} to {sr['all']['pi95'][1]:.1f} |")
+    ew = sr["equal_weight_mean_22"]
+    o.append(f"| Scale ranking | {pooled(sr['wave1'])} [{sr['wave1']['k']}] | {pooled(sr['wave2'])} [{sr['wave2']['k']}] | "
+             f"{pooled(ew)}^a^ | {pooled(sr['all'])} | {wd(sr)} | {sr['all']['pi95'][0]:.1f} to {sr['all']['pi95'][1]:.1f}^b^ |")
     rr = q3.get("response_over_risk_paired")
     if rr:
         o.append(f"| Response ranking | {pooled(rr['wave1'])} [{rr['wave1']['k']}] | {pooled(rr['wave2'])} [{rr['wave2']['k']}] | "
@@ -125,21 +130,34 @@ def main_tables() -> str:
     dp = q3["dopfn_wave1"]
     o.append(f"| Do-PFN | {pooled(dp)} [{dp['k']}] | – | – | – | – | – |")
     o += ["\n*B. Gain of each learned ranking over the two simple alternatives, all 22 trials, same test units*\n",
-          "| Learned ranking | Over the scale ranking | Over the response ranking |", "|---|---|---|"]
+          "| Learned ranking | Over the scale ranking | 95% prediction interval, new trial | Over the response ranking | 95% prediction interval, new trial |",
+          "|---|---|---|---|---|"]
     lr_ = q3.get("learners_over_response", {})
+    pi_ = lambda r: f"{r['pi95'][0]:.1f} to {r['pi95'][1]:.1f}"  # noqa: E731
     for k, name in LEARNER.items():
         if k == "scale_over_risk":
             continue
         a_ = q3["learners_over_scale"][k]
         b_ = lr_.get(k)
-        o.append(f"| {name} | {pooled(a_)} | {pooled(b_) if b_ else '–'} |")
+        o.append(f"| {name} | {pooled(a_)} | {pi_(a_)} | {pooled(b_) if b_ else '–'} | {pi_(b_) if b_ else '–'} |")
+    fl = sr["all_22_zero_gap_at_floor"]
+    hf = q3["holm_family"]
+    holm_s = ", ".join(f"{v['p_holm']:.3f}" for v in hf.values())
+    raw_s = ", ".join(f"{v['p']:.3f}" for v in hf.values())
     o.append("\nValues are gains at a 20% budget, in outcomes improved per 1,000 actions (95% CI) [number of trials], pooled by random "
              "effects; panel B compares each learned ranking with the scale or response ranking on the same units. Pools leave out trials in "
              "which the two compared rankings select the same units. The wave difference is the wave coefficient of one random-effects "
              "meta-regression over all trials, with a common between-trial variance, so it is not the difference of the two wave cells. "
              "Do-PFN was run in wave 1 only. Intervals are not adjusted for multiple comparisons; the doubly robust learner is the "
-             "registered learned ranking in both waves. Pooling over both waves was not pre-specified. The prediction interval applies to a new trial drawn from the same "
-             "mix of domains as these trials, and the pooled values average absolute differences in outcomes that differ between trials.\n")
+             "registered learned ranking in both waves. Pooling over both waves was not pre-specified. The prediction interval applies to a new trial "
+             "exchangeable with these trials, and the pooled values average absolute differences in outcomes that differ between trials. "
+             f"^a^Equal-weighted mean over all 22 trials with the 5 trials in which the two rankings selected the same units entered as 0 "
+             f"(SE {ew['se']:.1f} from the per-trial bootstrap variances; t interval with 21 degrees of freedom). An inverse-variance pool that "
+             f"enters those 5 trials at the registered variance floor gives {pooled(fl)}, because they then carry nearly all the weight and set "
+             f"the between-trial variance to 0; the 17-trial pool is conditional on the two rankings differing. ^b^From the 17-trial pool. "
+             f"Holm-adjusted P values for the family of four claims that the Abstract makes against the risk ranking (its rank-weighted average "
+             f"treatment effect, and the gains of the scale, response, and doubly robust rankings) were "
+             f"{holm_s} (unadjusted {raw_s}).\n")
     return "\n".join(o)
 
 
@@ -266,12 +284,14 @@ def si_tables() -> str:
         qn = au.get(f"{k_}_qini")
         o.append(f"| {nm_} | {pooled(au[k_])} | {pooled(qn) if qn else '–'} |")
     from math import comb
-    n15 = au["n_risk_below_random_q20"]
+    n15 = au["n_risk_q20_below_ate"]
     p_sign = min(1.0, 2 * sum(comb(22, i) for i in range(n15, 23)) / 2 ** 22)
     o.append(f"\nAll values pool 22 trials. A negative value means that the ranking puts people with smaller-than-average effects first. "
              f"The risk ranking's AUTOC CI lay below 0 in {au['n_risk_autoc_ci_below_0']} of 22 trials. At a 20% budget, the risk ranking's "
-             f"estimated policy value was below that of one random 20% selection in {n15} of 22 trials (point estimates; two-sided sign "
-             f"test P = {p_sign:.2f}). Paired differences in AUTOC between rankings were not computed.\n")
+             f"estimated policy value was below the trial's average effect, which is the expected value of random selection, in {n15} of 22 "
+             f"trials (point estimates; two-sided sign test P = {p_sign:.2f}). Qini was computed only for the risk, scale, and doubly robust "
+             f"rankings. The frozen scorer reports each ranking's AUTOC with its own bootstrap interval; paired AUTOC differences between "
+             f"rankings would need the sealed outcomes to be read outside the frozen scorer, so they were not computed.\n")
     sr = q3["dr_with_sign_rule_trials"]
     o += ["\n## Table S11. Sensitivity of the Question 3 comparisons (per 1,000 actions, 95% CI; not pre-specified)\n",
           "| Analysis | Doubly robust over risk | Scale over risk | Doubly robust over scale |", "|---|---|---|---|"]
@@ -284,6 +304,22 @@ def si_tables() -> str:
     lr = q3["between_learner_correlation_range"]
     o.append(f"\nBracketed numbers are trials pooled where fewer than 22. Across trials, the per-trial gains of the four learned rankings "
              f"correlated at {lr[0]:.2f} to {lr[1]:.2f}.\n")
+    bl = q3["budgets_learners"]
+    o += ["\n*Each learned ranking over the two simple alternatives, by budget (all 22 trials, same test units)*\n",
+          "| Comparison | Budget 10% | Budget 20% | Budget 30% |", "|---|---|---|---|"]
+    o.append(f"| Response ranking over the risk ranking | " + " | ".join(pooled(bl[b]["response_over_risk"]) for b in ("0.1", "0.2", "0.3")) + " |")
+    o.append(f"| Scale ranking over the response ranking | " + " | ".join(pooled(bl[b]["scale_over_response"]) for b in ("0.1", "0.2", "0.3")) + " |")
+    for k_, nm_ in LEARNER.items():
+        if k_ == "scale_over_risk":
+            continue
+        for src, lab in (("over_scale", "over the scale ranking"), ("over_response", "over the response ranking")):
+            o.append(f"| {nm_} {lab} | " + " | ".join(pooled(bl[b][src][k_]) for b in ("0.1", "0.2", "0.3")) + " |")
+    pf = q3["wave1_pi_forecast_wave2"]
+    o.append("\nThe wave-1 95% prediction interval of each learned ranking's gain over the risk ranking, taken as a forecast of the 9 wave-2 "
+             "per-trial gains, contained " + "; ".join(
+                 f"{v['n_inside']} of {v['n_wave2']} for the {LEARNER[k_].lower()} ({v['pi95_wave1'][0]:.1f} to {v['pi95_wave1'][1]:.1f})"
+                 for k_, v in pf.items()) + ". The gains outside the intervals were Florida job-search assistance for three learners and "
+             "Freedom from Hunger for the causal forest.\n")
     o += ["\n## Table S12. Detail on the calibrated ensemble's 90% intervals in model routing (not pre-specified)\n",
           "| Model pair | Test prompts | Prompts with effect 0 | Median interval width | Intervals excluding 0 | Coverage, all | Coverage, effect 0 | Coverage, effect not 0 |",
           "|---|---|---|---|---|---|---|---|"]
@@ -293,6 +329,7 @@ def si_tables() -> str:
                  f"{r['coverage_all']:.3f} | {r['coverage_effect_zero']:.3f} | {r['coverage_effect_nonzero']:.3f} |")
     o.append("\nThe effect of routing a prompt to the larger model ranges from −1 to 1.\n")
     rsp, rr = q3.get("response"), q3.get("response_over_risk_paired")
+    o.append("{{SPLIT}}")
     if rsp and rr:
         o += ["\n## Table S15. Response ranking as a practitioner comparator (per 1,000 actions, 95% CI; not pre-specified)\n",
               "| Comparison | Wave 1 | Wave 2 | All trials |", "|---|---|---|---|"]
@@ -321,10 +358,12 @@ def si_tables() -> str:
               "| Domain | Trials | Scale over risk | Response over risk | Doubly robust over risk | Doubly robust over scale | Doubly robust over response |",
               "|---|---|---|---|---|---|---|"]
         for d_, v_ in q3["by_domain"].items():
-            cells = [pooled(v_[c]) if v_[c] else "–" for c in ("scale_over_risk", "response_over_risk", "dr_over_risk", "dr_over_scale", "dr_over_response")]
-            o.append(f"| {d_.capitalize()} | {len(v_['trials'])} | " + " | ".join(cells) + " |")
-        o.append("\nOther: charity, exercise, consumer credit, education, employment, and consumer finance. Pools leave out trials in "
-                 "which the two compared rankings select the same units.\n")
+            cells = [pooled(v_[c]) + (f" [{v_[c]['k']}]" if v_[c]["k"] != len(v_["trials"]) else "") if v_[c] else "–"
+                     for c in ("scale_over_risk", "response_over_risk", "dr_over_risk", "dr_over_scale", "dr_over_response")]
+            o.append(f"| {d_.replace('_', '-').capitalize()} | {len(v_['trials'])} | " + " | ".join(cells) + " |")
+        o.append("\nOther: charity, exercise, consumer credit, education, employment, and consumer finance. Non-voting pools the medicine, "
+                 "retail, and other trials. Pools leave out trials in which the two compared rankings select the same units; bracketed "
+                 "numbers give the trials pooled where fewer than the domain's trials. The split by domain was not pre-specified.\n")
     return "\n".join(o)
 
 
@@ -343,7 +382,10 @@ def main() -> None:
     a, b = t.index("## Tables\n"), t.index("## Figure legends")
     ms.write_text(t[:a] + "## Tables\n\n" + fix(main_tables()).replace("## Table", "### Table") + "\n" + t[b:])
     notes = (OUT.parent / "si_appendix_notes.md").read_text()
-    (OUT.parent / "risk_vs_benefit_targeting_22_trials_si_appendix.md").write_text(notes.replace("{{TABLES}}", fix(si_tables())))
+    early, late = fix(si_tables()).split("{{SPLIT}}")
+    assert "{{TABLES_LATE}}" in notes
+    (OUT.parent / "risk_vs_benefit_targeting_22_trials_si_appendix.md").write_text(
+        notes.replace("{{TABLES}}", early.rstrip() + "\n").replace("{{TABLES_LATE}}", late.strip() + "\n"))
     print("wrote", OUT / "main_tables.md", OUT / "si_tables.md")
 
 
