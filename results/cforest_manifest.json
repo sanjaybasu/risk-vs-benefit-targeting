@@ -1,0 +1,71 @@
+{
+ "elaia2": {
+  "sha256": "1d0630579dbb7e7701ab0f99d799dad597c6d1cb911d966c5a1d26dbb5d2421e"
+ },
+ "gusto": {
+  "sha256": "d6137346e326ea1df7bffe57027174b96ac189f9ae6850bd760e794df87e8174"
+ },
+ "hillstrom": {
+  "sha256": "2d12d6901a4841e4dec9df9f8e93770b19fc6b530ae8fd51f594450365c3424d"
+ },
+ "ist": {
+  "sha256": "fc70e723303360276b70ce6161043cd99f33556fd90008404b3a7b533b26fb5b"
+ },
+ "karlan_list": {
+  "sha256": "00ca3d08eb399dfd4ce00613f02d5c88c31fdae5391355e872993fee5c9650d9"
+ },
+ "lenta": {
+  "sha256": "fafce4ceb6a89b4a8a93e0a28979f6909533dfe0c51f73c112b1925c6cc93218"
+ },
+ "newhaven": {
+  "sha256": "5b7ef78be0baaa8ffd06e8b7d0c220d70ec66e0e75fd0328c5a170247ee23fbc"
+ },
+ "sf_email": {
+  "sha256": "8f779298d008b231d58a1c878b1b26c6e033b654ff2ab1ffeaebf4110beceead"
+ },
+ "sixcity": {
+  "sha256": "bb6a71d3e3440b89d35d0b40c44ccd639d0d901706edf3efa71937a42beb920f"
+ },
+ "stepup": {
+  "sha256": "e7b64ad74bf409e999025a7822841b4b2205193ecf24ec5e339fbb97d38e0b9d"
+ },
+ "synbiotic": {
+  "sha256": "afd3718fbb1a26fc9a0209f7880f649e85e54c26ff9a6d31f0bf75cc22539cba"
+ },
+ "voter": {
+  "sha256": "553f4e0f23644f8d3c3c22f2b4b5d0de13213264f4c26164fef53d2c56dd24c8"
+ },
+ "w2_ffh_charity": {
+  "sha256": "0e7dff6ccf0ad941d00cb12c23b4206a72dbab1b821ecb72f74e74f036336bad"
+ },
+ "w2_jsa_florida": {
+  "sha256": "0879c963e85d3a34c8b9fd51739bf8ef49a7262d7a94d13b864c4300a94cbba8"
+ },
+ "w2_jtpa": {
+  "sha256": "56184c0a8af48ad30635e78dca31835979b843514264d3fed61ddca417cc7de9"
+ },
+ "w2_mooc_megastudy": {
+  "sha256": "58cc383319ff79206933eb216c9bce550ec1c43ed859880e5117b3fefdf4200b"
+ },
+ "w2_robocall2008": {
+  "sha256": "89b20b26cf678544fdfa5ee01bb6ff7e96b5ce88385554e90a1b6741c4e3e15e"
+ },
+ "w2_sa_loan": {
+  "sha256": "6a4bea36e3f26c3c32fbc373ef8bd0e53e66af283341d2c700b7e6a4e57de317"
+ },
+ "w2_sanmateo_email": {
+  "sha256": "a6a905b1d7b15335878018a7141da4f2481c03bda6316ab9dfcb252b755f2701"
+ },
+ "w2_turkey_overdraft": {
+  "sha256": "115f93c1c54ef06761380cfb82af873e6b89d71f935d45d277e2a0f12a0adb47"
+ },
+ "w2_wa_bonus": {
+  "sha256": "f9ac9cfb410963fe692fca21e92e73a4d85bfb8eef6d1fdf90e19754d350f06f"
+ },
+ "w2_wisconsin_recall": {
+  "sha256": "d2baadc4617bb1bab83cd4471bb170f244a11e59cee3986ba5521dde068419e9"
+ },
+ "x5": {
+  "sha256": "1bd0b79e6d716aa390aa5fc0e882ff80bd54a40a04f300e127a11abe10b20ebc"
+ }
+}
