@@ -42,11 +42,16 @@ POSTED = {"predictions": ("predictions/manifest.json", "predictions"),
           "predictions_loeo": ("results/loeo_manifest.json", "sha256"),
           "predictions_splitctx": ("results/scale_forecast_splitctx.json", "sha256"),
           "predictions_llm_masked": ("results/llm_masked_manifest.json", "sha256"),
-          "predictions_rose_v2": ("results/rose_v2_manifest.json", "sha256")}
+          "predictions_rose_v2": ("results/rose_v2_manifest.json", "sha256"),
+          "predictions_cforest": ("results/cforest_manifest.json", "sha256")}
 
 
 def jobs(stage: str) -> list[tuple[str, str, bool, str]]:
     """(prediction set, trial, subset mode, scorer) for a stage, in the registered order."""
+    if stage == "cforest":  # registration update 7
+        w2 = ["w2_robocall2008", "w2_sanmateo_email", "w2_wisconsin_recall", "w2_ffh_charity", "w2_sa_loan",
+              "w2_mooc_megastudy", "w2_wa_bonus", "w2_jsa_florida", "w2_jtpa", "w2_turkey_overdraft"]
+        return [("predictions_cforest", t, False, "policy") for t in NONHOLD + HOLD + w2]
     if stage == "rose_v2_policy":  # exploratory: one Rose version (v2) across both waves; hashes in update 6
         return [("predictions_rose_v2", t, False, "policy") for t in NONHOLD + HOLD]
     if stage == "wave2":  # wave-2 registration; forecasts and hashes posted first (results/w2_forecasts.json)
@@ -92,7 +97,7 @@ def now() -> str:
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--sealed", required=True, type=Path)
-    ap.add_argument("--stage", required=True, choices=["stage1", "stage2", "masked", "rose_v2", "wave2", "rose_v2_policy"])
+    ap.add_argument("--stage", required=True, choices=["stage1", "stage2", "masked", "rose_v2", "wave2", "rose_v2_policy", "cforest"])
     ap.add_argument("--workers", type=int, default=12)
     a = ap.parse_args()
     out_dir = ROOT / "scoring" / a.stage
