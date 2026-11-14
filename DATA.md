@@ -45,7 +45,7 @@ Every dataset is public. Raw files live in `data/raw/<dataset>/` (gitignored); `
 
 | Dataset | File | Bytes | SHA-256 | Source |
 |---|---|---|---|---|
-| camden | dataverse_files.zip | 1253605 | `36124ec8243e0b3c` | local copy of /Users/sanjaybasu/Downloads/dataverse_files.zip |
+| camden | dataverse_files.zip | 1253605 | `36124ec8243e0b3c` | local copy of a manual download (click-through terms or Dataverse package); see the source row above |
 | crash2 | crash2.rda | 499880 | `d0aa818f45c2f27f` | https://hbiostat.org/data/repo/crash2.rda |
 | criteo | criteo-research-uplift-v2.1.csv.gz | 311422618 | `2716e1bf0fd157a9` | https://huggingface.co/datasets/criteo/criteo-uplift/resolve/main/criteo-research-uplift-v2.1.csv.gz |
 | hillstrom | hillstrom.csv.gz | 443070 | `bab6578f60db5d79` | https://hillstorm1.s3.us-east-2.amazonaws.com/hillstorm_no_indices.csv.gz |
@@ -62,19 +62,19 @@ Every dataset is public. Raw files live in `data/raw/<dataset>/` (gitignored); `
 | nsw | nswre74_control.txt | 41860 | `a1364cea459d953d` | https://users.nber.org/~rdehejia/data/nswre74_control.txt |
 | nsw | nsw_treated.txt | 43065 | `ab65cd58de17a78b` | https://users.nber.org/~rdehejia/data/nsw_treated.txt |
 | nsw | nsw_control.txt | 61625 | `8fd745ed2c3426bb` | https://users.nber.org/~rdehejia/data/nsw_control.txt |
-| oregon | oregon_puf.zip | 9370270 | `0426efe3c226ed39` | local copy of /Users/sanjaybasu/Downloads/Oregon/oregon_puf.zip |
-| oregon | By downloading these materials, I agree to the following.txt | 816 | `21905596f78bfdb4` | local copy of /Users/sanjaybasu/Downloads/Oregon/By downloading these materials, I agree to the following.txt |
+| oregon | oregon_puf.zip | 9370270 | `0426efe3c226ed39` | local copy of a manual download (click-through terms or Dataverse package); see the source row above |
+| oregon | By downloading these materials, I agree to the following.txt | 816 | `21905596f78bfdb4` | local copy of a manual download (click-through terms or Dataverse package); see the source row above |
 | routerbench | routerbench_0shot.parquet | 38710599 | `7d07b286c38766ad` | huggingface.co/datasets/withmartian/routerbench (pickle converted to parquet on Modal; scripts/modal_convert_routerbench.py) |
 | routerbench | routerbench_5shot.parquet | 45989939 | `ad8e0ef72c5e2f70` | huggingface.co/datasets/withmartian/routerbench (pickle converted to parquet on Modal; scripts/modal_convert_routerbench.py) |
 | swebench | repo |  | `40f164d5b8f1d249` | https://github.com/SWE-bench/experiments |
 | upworthy | exploratory.csv | 14260949 | `8368313b060f4015` | https://osf.io/download/3vqmp/ |
 | upworthy | confirmatory.csv | 66517697 | `b2a88288c88f2b67` | https://osf.io/download/vy8mj/ |
 | upworthy | holdout.csv | 14174776 | `93832660b831aca1` | https://osf.io/download/ynf3k/ |
-| voter | GerberGreenLarimer_APSR_2008_social_pressure.dta | 41293806 | `d8dd711c5216443d` | local copy of /Users/sanjaybasu/Downloads/doi-10.60600-yu-cgmwnw/GerberGreenLarimer_APSR_2008_social_pressure.dta |
-| voter | GerberGreenLarimer_APSR_2008.R | 4022 | `a6f3a3ad76abcb13` | local copy of /Users/sanjaybasu/Downloads/doi-10.60600-yu-cgmwnw/GerberGreenLarimer_APSR_2008.R |
-| voter | GerberGreenLarimer_APSR_2008_r_output.txt | 10334 | `f0eaaafeb7dcb7b6` | local copy of /Users/sanjaybasu/Downloads/doi-10.60600-yu-cgmwnw/GerberGreenLarimer_APSR_2008_r_output.txt |
-| voter | GerberGreenLarimer_APSR_2008.log | 16130 | `c16bb08f97006c0a` | local copy of /Users/sanjaybasu/Downloads/doi-10.60600-yu-cgmwnw/GerberGreenLarimer_APSR_2008.log |
-| voter | MANIFEST.TXT | 824 | `b520592b1f6bd17d` | local copy of /Users/sanjaybasu/Downloads/doi-10.60600-yu-cgmwnw/MANIFEST.TXT |
+| voter | GerberGreenLarimer_APSR_2008_social_pressure.dta | 41293806 | `d8dd711c5216443d` | local copy of a manual download (click-through terms or Dataverse package); see the source row above |
+| voter | GerberGreenLarimer_APSR_2008.R | 4022 | `a6f3a3ad76abcb13` | local copy of a manual download (click-through terms or Dataverse package); see the source row above |
+| voter | GerberGreenLarimer_APSR_2008_r_output.txt | 10334 | `f0eaaafeb7dcb7b6` | local copy of a manual download (click-through terms or Dataverse package); see the source row above |
+| voter | GerberGreenLarimer_APSR_2008.log | 16130 | `c16bb08f97006c0a` | local copy of a manual download (click-through terms or Dataverse package); see the source row above |
+| voter | MANIFEST.TXT | 824 | `b520592b1f6bd17d` | local copy of a manual download (click-through terms or Dataverse package); see the source row above |
 
 ## Terms that restrict use
 

@@ -3,7 +3,7 @@
 | Claim | Value as reported | Source | In manuscript |
 |---|---|---|---|
 | tau_w1_inf | between-trial SD was 10.6 per 1,000 | Q2.wave1_informative_only.tau2 | True |
-| tau_inf16 | between-trial SD was 11.2 (Table 2) | Q2.informative_only.tau2 | True |
+| tau_inf16 | between-trial SD was 11.2 (Table 1) | Q2.informative_only.tau2 | True |
 | oos_voting | forecasts for the 3 voting trials (1.6 to 5.2 per 1,000) were below their observed gains (34.4 to 41.7) | Q2.wave2_out_of_sample.per_trial | True |
 | routing_dr_rng | gained 39.5 to 188.4 per 1,000 over the risk ranking | Q2.routing.*.dr_minus_risk | True |
 | routing_dr_llama | including 188.4 (95% CI, 148.1 to 228.7) | Q2.routing.llama.dr_minus_risk | True |
