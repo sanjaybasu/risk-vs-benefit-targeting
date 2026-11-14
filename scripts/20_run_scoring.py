@@ -102,7 +102,7 @@ def now() -> str:
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--sealed", required=True, type=Path)
-    ap.add_argument("--stage", required=True, choices=["stage1", "stage2", "masked", "rose_v2", "wave2", "rose_v2_policy", "cforest"])
+    ap.add_argument("--stage", required=True, choices=["stage1", "stage2", "masked", "rose_v2", "wave2", "rose_v2_policy", "cforest", "response"])
     ap.add_argument("--workers", type=int, default=12)
     a = ap.parse_args()
     out_dir = ROOT / "scoring" / a.stage
