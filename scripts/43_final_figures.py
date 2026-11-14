@@ -109,14 +109,14 @@ def figure2(fr):
     a.fill_between(grid, G @ beta - crit * se, G @ beta + crit * se, color=MUTED, alpha=0.14, linewidth=0)
     w1 = q2["wave1_only"]
     a.plot(grid, G @ beta, color=INK, linewidth=2,
-           label="19 trials: {:.2f} ({:.2f} to {:.2f})\nWave 1 alone, registered primary: {:.2f} ({:.2f} to {:.2f})".format(
+           label="19 trials: {:.2f} ({:.2f} to {:.2f}); wave 1 alone: {:.2f} ({:.2f} to {:.2f})".format(
                q2["primary"]["slope"], q2["primary"]["lo95"], q2["primary"]["hi95"], w1["slope"], w1["lo95"], w1["hi95"]))
     o = q2["informative_through_origin"]
     a.plot(grid, o["slope"] * grid, color=INK, linewidth=1.4, linestyle=(0, (1, 1.5)),
            label=f"16 trials, through origin: {o['slope']:.2f} ({o['lo95']:.2f} to {o['hi95']:.2f})")
     a.plot(grid, grid, color=MUTED, linewidth=1.2, linestyle=(0, (4, 3)), label="Observed equals forecast")
-    a.annotate("3 trials at 0, 0 by construction", (0, 0), xytext=(18, -64), textcoords="data", ha="left",
-               fontsize=7.5, color=MUTED, arrowprops={"arrowstyle": "->", "color": MUTED, "linewidth": 0.8})
+    a.annotate("3 trials: forecast 0 by construction,\nobserved gain 0", (0, 0), xytext=(-6, 118), textcoords="data", ha="left",
+               fontsize=7.5, color=MUTED, arrowprops={"arrowstyle": "->", "color": MUTED, "linewidth": 0.8, "relpos": (0.0, 0.0)})
     for t, p in pts.items():
         w2 = t.startswith("w2_")
         col = W2C if w2 else W1C

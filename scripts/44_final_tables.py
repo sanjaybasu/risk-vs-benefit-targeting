@@ -88,10 +88,10 @@ def main_tables() -> str:
     p = q2["primary"]
     io, o16 = q2["informative_only"], q2["informative_through_origin"]
     rows = [("Wave 1 (registered primary)", q2["k_wave1"], q2["wave1_only"]),
-            ("Wave 1, without the 2 trials whose gap is 0 by construction", q2["wave1_informative_only"]["k"], q2["wave1_informative_only"]),
+            ("Wave 1, without the 2 trials whose forecast is 0 by construction", q2["wave1_informative_only"]["k"], q2["wave1_informative_only"]),
             ("Wave 2 (registered primary; descriptive, fewer than 8 trials)", q2["k_wave2"], q2["wave2_only"]),
             ("Both waves (registered secondary)", q2["k"], p),
-            ("Both waves, without the 3 trials whose gap is 0 by construction", io["k"], io),
+            ("Both waves, without the 3 trials whose forecast is 0 by construction", io["k"], io),
             ("Same 16 trials, line through the origin (not pre-specified)", o16["k"], o16)]
     o += ["\n## Table 2. Does the scale-predicted gap forecast the observed gain of the scale ranking over the risk ranking?\n",
           "| Analysis | Trials | Slope (95% CI) | P | Between-trial SD |", "|---|---|---|---|---|"]
@@ -99,10 +99,10 @@ def main_tables() -> str:
         tau = "–" if r.get("tau2") is None else f"{r['tau2'] ** 0.5:.1f}"
         o.append(f"| {name} | {k} | {ci(r['slope'], r['lo95'], r['hi95'], 2)} | {r['p_two_sided']:.3f} | {tau} |")
     o.append(f"\nSlope 1 means that observed gains equal forecast gains; slope 0 means no relation. The between-trial SD is the square root "
-             "of the restricted maximum likelihood estimate of the between-trial variance, in outcomes per 1,000 actions; the trials whose gap "
+             "of the restricted maximum likelihood estimate of the between-trial variance, in outcomes per 1,000 actions; the trials whose forecast "
              "is 0 by construction have zero residual and the floor variance, so the fits that include them estimate this SD as 0 and "
              "behave as fixed-effect fits. In the 19-trial fit, the 3 trials whose "
-             f"gap is 0 by construction carry {100 * q2['weight_share_zero_gap_trials']:.1f}% of the weight; in the wave-1 fit, the 2 such trials "
+             f"forecast is 0 by construction carry {100 * q2['weight_share_zero_gap_trials']:.1f}% of the weight; in the wave-1 fit, the 2 such trials "
              f"carry {100 * q2['weight_share_zero_gap_trials_wave1']:.1f}%. In each of these trials the two rankings selected the same test units, "
              "so the observed gain was 0 with no sampling variance. SI Appendix, Table S9 gives the registered "
              "sensitivity analyses.\n")
@@ -142,8 +142,9 @@ def main_tables() -> str:
         o.append(f"| {name} | {pooled(a_)} | {pi_(a_)} | {pooled(b_) if b_ else '–'} | {pi_(b_) if b_ else '–'} |")
     fl = sr["all_22_zero_gap_at_floor"]
     hf = q3["holm_family"]
-    holm_s = ", ".join(f"{v['p_holm']:.3f}" for v in hf.values())
-    raw_s = ", ".join(f"{v['p']:.3f}" for v in hf.values())
+    ho = ["risk_autoc", "scale_over_risk_17", "response_over_risk_22", "dr_over_risk_22"]
+    holm_s = ", ".join(f"{hf[k]['p_holm']:.3f}" for k in ho)
+    raw_s = ", ".join(f"{hf[k]['p']:.3f}" for k in ho)
     o.append("\nValues are gains at a 20% budget, in outcomes improved per 1,000 actions (95% CI) [number of trials], pooled by random "
              "effects; panel B compares each learned ranking with the scale or response ranking on the same units. Pools leave out trials in "
              "which the two compared rankings select the same units. The wave difference is the wave coefficient of one random-effects "
@@ -155,8 +156,10 @@ def main_tables() -> str:
              f"(SE {ew['se']:.1f} from the per-trial bootstrap variances; t interval with 21 degrees of freedom). An inverse-variance pool that "
              f"enters those 5 trials at the registered variance floor gives {pooled(fl)}, because they then carry nearly all the weight and set "
              f"the between-trial variance to 0; the 17-trial pool is conditional on the two rankings differing. ^b^From the 17-trial pool. "
-             f"Holm-adjusted P values for the family of four claims that the Abstract makes against the risk ranking (its rank-weighted average "
-             f"treatment effect, and the gains of the scale, response, and doubly robust rankings) were "
+             f"Where the estimated between-trial SD is 0 (the wave-2 pools of the doubly robust learner, the causal forest, and CausalPFN, "
+             f"and the causal forest and CausalPFN over the scale ranking), the pool is a fixed-effect pool and the prediction interval equals "
+             f"the confidence interval. Holm-adjusted P values for the four pooled claims against the risk ranking in Results, question 3 (its "
+             f"rank-weighted average treatment effect, and the gains of the scale, response, and doubly robust rankings over it, in that order) were "
              f"{holm_s} (unadjusted {raw_s}).\n")
     return "\n".join(o)
 
@@ -188,7 +191,7 @@ def si_tables() -> str:
     for t, r in q2["leave_one_out"].items():
         o.append(f"| {META[t][0]} | {ci(r['slope'], r['lo95'], r['hi95'], 2)} | {r['lpd_gain'] + 0.0 if abs(r['lpd_gain']) >= 0.005 else 0.0:.2f} |")
     oos = q2["wave2_out_of_sample"]
-    o += ["\n## Table S3. Wave-1 fit as a forecast of the eligible wave-2 trials\n",
+    o += ["\n## Table S3. Wave-1 fit as a predictor of the eligible wave-2 trials\n",
           "| Trial | Forecast (95% prediction interval) | Observed gain | Gain in log predictive density, nats |", "|---|---|---|---|"]
     for t, r in oos["per_trial"].items():
         o.append(f"| {META[t][0]} | {ci(r['forecast'], *r['pi95'])} | {r['observed']:.1f} | {r['lpd_gain'] + 0.0 if abs(r['lpd_gain']) >= 0.005 else 0.0:.2f} |")
@@ -350,8 +353,8 @@ def si_tables() -> str:
         o.append("\nThe response ranking orders people by the predicted probability of the desirable outcome with the action, from the "
                  "outcome model fit to the action arm of the context split. Where the lower outcome is better, it serves the people with the "
                  "lowest predicted risk under the action first. All contrasts are paired on the same test units. In the pools against the "
-                 f"response ranking, Lenta carries {100 * lc['scale_over_response']['weight']:.0f}% (scale) and "
-                 f"{100 * lc['dr_over_response']['weight']:.0f}% (doubly robust) of the weight; without Lenta, the scale ranking over the "
+                 f"response ranking, Lenta carries {100 * lc['scale_over_response']['weight']:.1f}% (scale) and "
+                 f"{100 * lc['dr_over_response']['weight']:.1f}% (doubly robust) of the weight; without Lenta, the scale ranking over the "
                  f"response ranking was {pooled(lc['scale_over_response']['without'])} and the doubly robust learner over the response ranking "
                  f"was {pooled(lc['dr_over_response']['without'])}.\n")
         o += ["\n## Table S16. Gains by domain (per 1,000 actions, 95% CI; not pre-specified)\n",
@@ -363,7 +366,7 @@ def si_tables() -> str:
             o.append(f"| {d_.replace('_', '-').capitalize()} | {len(v_['trials'])} | " + " | ".join(cells) + " |")
         o.append("\nOther: charity, exercise, consumer credit, education, employment, and consumer finance. Non-voting pools the medicine, "
                  "retail, and other trials. Pools leave out trials in which the two compared rankings select the same units; bracketed "
-                 "numbers give the trials pooled where fewer than the domain's trials. The split by domain was not pre-specified.\n")
+                 "numbers give the trials pooled where fewer than the domain's trials. Where the estimated between-trial SD is 0, the pool is a fixed-effect pool. The split by domain was not pre-specified.\n")
     return "\n".join(o)
 
 
