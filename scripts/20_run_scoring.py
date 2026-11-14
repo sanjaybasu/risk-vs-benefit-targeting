@@ -43,11 +43,16 @@ POSTED = {"predictions": ("predictions/manifest.json", "predictions"),
           "predictions_splitctx": ("results/scale_forecast_splitctx.json", "sha256"),
           "predictions_llm_masked": ("results/llm_masked_manifest.json", "sha256"),
           "predictions_rose_v2": ("results/rose_v2_manifest.json", "sha256"),
-          "predictions_cforest": ("results/cforest_manifest.json", "sha256")}
+          "predictions_cforest": ("results/cforest_manifest.json", "sha256"),
+          "predictions_response": ("results/response_manifest.json", "sha256")}
 
 
 def jobs(stage: str) -> list[tuple[str, str, bool, str]]:
     """(prediction set, trial, subset mode, scorer) for a stage, in the registered order."""
+    if stage == "response":  # exploratory practitioner comparator; files derived from hashed m1 (script 46)
+        w2 = ["w2_robocall2008", "w2_sanmateo_email", "w2_wisconsin_recall", "w2_ffh_charity", "w2_sa_loan",
+              "w2_mooc_megastudy", "w2_jsa_florida", "w2_jtpa", "w2_turkey_overdraft"]
+        return [("predictions_response", t, False, "policy") for t in NONHOLD + HOLD + w2]
     if stage == "cforest":  # registration update 7
         w2 = ["w2_robocall2008", "w2_sanmateo_email", "w2_wisconsin_recall", "w2_ffh_charity", "w2_sa_loan",
               "w2_mooc_megastudy", "w2_wa_bonus", "w2_jsa_florida", "w2_jtpa", "w2_turkey_overdraft"]

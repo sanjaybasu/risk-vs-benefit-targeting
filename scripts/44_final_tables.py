@@ -1,0 +1,276 @@
+"""Main Tables 1-3 and SI Tables S1-S8, written from results files only.
+
+Output: notebooks/system-three/paper/tables/main_tables.md and si_tables.md.
+Descriptive labels (trial names, domains, actions, outcomes) are fixed text; every number is read
+from results/final_results.json, results/dataset_table.json, results/theory_checks.json,
+results/llm_masked_compare.json, results/proportionality_diagnostic*.json, or the scorer outputs.
+"""
+
+from __future__ import annotations
+
+import glob
+import json
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+R = ROOT / "results"
+OUT = ROOT.parents[1] / "notebooks" / "system-three" / "paper" / "tables"
+FR = json.loads((R / "final_results.json").read_text())
+DT = json.loads((R / "dataset_table.json").read_text())
+W1, W2 = FR["trials"]["wave1"], FR["trials"]["wave2"]
+SCALE_PT = {t: {"estimate": p["y"], "lo95": p["lo95"], "hi95": p["hi95"]} for t, p in FR["Q2"]["points"].items()}
+
+# name, domain, action versus reference, outcome (direction)
+META = {
+    "gusto": ("GUSTO-I", "Medicine", "Accelerated alteplase vs streptokinase", "Death by 30 days (lower)"),
+    "ist": ("International Stroke Trial", "Medicine", "Aspirin vs no aspirin", "Death or dependency at 6 months (lower)"),
+    "synbiotic": ("Neonatal synbiotic trial", "Medicine", "Oral synbiotic vs placebo", "Sepsis or death by 60 days (lower)"),
+    "elaia2": ("ELAIA-2", "Medicine", "Electronic kidney-injury alert vs usual care",
+               "Progression, dialysis, or death by 14 days (lower)"),
+    "voter": ("Michigan social-pressure mailer", "Voting", "Neighbors mailer vs no mail", "Voted (higher)"),
+    "sf_email": ("San Francisco registrar email", "Voting", "Email vs no email", "Voted (higher)"),
+    "karlan_list": ("Karlan–List matching grant", "Charity", "Matching-grant letter vs standard letter", "Gave (higher)"),
+    "stepup": ("StepUp exercise megastudy", "Exercise", "Behavioral program vs control", "Any gym visit, weeks 1–4 (higher)"),
+    "hillstrom": ("Hillstrom email", "Retail", "Email vs no email", "Website visit in 2 weeks (higher)"),
+    "sixcity": ("Six-city canvass", "Voting", "Door-to-door canvass vs none", "Voted (higher)"),
+    "newhaven": ("New Haven canvass", "Voting", "Door-to-door canvass vs none", "Voted (higher)"),
+    "lenta": ("Lenta text message", "Retail", "Text message vs none", "Store visit (higher)"),
+    "x5": ("X5 text message", "Retail", "Text message vs none", "Purchase (higher)"),
+    "w2_robocall2008": ("Michigan robocall", "Voting", "Recorded call vs none", "Voted (higher)"),
+    "w2_sanmateo_email": ("San Mateo registrar email", "Voting", "Email vs no email", "Voted (higher)"),
+    "w2_wisconsin_recall": ("Wisconsin ballot-secrecy letter", "Voting", "Letter vs none", "Voted (higher)"),
+    "w2_ffh_charity": ("Freedom from Hunger mailing", "Charity", "Research insert vs standard mailing", "Gave (higher)"),
+    "w2_sa_loan": ("South Africa loan offer", "Consumer credit", "One example loan vs several", "Took up loan (higher)"),
+    "w2_mooc_megastudy": ("edX plan-making", "Education", "Plan-making prompt vs control", "Earned certificate (higher)"),
+    "w2_jsa_florida": ("Florida job-search assistance", "Employment", "Structured job-search assistance vs usual services",
+                       "Exhausted benefits in year 1 (lower)"),
+    "w2_jtpa": ("Job Training Partnership Act", "Employment", "Access to training vs none", "Any earnings by 30 months (higher)"),
+    "w2_turkey_overdraft": ("Turkey overdraft message", "Consumer finance", "Interest-discount message vs none",
+                            "Used overdraft (lower)"),
+}
+RBL = {"routerbench__mistral7b_to_gpt4": "Mistral-7B to GPT-4", "routerbench__gpt35_to_gpt4": "GPT-3.5 to GPT-4",
+       "routerbench__llama70b_to_claude2": "Llama-2-70B to Claude 2", "routerbench__mixtral_to_gpt4": "Mixtral to GPT-4"}
+LEARNER = {"scale_over_risk": "Scale ranking", "dr": "Doubly robust learner", "causal_forest": "Causal forest",
+           "causalpfn": "CausalPFN", "rose": "Calibrated ensemble"}
+
+
+def ci(e, lo, hi, d=1):
+    e, lo, hi = (0.0 if round(v, d) == 0 else v for v in (e, lo, hi))
+    return f"{e:.{d}f} ({lo:.{d}f} to {hi:.{d}f})"
+
+
+def n(x):
+    return f"{int(round(x)):,}"
+
+
+def pooled(r, d=1):
+    return ci(r["mean"], r["lo95"], r["hi95"], d)
+
+
+def main_tables() -> str:
+    q2, q3 = FR["Q2"], FR["Q3"]
+    elig = set(q2["points"])
+    gap = {t: p["x"] for t, p in q2["points"].items()}
+    fc = json.loads((R / "scale_forecast.json").read_text())
+    o = ["## Table 1. The 22 randomized trials\n",
+         "| Trial | Wave | Domain | Action vs reference | Outcome (better direction) | Randomized individuals | Test units | Scale-predicted gap, per 1,000 | In forecast test |",
+         "|---|---|---|---|---|---|---|---|---|"]
+    for t in W1 + W2:
+        nm, dom, act, out = META[t]
+        g = f"{gap[t]:.1f}" if t in elig else "–"
+        o.append(f"| {nm} | {2 if t.startswith('w2_') else 1} | {dom} | {act} | {out} | {n(DT[t]['rows'])} | {n(DT[t]['test'])} | "
+                 f"{g} | {'Yes' if t in elig else 'No (effect not beneficial in context data)'} |")
+    o.append(f"\nTest units total {n(FR['n_test_units']['wave1'] + FR['n_test_units']['wave2'])} "
+             f"(wave 1, {n(FR['n_test_units']['wave1'])}; wave 2, {n(FR['n_test_units']['wave2'])}). GUSTO-I compares accelerated "
+             "alteplase with the two streptokinase arms combined; the combination arm is not used. The International Stroke Trial "
+             "compares aspirin with no aspirin; heparin allocation, randomized independently, is kept as a covariate. The "
+             "scale-predicted gap is defined only where the context effect is beneficial.\n")
+    p = q2["primary"]
+    io, o16 = q2["informative_only"], q2["informative_through_origin"]
+    rows = [("Wave 1 (registered primary)", q2["k_wave1"], q2["wave1_only"]),
+            ("Wave 2 (registered primary; descriptive, fewer than 8 trials)", q2["k_wave2"], q2["wave2_only"]),
+            ("Both waves (registered secondary)", q2["k"], p),
+            ("Both waves, without the 3 trials whose gap is 0 by construction", io["k"], io),
+            ("Same 16 trials, line through the origin (not pre-specified)", o16["k"], o16)]
+    o += ["\n## Table 2. Does the scale-predicted gap forecast the observed gain of the scale ranking over the risk ranking?\n",
+          "| Analysis | Trials | Slope (95% CI) | P |", "|---|---|---|---|"]
+    for name, k, r in rows:
+        o.append(f"| {name} | {k} | {ci(r['slope'], r['lo95'], r['hi95'], 2)} | {r['p_two_sided']:.3f} |")
+    o.append(f"\nSlope 1 means that observed gains equal forecast gains; slope 0 means no relation. In the 19-trial fit, the 3 trials whose "
+             f"gap is 0 by construction carry {100 * q2['weight_share_zero_gap_trials']:.1f}% of the weight. Proposition 2 implies that a gap "
+             "of 0 gives an observed gain of 0, which motivates the fit through the origin. SI Appendix, Table S9 gives the registered "
+             "sensitivity analyses.\n")
+    o += ["\n## Table 3. Do the scale ranking and learned benefit rankings select people with larger effects than the risk ranking?\n",
+          "| Ranking | Wave 1 | Wave 2 | All trials | Wave 2 minus wave 1 | Between-trial SD, all trials | 95% prediction interval, new trial |",
+          "|---|---|---|---|---|---|---|"]
+    for k, name in LEARNER.items():
+        r = q3[k]
+        wd = r.get("wave2_minus_wave1")
+        wds = ci(wd["est"], wd["lo95"], wd["hi95"]) if wd and "lo95" in wd else "–"
+        o.append(f"| {name} | {pooled(r['wave1'])} [{r['wave1']['k']}] | {pooled(r['wave2'])} [{r['wave2']['k']}] | "
+                 f"{pooled(r['all'])} [{r['all']['k']}] | {wds} | {r['all']['tau']:.1f} | "
+                 f"{r['all']['pi95'][0]:.1f} to {r['all']['pi95'][1]:.1f} |")
+    d = q3["dr_over_scale"]
+    o.append(f"| Doubly robust learner over the scale ranking | {pooled(d['wave1'])} [{d['wave1']['k']}] | {pooled(d['wave2'])} [{d['wave2']['k']}] | "
+             f"{pooled(d['all'])} [{d['all']['k']}] | – | {d['all']['tau']:.1f} | {d['all']['pi95'][0]:.1f} to {d['all']['pi95'][1]:.1f} |")
+    o.append("\nValues are gains at a 20% budget, in outcomes improved per 1,000 actions (95% CI) [number of trials], pooled by random "
+             "effects; the last row compares with the scale ranking. Pools leave out trials in which the two rankings select the same "
+             "units. Pooling over both waves was not pre-specified. The prediction interval applies to a new trial drawn from the same "
+             "mix of domains as these trials, and the pooled values average absolute differences in outcomes that differ between trials.\n")
+    return "\n".join(o)
+
+
+def scored(set_name, t):
+    ps = sorted(glob.glob(str(ROOT / "scoring" / "*" / f"{set_name}__{t}.json")))
+    return next(iter(json.loads(Path(ps[-1]).read_text())["trials"].values())) if ps else None
+
+
+def si_tables() -> str:
+    q2, q3, q4 = FR["Q2"], FR["Q3"], FR["Q4"]
+    o = ["## Table S1. Reproduction of each trial's published estimate before the test split was sealed\n",
+         "| Trial | Published quantity | Published | Reproduced | Prespecified tolerance | Result | Terms of use |",
+         "|---|---|---|---|---|---|---|"]
+    for t in W1 + W2:
+        r = DT[t]["reproduction"]
+        pub = "–" if r["published"] is None else f"{r['published']:.4g}"
+        tol = "–" if r.get("tol") is None else f"{r['tol']:.4g}"
+        res = "Within tolerance" if r["status"] == "match" else "No published target in the public file"
+        metric = {"diff": "Difference in proportions", "n_units": "Analysis sample size", "relative_change": "Relative change",
+                  "diff_strata": "Difference in proportions", "treated_share": "Share assigned to action"}.get(r["metric"], r["metric"])
+        o.append(f"| {META[t][0]} | {metric} | {pub} | {r['reproduced']:.4g} | {tol} | {res} | {DT[t]['license']} |")
+    o += ["\n## Table S2. Leave-one-trial-out slope and forecast gain\n",
+          "| Trial left out | Slope without it (95% CI) | Gain in log predictive density, nats |", "|---|---|---|"]
+    for t, r in q2["leave_one_out"].items():
+        o.append(f"| {META[t][0]} | {ci(r['slope'], r['lo95'], r['hi95'], 2)} | {r['lpd_gain'] + 0.0 if abs(r['lpd_gain']) >= 0.005 else 0.0:.2f} |")
+    oos = q2["wave2_out_of_sample"]
+    o += ["\n## Table S3. Wave-1 fit as a forecast of the eligible wave-2 trials\n",
+          "| Trial | Forecast (95% prediction interval) | Observed gain | Gain in log predictive density, nats |", "|---|---|---|---|"]
+    for t, r in oos["per_trial"].items():
+        o.append(f"| {META[t][0]} | {ci(r['forecast'], *r['pi95'])} | {r['observed']:.1f} | {r['lpd_gain'] + 0.0 if abs(r['lpd_gain']) >= 0.005 else 0.0:.2f} |")
+    o.append(f"\nTotal gain {oos['lpd_gain_nats']:.2f} nats; {oos['n_inside_pi95']} of {oos['k']} observed gains inside the 95% prediction interval.\n")
+    o += ["\n## Table S4. Model routing, where each prompt's effect is known\n",
+          "| Model pair (smaller to larger) | Test prompts | Scale-predicted gap | Scale over risk (95% CI) | Doubly robust over risk (95% CI) | Interaction of action with logit risk (95% CI) | Diagnostic flag |",
+          "|---|---|---|---|---|---|---|"]
+    for t, r in q2["routing"].items():
+        a, b, it = r["scale_minus_risk"], r["dr_minus_risk"], r["interaction"]
+        nm = RBL.get(t, "SWE-bench, " + t.split("__")[1].replace("_to_", " to ").replace("p", "agent percentile "))
+        its = ci(it["delta"], it["delta_lo95"], it["delta_hi95"], 2) if it else "–"
+        fl = "–" if r["flag"] is None else ("Yes" if r["flag"] else "No")
+        o.append(f"| {nm} | {n(r['n_test'])} | {r['forecast']:.1f} | {ci(a['estimate'], a['lo95'], a['hi95'])} | "
+                 f"{ci(b['estimate'], b['lo95'], b['hi95'])} | {its} | {fl} |")
+    o.append("\nThe three SWE-bench pairs (coding agents at three skill percentiles, 148 test tasks each) were scored but are too small to "
+             "inform any comparison; in each, the scale and risk rankings selected the same tasks.\n")
+    o += ["\n## Table S5. Gain of each ranking over the risk ranking, by trial (per 1,000 actions, 95% CI)\n",
+          "| Trial | " + " | ".join(LEARNER.values()) + " |", "|---|" + "---|" * len(LEARNER)]
+    for t in W1 + W2:
+        cells = []
+        for k in LEARNER:
+            if k == "scale_over_risk":
+                c_ = next(x for x in scored("predictions", t)["table"] if x["ranking"] == "scale-minus-risk" and x["budget"] == 0.2)
+                r = {"estimate": c_["estimate"] + 0.0, "lo95": c_["lo95"] + 0.0, "hi95": c_["hi95"] + 0.0}
+            else:
+                r = q3[k]["per_trial"].get(t)
+            cells.append(ci(r["estimate"], r["lo95"], r["hi95"]) if r else "–")
+        o.append(f"| {META[t][0]} | " + " | ".join(cells) + " |")
+    o += ["\n## Table S6. Uncertainty statements of the calibrated ensemble\n",
+          "| Setting | Measure | Calibrated ensemble | Comparator |", "|---|---|---|---|"]
+    for t in RB_ORDER:
+        u = q4["unit_coverage"][t]
+        h = q4["harm_brier"][t]
+        o.append(f"| {RBL[t]} | Coverage of each prompt's effect by the 90% interval | {u:.3f} | Nominal 0.900 |")
+        o.append(f"| {RBL[t]} | Brier score, probability that the action harms the prompt | {h['rose']:.4f} | "
+                 f"{h['constant']:.4f} (development-split harm rate) |")
+    o.append(f"| 22 trials | Share of 10 predicted-effect bins whose doubly robust mean lies inside the 90% interval | "
+             f"1.0 in {q4['n_trials_full_coverage']} of {len(q4['group_coverage_by_trial'])} trials | Nominal 0.9 |")
+    m = json.loads((R / "llm_masked_compare.json").read_text())
+    o += ["\n## Table S7. Language model, original and masked trial descriptions (wave 1; gain over risk ranking per 1,000 actions)\n",
+          "| Trial | Original (95% CI) | Masked (95% CI) | Rank correlation of the two runs' effect estimates |",
+          "|---|---|---|---|"]
+    for t, r in m["per_trial"].items():
+        o.append(f"| {META[t][0]} | {ci(r['original'], *r['original_ci'])} | {ci(r['masked'], *r['masked_ci'])} | "
+                 f"{r['spearman_effects']:.2f} |")
+    lm, lmm = q3["language_model_wave1"], q3["language_model_masked_wave1"]
+    o.append(f"\nPooled: original {pooled(lm)}; masked {ci(lmm['mean'], lmm['lo95'], lmm['hi95'])}.\n")
+    d = {**json.loads((R / "proportionality_diagnostic.json").read_text()),
+         **json.loads((R / "proportionality_diagnostic_w2.json").read_text())}
+    o += ["\n## Table S8. Context-only diagnostic of a constant odds ratio\n",
+          "| Trial | Interaction of action with logit risk (95% CI) | Scale-predicted gap | Gap predicted with the interaction | Flag |",
+          "|---|---|---|---|---|"]
+    for t in W1 + W2:
+        r = d[t]
+        o.append(f"| {META[t][0]} | {ci(r['delta'], r['delta_lo95'], r['delta_hi95'], 3)} | {r['gap_scale']:.1f} | "
+                 f"{r['gap_interaction']:.1f} | {'Yes' if r['flag_not_applicable'] else 'No'} |")
+    o += ["\n## Table S9. Registered sensitivity analyses of the forecast slope\n",
+          "| Analysis | Trials | Slope (95% CI) | P |", "|---|---|---|---|"]
+    rows = [("Budget 10%", q2["k"], q2["budget_0.1"]), ("Budget 30%", q2["k"], q2["budget_0.3"]),
+            ("Weights from test-split bootstrap variances", q2["k"], q2["bootstrap_weights"]),
+            ("Weights from design variances", q2["k"], q2["design_weights"])]
+    kk = {"primary": (q2["k"], "both waves"), "informative_only": (q2["informative_only"]["k"], "16 informative trials"),
+          "wave1_only": (q2["k_wave1"], "wave 1"), "wave2_only": (q2["k_wave2"], "wave 2")}
+    for nm_, r in q2["truncated_kh"].items():
+        rows.append((f"Truncated Knapp–Hartung, {kk[nm_][1]}", kk[nm_][0], r))
+    for name, k, r in rows:
+        o.append(f"| {name} | {k if k else '–'} | {ci(r['slope'], r['lo95'], r['hi95'], 2)} | {r['p_two_sided']:.3f} |")
+    sp, ia = q2["size_placebo_both"], q2["slope_by_wave_interaction"]
+    o.append(f"| Adjusted for the predicted average effect | {q2['k']} | {ci(sp['coef_gap'], sp['lo95'], sp['hi95'], 2)} | – |")
+    o.append(f"| Wave-by-forecast interaction (common between-trial variance) | {q2['k']} | {ci(ia['coef'], ia['lo95'], ia['hi95'], 2)} | {ia['p']:.3f} |")
+    o.append(f"| Regression-calibration correction for error in the forecast (reliability {q2['eiv']['reliability']:.2f}) | {q2['k']} | "
+             f"{q2['eiv']['slope']:.2f} | – |")
+    fz = q2["registered_falsifier_wave1"]
+    o.append(f"\nJoint test of intercept 0 and slope 1 in 19 trials, P = {q2['primary']['joint_0_1']['p']:.3f}. Leave-one-trial-out "
+             f"forecasts that used the gap improved on forecasts that ignored it by {q2['loo_lpd_gain_nats']:.2f} nats of log predictive density "
+             f"over 19 trials and {q2['loo_lpd_gain_informative_only']:.2f} nats over the 16 informative trials. Registered wave-1 falsifier: "
+             f"the slope CI excluded 0; the joint test gave P = {fz['strong_joint_test_p']:.3f}; forecasts of the 3 holdout trials, posted "
+             f"before they were scored, gained {fz['holdout_lpd_gain_nats']:.2f} nats against a margin of {fz['margin_nats']:.0f} nat. The primary "
+             "fit uses the untruncated Knapp–Hartung correction; the truncated version is the registered sensitivity analysis.\n")
+    au = q3["autoc"]
+    o += ["\n## Table S10. Rank-weighted average treatment effect (AUTOC) and comparison with random targeting\n",
+          "| Ranking | Pooled AUTOC per 1,000 (95% CI) [trials] |", "|---|---|"]
+    for k_, nm_ in (("risk", "Risk ranking"), ("scale", "Scale ranking"), ("benefit", "Doubly robust learner")):
+        o.append(f"| {nm_} | {pooled(au[k_])} [{au[k_]['k']}] |")
+    o.append(f"\nA negative AUTOC means that the ranking puts people with smaller-than-average effects first. The risk ranking's AUTOC CI "
+             f"lay below 0 in {au['n_risk_autoc_ci_below_0']} of 22 trials. At a 20% budget, the risk ranking's estimated policy value was "
+             f"below that of random targeting in {au['n_risk_below_random_q20']} of 22 trials (point estimates).\n")
+    sr, hm = q3["dr_with_sign_rule_trials"], q3["heterogeneity_moderator"]
+    o += ["\n## Table S11. Additional analyses of the learned rankings (doubly robust learner, per 1,000 actions)\n",
+          "| Analysis | Estimate (95% CI) |", "|---|---|"]
+    o.append(f"| Wave 1 with ELAIA-1 and Oregon added (15 trials) | {pooled(sr['wave1'])} |")
+    o.append(f"| All trials with ELAIA-1 and Oregon added (24 trials) | {pooled(sr['all'])} |")
+    o.append(f"| Change in gain per 1 per 1,000 increase in the SD of predicted effects, adjusted for wave | {ci(hm['coef_per_1000_sd'], hm['lo95'], hm['hi95'], 2)} |")
+    o.append(f"| Wave 2 minus wave 1, adjusted for the SD of predicted effects | {ci(hm['wave2_adjusted'], hm['wave2_adjusted_lo95'], hm['wave2_adjusted_hi95'])} |")
+    lr = q3["between_learner_correlation_range"]
+    o.append(f"\nThe median SD of predicted effects was {hm['median_sd_wave1']:.0f} per 1,000 in wave 1 and {hm['median_sd_wave2']:.0f} in "
+             f"wave 2. Across trials, the per-trial gains of the four learned rankings correlated at {lr[0]:.2f} to {lr[1]:.2f}. These "
+             "analyses were not pre-specified.\n")
+    o += ["\n## Table S12. Detail on the calibrated ensemble's 90% intervals in model routing (not pre-specified)\n",
+          "| Model pair | Prompts with effect 0 | Median interval width | Intervals excluding 0 | Coverage, all | Coverage, effect 0 | Coverage, effect not 0 |",
+          "|---|---|---|---|---|---|---|"]
+    for t in RB_ORDER:
+        r = q4["interval_detail"][t]
+        o.append(f"| {RBL[t]} | {r['share_effect_zero']:.3f} | {r['median_width']:.2f} | {r['share_excluding_zero']:.3f} | "
+                 f"{r['coverage_all']:.3f} | {r['coverage_effect_zero']:.3f} | {r['coverage_effect_nonzero']:.3f} |")
+    o.append("\nThe effect of routing a prompt to the larger model ranges from −1 to 1.\n")
+    return "\n".join(o)
+
+
+RB_ORDER = ["routerbench__mistral7b_to_gpt4", "routerbench__gpt35_to_gpt4", "routerbench__llama70b_to_claude2",
+            "routerbench__mixtral_to_gpt4"]
+
+
+def main() -> None:
+    OUT.mkdir(parents=True, exist_ok=True)
+    import re
+    fix = lambda txt: re.sub(r"(?<![A-Za-z0-9])-(?=\d)", "\u2212", txt)  # noqa: E731  true minus sign
+    (OUT / "main_tables.md").write_text(fix(main_tables()) + "\n")
+    (OUT / "si_tables.md").write_text(fix(si_tables()) + "\n")
+    ms = OUT.parent / "risk_vs_benefit_targeting_22_trials_pnas_manuscript.md"
+    t = ms.read_text()
+    a, b = t.index("## Tables\n"), t.index("## Figure legends")
+    ms.write_text(t[:a] + "## Tables\n\n" + fix(main_tables()).replace("## Table", "### Table") + "\n" + t[b:])
+    notes = (OUT.parent / "si_appendix_notes.md").read_text()
+    (OUT.parent / "risk_vs_benefit_targeting_22_trials_si_appendix.md").write_text(notes.replace("{{TABLES}}", fix(si_tables())))
+    print("wrote", OUT / "main_tables.md", OUT / "si_tables.md")
+
+
+if __name__ == "__main__":
+    main()

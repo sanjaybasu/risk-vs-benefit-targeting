@@ -62,7 +62,12 @@ def slope(x, y, v, X=None):
 
 
 def pool(e, sd):
-    e, v = np.asarray(e, float), np.maximum(np.asarray(sd, float) ** 2, mr.V_FLOOR)
+    """Random-effects pool. Trials where the two rankings select the same units (estimate 0 with zero
+    bootstrap SD) carry no sampling information and are left out; k counts the trials used."""
+    e, sd = np.asarray(e, float), np.asarray(sd, float)
+    keep = ~((sd < 1e-9) & (np.abs(e) < 1e-9))
+    e, sd = e[keep], sd[keep]
+    v = np.maximum(sd ** 2, mr.V_FLOOR)
     f = mr.fit_re(e, np.ones((len(e), 1)), v)
     se = float(np.sqrt(f.vcov[0, 0]))
     c = stats.t.ppf(0.975, f.df)
@@ -93,12 +98,32 @@ def main() -> None:
     q2 = {"k": len(elig), "k_wave1": int((wv == 0).sum()), "k_wave2": int((wv == 1).sum())}
     f, q2["primary"] = slope(x, y, v)
     q2["primary"]["joint_0_1"] = mr.joint_test(f)
+    q2["primary_fit"] = {"beta": f.beta.tolist(), "vcov": f.vcov.tolist(), "df": float(f.df), "tau2": float(f.tau2)}
+    q2["points"] = {t: {"x": float(post[t]["x"]), "y": obs[t]["estimate"], "lo95": obs[t]["lo95"], "hi95": obs[t]["hi95"]}
+                    for t in elig}
     inf = np.array([t not in zeros for t in elig])
     _, q2["informative_only"] = slope(x[inf], y[inf], v[inf])
     q2["informative_only"]["k"] = int(inf.sum())
+    # Proposition 2 fixes the line through the origin (gap 0 forecast implies gain 0); fit without intercept.
+    fo = mr.fit_re(y[inf], x[inf][:, None], v[inf])
+    se_o = float(np.sqrt(fo.vcov[0, 0]))
+    c_o = stats.t.ppf(0.975, fo.df)
+    q2["informative_through_origin"] = {"k": int(inf.sum()), "slope": float(fo.beta[0]), "lo95": float(fo.beta[0] - c_o * se_o),
+                                        "hi95": float(fo.beta[0] + c_o * se_o),
+                                        "p_two_sided": float(2 * stats.t.sf(abs(fo.beta[0] / se_o), fo.df))}
+    wts = 1 / (v + f.tau2)
+    q2["weight_share_zero_gap_trials"] = float(wts[~inf].sum() / wts.sum())
+    # Truncated Knapp-Hartung (registered sensitivity) for the main fits.
+    q2["truncated_kh"] = {}
+    for name, m in (("primary", np.ones(len(x), bool)), ("informative_only", inf), ("wave1_only", wv == 0), ("wave2_only", wv == 1)):
+        ft = mr.fit_re(y[m], np.column_stack([np.ones(m.sum()), x[m]]), v[m], truncate=True)
+        q2["truncated_kh"][name] = mr.slope_test(ft)
     fi = mr.fit_re(y, np.column_stack([np.ones_like(x), x, wv, x * wv]), v)
-    q2["slope_by_wave_interaction"] = {"coef": float(fi.beta[3]), "se": float(np.sqrt(fi.vcov[3, 3])),
-                                      "p": float(2 * stats.t.sf(abs(fi.beta[3] / np.sqrt(fi.vcov[3, 3])), fi.df))}
+    _sei = float(np.sqrt(fi.vcov[3, 3]))
+    q2["slope_by_wave_interaction"] = {"coef": float(fi.beta[3]), "se": _sei,
+                                      "lo95": float(fi.beta[3] - stats.t.ppf(0.975, fi.df) * _sei),
+                                      "hi95": float(fi.beta[3] + stats.t.ppf(0.975, fi.df) * _sei),
+                                      "p": float(2 * stats.t.sf(abs(fi.beta[3] / _sei), fi.df))}
     for name, m in (("wave1_only", wv == 0), ("wave2_only", wv == 1)):
         _, q2[name] = slope(x[m], y[m], v[m])
     loo, lpd = {}, 0.0
@@ -133,6 +158,49 @@ def main() -> None:
     vdes = np.array([post[t]["v_design"] for t in elig])
     _, q2["bootstrap_weights"] = slope(x, y, vobs)
     _, q2["design_weights"] = slope(x, y, vdes)
+    # Wave 1 fit forecasts each eligible wave-2 trial (out of sample); gain over intercept-only.
+    m1 = wv == 0
+    X = np.column_stack([np.ones_like(x), x])
+    f1, f0 = mr.fit_re(y[m1], X[m1], v[m1]), mr.fit_re(y[m1], X[m1][:, :1], v[m1])
+    oos, g_oos, inside = {}, 0.0, 0
+    for i in np.where(~m1)[0]:
+        mu1, var1 = mr.predict(f1, X[i], v[i])
+        mu0, var0 = mr.predict(f0, X[i][:1], v[i])
+        half = stats.t.ppf(0.975, f1.df) * np.sqrt(var1)
+        g = mr.lpd(y[i], mu1, var1, f1.df) - mr.lpd(y[i], mu0, var0, f0.df)
+        g_oos += g
+        inside += int(mu1 - half <= y[i] <= mu1 + half)
+        oos[elig[i]] = {"forecast": float(mu1), "pi95": [float(mu1 - half), float(mu1 + half)], "observed": float(y[i]),
+                        "lpd_gain": float(g)}
+    q2["wave2_out_of_sample"] = {"per_trial": oos, "lpd_gain_nats": float(g_oos), "n_inside_pi95": inside, "k": len(oos)}
+    # Data with known individual effects (model routing): forecast, observed, DR, diagnostic flag.
+    tc = json.loads((R / "tierA_manifest.json").read_text())
+    d1 = json.loads((R / "proportionality_diagnostic.json").read_text())
+    d2 = json.loads((R / "proportionality_diagnostic_w2.json").read_text())
+    rb = {}
+    for t in RB:
+        tt = table("predictions_tierA", t)
+        rb[t] = {"n_test": int(tt["n"]), "forecast": float(tc[t]["scale_forecast_gap_q20"]),
+                 "scale_minus_risk": {k: cell(tt, "scale-minus-risk")[k] for k in ("estimate", "lo95", "hi95")},
+                 "dr_minus_risk": {k: cell(tt, "benefit-minus-risk")[k] for k in ("estimate", "lo95", "hi95")},
+                 "flag": bool(d1[t]["flag_not_applicable"]),
+                 "interaction": {k: d1[t][k] for k in ("delta", "delta_lo95", "delta_hi95")}}
+        rb[t]["forecast_failed"] = bool(rb[t]["scale_minus_risk"]["hi95"] < 0 or
+                                        (rb[t]["forecast"] > 0 and rb[t]["scale_minus_risk"]["estimate"] < 0))
+    for t in ["swebench__p10_to_p50", "swebench__p25_to_p75", "swebench__p50_to_p90"]:
+        tt = table("predictions_tierA", t)
+        rb[t] = {"n_test": int(tt["n"]), "forecast": float(tc[t]["scale_forecast_gap_q20"]),
+                 "scale_minus_risk": {k: cell(tt, "scale-minus-risk")[k] for k in ("estimate", "lo95", "hi95")},
+                 "dr_minus_risk": {k: cell(tt, "benefit-minus-risk")[k] for k in ("estimate", "lo95", "hi95")},
+                 "flag": None, "interaction": None, "forecast_failed": None, "uninformative": True}
+    q2["routing"] = rb
+    h1 = json.loads((R / "h1_analysis.json").read_text())
+    q2["registered_falsifier_wave1"] = {"weak_slope_ci_excludes_0": bool(h1["H1_primary"]["lo95"] > 0),
+                                        "strong_joint_test_p": float(h1["H1_primary"]["joint_0_1"]["p"]),
+                                        "holdouts": json.loads((R / "holdouts.json").read_text())["holdouts"],
+                                        "holdout_lpd_gain_nats": float(h1["holdout_lpd_gain_nats"]),
+                                        "margin_nats": float(mr.FORECAST_MARGIN_NATS)}
+    q2["diagnostic_flagged_trials"] = [t for t in ALL if {**d1, **d2}[t]["flag_not_applicable"]]
     out["Q2"] = q2
     # Q3
     q3 = {}
@@ -149,13 +217,49 @@ def main() -> None:
         vv = np.maximum(np.array([e[t][1] for t in tl]) ** 2, mr.V_FLOOR)
         wv2 = np.array([1.0 if t.startswith("w2_") else 0.0 for t in tl])
         fw = mr.fit_re(ee, np.column_stack([np.ones_like(wv2), wv2]), vv)
-        res["wave2_minus_wave1"] = {"est": float(fw.beta[1]), "se": float(np.sqrt(fw.vcov[1, 1]))}
+        _se = float(np.sqrt(fw.vcov[1, 1]))
+        _c = stats.t.ppf(0.975, fw.df)
+        res["wave2_minus_wave1"] = {"est": float(fw.beta[1]), "se": _se, "lo95": float(fw.beta[1] - _c * _se),
+                                    "hi95": float(fw.beta[1] + _c * _se),
+                                    "p": float(2 * stats.t.sf(abs(fw.beta[1] / _se), fw.df))}
         res["n_ci_above_0"] = int(sum(r["lo95"] > 0 for r in rows.values()))
         res["n_ci_below_0"] = int(sum(r["hi95"] < 0 for r in rows.values()))
         q3[k] = res
     for rk, name in (("scale-minus-risk", "scale_over_risk"), ("benefit-minus-scale", "dr_over_scale")):
         q3[name] = {w: pool(*zip(*[(cell(table("predictions", t), rk)["estimate"], cell(table("predictions", t), rk)["boot_sd"])
                                    for t in tl])) for w, tl in (("wave1", W1), ("wave2", W2), ("all", ALL))}
+    # Sensitivity: wave-1 trials excluded by the sign rule at enrollment (ELAIA-1, Oregon), doubly robust only.
+    extra = {t: cell(table("predictions", t), "benefit-minus-risk") for t in ("elaia1", "oregon")}
+    base = {t: cell(table("predictions", t), "benefit-minus-risk") for t in ALL}
+    q3["dr_with_sign_rule_trials"] = {
+        "wave1": pool(*zip(*[(r["estimate"], r["boot_sd"]) for r in [base[t] for t in W1] + list(extra.values())])),
+        "all": pool(*zip(*[(r["estimate"], r["boot_sd"]) for r in list(base.values()) + list(extra.values())]))}
+    # Rank-weighted average treatment effect (AUTOC, per 1,000) by ranking, pooled; risk AUTOC below 0 count.
+    au = {}
+    for rk in ("risk", "scale", "benefit"):
+        rows = [table("predictions", t)["rate"][f"{rk}_autoc"] for t in ALL]
+        au[rk] = pool([1000 * r["estimate"] for r in rows], [1000 * r["boot_sd"] for r in rows])
+    au["n_risk_autoc_ci_below_0"] = int(sum(table("predictions", t)["rate"]["risk_autoc"]["hi95"] < 0 for t in ALL))
+    au["n_risk_below_random_q20"] = int(sum(cell(table("predictions", t), "risk")["estimate"] < cell(table("predictions", t), "random")["estimate"]
+                                            for t in ALL))
+    q3["autoc"] = au
+    # Exploratory: is the doubly robust gain larger where predicted effects vary more? (prediction files only)
+    import pandas as pd
+    het = np.array([float(pd.read_parquet(ROOT / "predictions" / f"{t}.parquet")["benefit"].std()) * 1000 for t in ALL])
+    ed = np.array([base[t]["estimate"] for t in ALL])
+    vd = np.maximum(np.array([base[t]["boot_sd"] for t in ALL]) ** 2, mr.V_FLOOR)
+    wvv = np.array([1.0 if t.startswith("w2_") else 0.0 for t in ALL])
+    fh = mr.fit_re(ed, np.column_stack([np.ones_like(het), het, wvv]), vd)
+    _c = stats.t.ppf(0.975, fh.df)
+    q3["heterogeneity_moderator"] = {"sd_predicted_effect_per_1000": dict(zip(ALL, het.tolist())),
+                                     "median_sd_wave1": float(np.median(het[wvv == 0])), "median_sd_wave2": float(np.median(het[wvv == 1])),
+                                     "coef_per_1000_sd": float(fh.beta[1]),
+                                     "lo95": float(fh.beta[1] - _c * np.sqrt(fh.vcov[1, 1])), "hi95": float(fh.beta[1] + _c * np.sqrt(fh.vcov[1, 1])),
+                                     "wave2_adjusted": float(fh.beta[2]), "wave2_adjusted_lo95": float(fh.beta[2] - _c * np.sqrt(fh.vcov[2, 2])),
+                                     "wave2_adjusted_hi95": float(fh.beta[2] + _c * np.sqrt(fh.vcov[2, 2]))}
+    lc = [np.corrcoef([q3[a]["per_trial"][t]["estimate"] for t in ALL], [q3[b]["per_trial"][t]["estimate"] for t in ALL])[0, 1]
+          for i, a in enumerate(SETS) for b in list(SETS)[i + 1:]]
+    q3["between_learner_correlation_range"] = [float(min(lc)), float(max(lc))]
     llm = [cell(table("predictions_llm", t), "benefit-minus-risk") for t in W1]
     q3["language_model_wave1"] = pool([r["estimate"] for r in llm], [r["boot_sd"] for r in llm])
     q3["language_model_masked_wave1"] = json.loads((R / "llm_masked_compare.json").read_text())["pooled_masked"]
@@ -173,7 +277,8 @@ def main() -> None:
     for t in RB:
         p = sorted(glob.glob(str(ROOT / "scoring" / "rose_v2" / f"predictions_rose_v2__{t}__contract.json")))[-1]
         uc[t] = next(iter(json.loads(Path(p).read_text())["trials"].values()))["unit_coverage_90"]
-    out["Q4"] = {"group_coverage_by_trial": gc, "n_trials_full_coverage": int(sum(v == 1.0 for v in gc.values())),
+    detail = json.loads((R / "rose_interval_detail.json").read_text())
+    out["Q4"] = {"interval_detail": detail,"group_coverage_by_trial": gc, "n_trials_full_coverage": int(sum(v == 1.0 for v in gc.values())),
                  "unit_coverage": uc,
                  "harm_brier": {t: {"rose": hv[t]["brier_rose_v1_p_harm_ind"], "constant": hv[t]["brier_constant_dev_rate"],
                                     "harm_rate": hv[t]["harm_rate"]} for t in RB}}
