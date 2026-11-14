@@ -17,7 +17,7 @@
 | voting_wave_diff | wave difference was −13.8 (95% CI, −83.0 to 55.3) | Q3.voting_only_wave_diff.dr_over_risk | True |
 | w1pi_dr | (−28.5 to 70.6) contained 8 of the 9 wave-2 | Q3.wave1_pi_forecast_wave2.dr | True |
 | w1pi_florida | at −35.4, fell outside | Q3.wave1_pi_forecast_wave2.dr.outside | True |
-| med_dr | (doubly robust, 2.9 per 1,000; 95% CI, −13.6 to 19.3; response, 1.5; 95% CI, −64.2 to 67.2; scale | Q3.by_domain.medicine | True |
+| med_dr | The doubly robust ranking gained 2.9 per 1,000 (95% CI, −13.6 to 19.3) and the response ranking gained 1.5 (95% CI, −64.2 to 67.2) | Q3.by_domain.medicine | True |
 | learn_scale_hi | upper bounds of 6.6 to 9.6 | Q3.learners_over_scale.*.hi95 | True |
 | nonvoting_dr_scale | gained 7.9 per 1,000 over the scale ranking in the 15 trials outside voting (95% CI, 1.1 to 14.7) | Q3.by_domain.non_voting.dr_over_scale | True |
 | voting_dr_scale | and −17.4 in the 7 voting trials (95% CI, −45.2 to 10.5) | Q3.by_domain.voting.dr_over_scale | True |
@@ -30,7 +30,7 @@
 | mistral_pair | where 39.5% of prompts had an effect of 0, coverage was 85.0% and 93.1% | rose_interval_detail.mistral | True |
 | w2_below_w1 | was 17.8 per 1,000 below the wave-1 mean | Q3.wave1_pi_forecast_wave2.dr.wave2_mean_minus_wave1_center | True |
 | resp_waves | (wave 1, 14.6; 95% CI, −0.4 to 29.6; wave 2, 11.0; 95% CI, −3.9 to 25.9) | Q3.response_over_risk_paired.wave1/wave2 | True |
-| med_scale | scale, 15.9 in the 2 trials in which it differed from the risk ranking; 95% CI, −98.6 to 130.4 | Q3.by_domain.medicine.scale_over_risk | True |
+| med_scale | in 2 of these trials and gained 15.9 in them (95% CI, −98.6 to 130.4) | Q3.by_domain.medicine.scale_over_risk | True |
 | floor_pool | gives 0.5 per 1,000 (95% CI, −1.6 to 2.5) | Q3.scale_over_risk.all_22_zero_gap_at_floor | True |
 | resp_lower | (4.4 per 1,000; 95% CI, −24.6 to 33.4) | Q3.response_over_risk_paired.lower_is_better | True |
 | n_trials | 22 randomized trials | len(wave1)+len(wave2) | True |
