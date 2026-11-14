@@ -9,7 +9,7 @@
 | routing_dr_llama | including 188.4 (95% CI, 148.1 to 228.7) | Q2.routing.llama.dr_minus_risk | True |
 | risk_ci_below0 | lay below 0 in 4 of 22 | Q3.autoc.n_risk_autoc_ci_below_0 | True |
 | risk_below_ate | in 15 of 22 (sign test P = 0.13) | Q3.autoc.n_risk_q20_below_ate | True |
-| eqw22 | entered as 0, was 14.6 (95% CI, 3.1 to 26.1) | Q3.scale_over_risk.equal_weight_mean_22 | True |
+| eqw22 | gains of 0, the equal-weighted mean over all 22 trials was 14.6 (95% CI, 3.1 to 26.1) | Q3.scale_over_risk.equal_weight_mean_22 | True |
 | voting_scale | largest in the 7 voting trials (32.7; 95% CI, 20.6 to 44.9) | Q3.by_domain.voting.scale_over_risk | True |
 | nonvoting_scale | other 10 trials in which the rankings differed (8.2; 95% CI, −4.6 to 20.9) | Q3.by_domain.non_voting.scale_over_risk | True |
 | resp_b10 | was 19.0 at a 10% budget (95% CI, 3.7 to 34.4) | Q3.budgets_learners.0.1.response_over_risk | True |
@@ -60,8 +60,8 @@
 | dr_w2 | 3.3 per 1,000 (95% CI, −9.0 to 15.6) | Q3.dr.wave2 | True |
 | others_w2 | −0.1 to 3.0 | Q3.*.wave2 | True |
 | wdiff | −15.5 per 1,000; 95% CI, −38.3 to 7.3 | Q3.dr.wave2_minus_wave1 | True |
-| dr_all | 15.7 per 1,000 (95% CI, 4.6 to 26.8) | Q3.dr.all | True |
-| dr_tau | SD was 18.3 | Q3.dr.all.tau | True |
+| dr_all | 15.7 per 1,000 over the risk ranking (95% CI, 4.6 to 26.8) | Q3.dr.all | True |
+| dr_tau | SD of 18.3 | Q3.dr.all.tau | True |
 | dr_pi | −23.9 to 55.3 | Q3.dr.all.pi95 | True |
 | cf_all | (12.8; 95% CI, 3.8 to 21.8) | Q3.causal_forest.all | True |
 | pfn_all | (12.6; 95% CI, 2.6 to 22.6) | Q3.causalpfn.all | True |
@@ -88,7 +88,7 @@
 | scale_resp | −2.2 per 1,000; 95% CI, −5.2 to 0.8 | Q3.response.scale_over_response.all | True |
 | lenta_w | 73.4% of the weight | Q3.lenta_check.scale_over_response.weight | True |
 | lenta_wo | −1.7 (95% CI, −7.6 to 4.3) | Q3.lenta_check.scale_over_response.without | True |
-| dr_resp | (1.8; 95% CI, −9.2 to 12.8) | Q3.learners_over_response.dr | True |
+| dr_resp | (doubly robust, 1.8; 95% CI, −9.2 to 12.8) | Q3.learners_over_response.dr | True |
 | learn_resp_rng | −0.8 to 1.8 per 1,000 over the response ranking | Q3.learners_over_response | True |
 | learn_scale_rng | 1.0 to 2.4 per 1,000 over the scale ranking | Q3.learners_over_scale | True |
 | brier_red | by 0.0002 to 0.0027 | rose_interval_detail.brier_diff_vs_constant | True |
