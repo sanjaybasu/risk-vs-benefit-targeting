@@ -54,7 +54,7 @@
 | llama_obs | by 227.7 per 1,000 (95% CI, 171.3 to 285.4) | Q2.routing.llama | True |
 | autoc_risk | −4.2 per 1,000 (95% CI, −7.5 to −0.9) | Q3.autoc.risk | True |
 | scale_all | 14.9 per 1,000 actions over the risk ranking (95% CI, 4.5 to 25.3) | Q3.scale_over_risk.all | True |
-| scale_k | In the 17 trials in which | Q3.scale_over_risk.all.k | True |
+| scale_k | different people in 17 trials | Q3.scale_over_risk.all.k | True |
 | dr_w1 | 21.1 per 1,000 actions over the risk ranking (95% CI, 4.5 to 37.6) | Q3.dr.wave1 | True |
 | others_w1 | 16.6 to 18.5 | Q3.*.wave1 | True |
 | dr_w2 | 3.3 per 1,000 (95% CI, −9.0 to 15.6) | Q3.dr.wave2 | True |
