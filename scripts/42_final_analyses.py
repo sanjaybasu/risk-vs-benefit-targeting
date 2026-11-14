@@ -329,6 +329,54 @@ def main() -> None:
                                 for rk, k2 in (("scale-minus-risk", "scale_over_response"), ("benefit-minus-risk", "dr_over_response"))}
                             for t in ALL}
         q3["response"] = rsp
+    DOMAIN = {"gusto": "medicine", "ist": "medicine", "synbiotic": "medicine", "elaia2": "medicine",
+              "voter": "voting", "sf_email": "voting", "sixcity": "voting", "newhaven": "voting", "w2_robocall2008": "voting",
+              "w2_sanmateo_email": "voting", "w2_wisconsin_recall": "voting", "hillstrom": "retail", "lenta": "retail",
+              "x5": "retail"}
+    def pool_set(set_name, rk, trials):
+        rows = [cell(table(set_name, t), rk) for t in trials if table(set_name, t) is not None]
+        return pool([r["estimate"] for r in rows], [r["boot_sd"] for r in rows]) if len(rows) >= 2 else None
+    # Each learned ranking over the scale ranking (paired, from its own scorer output).
+    q3["learners_over_scale"] = {k: pool_set(s_, "benefit-minus-scale", ALL) for k, s_ in SETS.items()}
+    # Paired comparisons with the response ranking.
+    vs = {"dr": "predictions_response", "causal_forest": "predictions_cforest_vs_resp",
+          "causalpfn": "predictions_causalpfn_vs_resp", "rose": "predictions_rose_vs_resp"}
+    if all(table(s_, t) is not None for s_ in vs.values() for t in ALL) and all(table("predictions_resp_vs_risk", t) for t in ALL):
+        q3["learners_over_response"] = {k: pool_set(s_, "benefit-minus-risk", ALL) for k, s_ in vs.items()}
+        rr = {"all": pool_set("predictions_resp_vs_risk", "benefit-minus-risk", ALL),
+              "wave1": pool_set("predictions_resp_vs_risk", "benefit-minus-risk", W1),
+              "wave2": pool_set("predictions_resp_vs_risk", "benefit-minus-risk", W2),
+              "higher_is_better": pool_set("predictions_resp_vs_risk", "benefit-minus-risk", [t for t in ALL if dt[t]["better"] == "higher"]),
+              "lower_is_better": pool_set("predictions_resp_vs_risk", "benefit-minus-risk", [t for t in ALL if dt[t]["better"] == "lower"])}
+        rr["wave2_minus_wave1"] = wave_diff("predictions_resp_vs_risk", "benefit-minus-risk")
+        rr["per_trial"] = {t: {kk: cell(table("predictions_resp_vs_risk", t), "benefit-minus-risk")[kk] for kk in ("estimate", "lo95", "hi95")} for t in ALL}
+        q3["response_over_risk_paired"] = rr
+        q3["dr_over_response_wave_diff"] = wave_diff("predictions_response", "benefit-minus-risk")
+        # domain-stratified pools
+        dom = {}
+        for d_ in ("medicine", "voting", "retail", "other"):
+            tl = [t for t in ALL if DOMAIN.get(t, "other") == d_]
+            dom[d_] = {"trials": tl, "dr_over_risk": pool_set("predictions", "benefit-minus-risk", tl),
+                       "scale_over_risk": pool_set("predictions", "scale-minus-risk", tl),
+                       "response_over_risk": pool_set("predictions_resp_vs_risk", "benefit-minus-risk", tl),
+                       "dr_over_scale": pool_set("predictions", "benefit-minus-scale", tl),
+                       "dr_over_response": pool_set("predictions_response", "benefit-minus-risk", tl)}
+        q3["by_domain"] = dom
+        # Lenta's weight in the pools against the response ranking, and pools without it
+        nl = [t for t in ALL if t != "lenta"]
+        def wshare(set_name, rk):
+            rows = {t: cell(table(set_name, t), rk) for t in ALL}
+            e = np.array([r["estimate"] for r in rows.values()]); sd = np.array([r["boot_sd"] for r in rows.values()])
+            keep = ~((sd < 1e-9) & (np.abs(e) < 1e-9))
+            v_ = np.maximum(sd ** 2, mr.V_FLOOR)
+            f_ = mr.fit_re(e[keep], np.ones((keep.sum(), 1)), v_[keep])
+            w_ = 1 / (v_ + f_.tau2)
+            idx = list(rows).index("lenta")
+            return float(w_[idx] / w_[keep].sum())
+        q3["lenta_check"] = {"scale_over_response": {"weight": wshare("predictions_response", "scale-minus-risk"),
+                                                     "without": pool_set("predictions_response", "scale-minus-risk", nl)},
+                             "dr_over_response": {"weight": wshare("predictions_response", "benefit-minus-risk"),
+                                                  "without": pool_set("predictions_response", "benefit-minus-risk", nl)}}
     out["Q3"] = q3
     # Q4
     gc = {}

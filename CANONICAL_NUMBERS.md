@@ -50,9 +50,18 @@
 | autoc_scale | AUTOC was 4.2 (95% CI, 0.8 to 7.7) | Q3.autoc.scale | True |
 | dr17 | 19.2 per 1,000 over the risk ranking (95% CI, 5.9 to 32.5) | Q3.learned_on_scale_trials.dr | True |
 | bud_dr_scale | 1.3 at both 10% and 30% | Q3.budgets.*.dr_over_scale | True |
-| resp_risk | 13.0 per 1,000 over the risk ranking (95% CI, 3.3 to 22.6) | Q3.response.response_over_risk_unpaired | True |
+| resp_risk | response ranking gained 13.1 per 1,000 actions over the risk ranking (95% CI, 3.4 to 22.8) | Q3.response_over_risk_paired.all | True |
+| resp_risk_k | (95% CI, 3.4 to 22.8; 22 trials) | Q3.response_over_risk_paired.all | True |
+| resp_hi | 15.2 in the 16 trials in which a higher outcome was better (95% CI, 3.9 to 26.5) | Q3.response_over_risk_paired.higher_is_better | True |
+| resp_lo | 4.4 in the 6 trials in which a lower outcome was better (95% CI, −24.6 to 33.4) | Q3.response_over_risk_paired.lower_is_better | True |
 | scale_resp | −2.2 per 1,000; 95% CI, −5.2 to 0.8 | Q3.response.scale_over_response.all | True |
-| dr_resp | 1.8 per 1,000; 95% CI, −9.2 to 12.8 | Q3.response.dr_over_response.all | True |
+| lenta_w | 73% of the weight | Q3.lenta_check.scale_over_response.weight | True |
+| lenta_wo | −1.7 (95% CI, −7.6 to 4.3) | Q3.lenta_check.scale_over_response.without | True |
+| dr_resp | (1.8; 95% CI, −9.2 to 12.8) | Q3.learners_over_response.dr | True |
+| learn_resp_rng | −0.8 to 1.8 per 1,000 over the response ranking | Q3.learners_over_response | True |
+| learn_scale_rng | 1.0 to 2.4 per 1,000 over the scale ranking | Q3.learners_over_scale | True |
+| brier_red | by 0.0002 to 0.0027 | rose_interval_detail.brier_diff_vs_constant | True |
+| brier_red_n | excluded 0 in 3 of 4 pairs | rose_interval_detail.brier_diff_vs_constant | True |
 | cov_nz | 68.6% to 93.1% | Q4.interval_detail.coverage_effect_nonzero | True |
 | cov_z | 85.0% to 100% | Q4.interval_detail.coverage_effect_zero | True |
 | zeros | GUSTO-I, the neonatal synbiotic trial, and the Job Training Partnership Act study | Q1.zero_gap_trials | True |

@@ -113,8 +113,10 @@ def figure2(fr):
            label=f"16 trials, through origin: {o['slope']:.2f} ({o['lo95']:.2f} to {o['hi95']:.2f})")
     a.plot(grid, grid, color=MUTED, linewidth=1.2, linestyle=(0, (4, 3)), label="Observed equals forecast")
     w1 = q2["wave1_only"]
-    a.plot([], [], color="none", label=f"Wave 1 (registered primary): {w1['slope']:.2f} ({w1['lo95']:.2f} to {w1['hi95']:.2f})")
-    a.annotate("3 trials at 0, 0\nby construction", (0, 0), xytext=(12, -105), textcoords="data", ha="left",
+    gw = np.linspace(-5, 60, 50)
+    a.plot(gw, w1["intercept"] + w1["slope"] * gw, color=W1C, linewidth=1.2, linestyle=(0, (6, 2, 1, 2)),
+           label=f"Wave 1 (registered primary): {w1['slope']:.2f} ({w1['lo95']:.2f} to {w1['hi95']:.2f})")
+    a.annotate("3 trials at 0, 0 by construction", (0, 0), xytext=(18, -64), textcoords="data", ha="left",
                fontsize=7.5, color=MUTED, arrowprops={"arrowstyle": "->", "color": MUTED, "linewidth": 0.8})
     for t, p in pts.items():
         w2 = t.startswith("w2_")
@@ -122,7 +124,7 @@ def figure2(fr):
         a.plot([p["x"], p["x"]], [p["lo95"], p["hi95"]], color=col, linewidth=1.1, alpha=0.8)
         a.scatter([p["x"]], [p["y"]], s=34, color=col, marker="s" if w2 else "o", zorder=3)
         if p["x"] > 25:
-            a.annotate(LABEL[t], (p["x"], p["y"]), xytext={"voter": (6, -12), "sixcity": (-46, -12)}.get(t, (5, 3)), textcoords="offset points", fontsize=7.5, color=INK)
+            a.annotate(LABEL[t], (p["x"], p["y"]), xytext={"voter": (6, -12), "sixcity": (5, -14)}.get(t, (5, 3)), textcoords="offset points", fontsize=7.5, color=INK)
     s = q2["primary"]
     a.set_title(f"A. Forecast and observed gain, {q2['k']} trials", fontsize=9, loc="left", color=INK)
     a.set_ylim(-170, 150)
@@ -188,7 +190,10 @@ def figure3(fr):
     style(a, grid=False)
     a.spines["left"].set_visible(False)
     y, ticks, labels = 0, [], []
-    for k, name in LEARNER.items():
+    rows_b = list(LEARNER.items())
+    if "response_over_risk_paired" in q3:
+        rows_b.insert(1, ("response_over_risk_paired", "Response ranking"))
+    for k, name in rows_b:
         r = q3[k]
         for w, col, mk, wl in (("wave1", W1C, "o", "wave 1"), ("wave2", W2C, "s", "wave 2"), ("all", INK, "D", "all trials")):
             if w == "all":

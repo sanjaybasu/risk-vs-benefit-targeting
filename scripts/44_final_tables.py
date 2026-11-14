@@ -73,7 +73,7 @@ def main_tables() -> str:
     gap = {t: p["x"] for t, p in q2["points"].items()}
     fc = json.loads((R / "scale_forecast.json").read_text())
     o = ["## Table 1. The 22 randomized trials\n",
-         "| Trial | Wave | Domain | Action vs reference | Outcome (better direction) | Randomized individuals | Test units | Scale-predicted gap, per 1,000 | In forecast test |",
+         "| Trial | Wave | Domain | Action vs reference | Outcome (better direction) | Individuals in the trial file (all arms) | Test units | Scale-predicted gap, per 1,000 | In forecast test |",
          "|---|---|---|---|---|---|---|---|---|"]
     for t in W1 + W2:
         nm, dom, act, out = META[t]
@@ -102,15 +102,20 @@ def main_tables() -> str:
              f"carry {100 * q2['weight_share_zero_gap_trials_wave1']:.1f}%. In each of these trials the two rankings selected the same test units, "
              "so the observed gain was 0 with no sampling variance. SI Appendix, Table S9 gives the registered "
              "sensitivity analyses.\n")
-    o += ["\n## Table 3. Do the scale ranking and learned benefit rankings select people with larger effects than the risk ranking?\n",
+    o += ["\n## Table 3. Do the scale ranking, the response ranking, and learned benefit rankings select people with larger effects than the risk ranking?\n",
+          "*A. Gain over the risk ranking*\n",
           "| Ranking | Wave 1 | Wave 2 | All 22 trials | 17 trials in which scale and risk rankings differ | Wave 2 minus wave 1 | 95% prediction interval, new trial |",
           "|---|---|---|---|---|---|---|"]
     def wd(r):
-        w_ = r.get("wave2_minus_wave1")
+        w_ = r.get("wave2_minus_wave1") if isinstance(r, dict) else None
         return ci(w_["est"], w_["lo95"], w_["hi95"]) if w_ and "lo95" in w_ else "–"
     sr = q3["scale_over_risk"]
     o.append(f"| Scale ranking | {pooled(sr['wave1'])} [{sr['wave1']['k']}] | {pooled(sr['wave2'])} [{sr['wave2']['k']}] | – | "
              f"{pooled(sr['all'])} | {wd(sr)} | {sr['all']['pi95'][0]:.1f} to {sr['all']['pi95'][1]:.1f} |")
+    rr = q3.get("response_over_risk_paired")
+    if rr:
+        o.append(f"| Response ranking | {pooled(rr['wave1'])} [{rr['wave1']['k']}] | {pooled(rr['wave2'])} [{rr['wave2']['k']}] | "
+                 f"{pooled(rr['all'])} | – | {wd(rr)} | {rr['all']['pi95'][0]:.1f} to {rr['all']['pi95'][1]:.1f} |")
     for k, name in LEARNER.items():
         if k == "scale_over_risk":
             continue
@@ -119,11 +124,17 @@ def main_tables() -> str:
                  f"{pooled(r['all'])} | {pooled(r17)} | {wd(r)} | {r['all']['pi95'][0]:.1f} to {r['all']['pi95'][1]:.1f} |")
     dp = q3["dopfn_wave1"]
     o.append(f"| Do-PFN | {pooled(dp)} [{dp['k']}] | – | – | – | – | – |")
-    d = q3["dr_over_scale"]
-    o.append(f"| Doubly robust learner over the scale ranking | {pooled(d['wave1'])} [{d['wave1']['k']}] | {pooled(d['wave2'])} [{d['wave2']['k']}] | "
-             f"{pooled(d['all'])} | – | {wd(d)} | {d['all']['pi95'][0]:.1f} to {d['all']['pi95'][1]:.1f} |")
+    o += ["\n*B. Gain of each learned ranking over the two simple alternatives, all 22 trials, same test units*\n",
+          "| Learned ranking | Over the scale ranking | Over the response ranking |", "|---|---|---|"]
+    lr_ = q3.get("learners_over_response", {})
+    for k, name in LEARNER.items():
+        if k == "scale_over_risk":
+            continue
+        a_ = q3["learners_over_scale"][k]
+        b_ = lr_.get(k)
+        o.append(f"| {name} | {pooled(a_)} | {pooled(b_) if b_ else '–'} |")
     o.append("\nValues are gains at a 20% budget, in outcomes improved per 1,000 actions (95% CI) [number of trials], pooled by random "
-             "effects; the last row compares the doubly robust learner with the scale ranking on the same units. Pools leave out trials in "
+             "effects; panel B compares each learned ranking with the scale or response ranking on the same units. Pools leave out trials in "
              "which the two compared rankings select the same units. The wave difference is the wave coefficient of one random-effects "
              "meta-regression over all trials, with a common between-trial variance, so it is not the difference of the two wave cells. "
              "Do-PFN was run in wave 1 only. Intervals are not adjusted for multiple comparisons; the doubly robust learner is the "
@@ -195,8 +206,11 @@ def si_tables() -> str:
         u = q4["unit_coverage"][t]
         h = q4["harm_brier"][t]
         o.append(f"| {RBL[t]} | Coverage of each prompt's effect by the 90% interval | {u:.3f} | Nominal 0.900 |")
+        bd = q4["interval_detail"][t]["brier_diff_vs_constant"]
         o.append(f"| {RBL[t]} | Brier score, probability that the action harms the prompt | {h['rose']:.4f} | "
                  f"{h['constant']:.4f} (development-split harm rate) |")
+        o.append(f"| {RBL[t]} | Brier difference, ensemble minus constant (95% bootstrap CI) | "
+                 f"{ci(bd['estimate'], bd['lo95'], bd['hi95'], 4)} | 0 |")
     o.append(f"| 22 trials | Share of 10 predicted-effect bins whose doubly robust mean lies inside the 90% interval | "
              f"1.0 in {q4['n_trials_full_coverage']} of {len(q4['group_coverage_by_trial'])} trials | Nominal 0.9 |")
     m = json.loads((R / "llm_masked_compare.json").read_text())
@@ -278,25 +292,39 @@ def si_tables() -> str:
         o.append(f"| {RBL[t]} | {n(r['n'])} | {r['share_effect_zero']:.3f} | {r['median_width']:.2f} | {r['share_excluding_zero']:.3f} | "
                  f"{r['coverage_all']:.3f} | {r['coverage_effect_zero']:.3f} | {r['coverage_effect_nonzero']:.3f} |")
     o.append("\nThe effect of routing a prompt to the larger model ranges from −1 to 1.\n")
-    rsp = q3.get("response")
-    if rsp:
+    rsp, rr = q3.get("response"), q3.get("response_over_risk_paired")
+    if rsp and rr:
         o += ["\n## Table S15. Response ranking as a practitioner comparator (per 1,000 actions, 95% CI; not pre-specified)\n",
               "| Comparison | Wave 1 | Wave 2 | All trials |", "|---|---|---|---|"]
+        o.append(f"| Response ranking over the risk ranking | {pooled(rr['wave1'])} | {pooled(rr['wave2'])} | {pooled(rr['all'])} |")
+        o.append(f"| Response ranking over the risk ranking, trials where higher is better | – | – | {pooled(rr['higher_is_better'])} [{rr['higher_is_better']['k']}] |")
+        o.append(f"| Response ranking over the risk ranking, trials where lower is better | – | – | {pooled(rr['lower_is_better'])} [{rr['lower_is_better']['k']}] |")
         for k_, nm_ in (("scale_over_response", "Scale ranking over the response ranking"),
                         ("dr_over_response", "Doubly robust learner over the response ranking")):
             r = rsp[k_]
-            o.append(f"| {nm_} | {pooled(r['wave1'])} [{r['wave1']['k']}] | {pooled(r['wave2'])} [{r['wave2']['k']}] | {pooled(r['all'])} [{r['all']['k']}] |")
-        u = rsp["response_over_risk_unpaired"]
-        o.append(f"| Response ranking over the risk ranking (all trials; SE assumes independence) | – | – | {pooled(u)} [{u['k']}] |")
-        o += ["\n| Trial | Scale over response | Doubly robust over response |", "|---|---|---|"]
+            o.append(f"| {nm_} | {pooled(r['wave1'])} | {pooled(r['wave2'])} | {pooled(r['all'])} [{r['all']['k']}] |")
+        lc = q3["lenta_check"]
+        o += ["\n| Trial | Response over risk | Scale over response | Doubly robust over response |", "|---|---|---|---|"]
         for t in W1 + W2:
-            r = rsp["per_trial"][t]
+            r = rsp["per_trial"][t]; q_ = rr["per_trial"][t]
             a_, b_ = r["scale_over_response"], r["dr_over_response"]
-            o.append(f"| {META[t][0]} | {ci(a_['estimate'], a_['lo95'], a_['hi95'])} | {ci(b_['estimate'], b_['lo95'], b_['hi95'])} |")
+            o.append(f"| {META[t][0]} | {ci(q_['estimate'], q_['lo95'], q_['hi95'])} | {ci(a_['estimate'], a_['lo95'], a_['hi95'])} | "
+                     f"{ci(b_['estimate'], b_['lo95'], b_['hi95'])} |")
         o.append("\nThe response ranking orders people by the predicted probability of the desirable outcome with the action, from the "
-                 "outcome model fit to the action arm of the context split. The scale and doubly robust contrasts are paired on the same test "
-                 "units. The response-over-risk row compares values from two scorer runs; its SE assumes independence and is therefore "
-                 "conservative if the two runs are positively correlated.\n")
+                 "outcome model fit to the action arm of the context split. Where the lower outcome is better, it serves the people with the "
+                 "lowest predicted risk under the action first. All contrasts are paired on the same test units. In the pools against the "
+                 f"response ranking, Lenta carries {100 * lc['scale_over_response']['weight']:.0f}% (scale) and "
+                 f"{100 * lc['dr_over_response']['weight']:.0f}% (doubly robust) of the weight; without Lenta, the scale ranking over the "
+                 f"response ranking was {pooled(lc['scale_over_response']['without'])} and the doubly robust learner over the response ranking "
+                 f"was {pooled(lc['dr_over_response']['without'])}.\n")
+        o += ["\n## Table S16. Gains by domain (per 1,000 actions, 95% CI; not pre-specified)\n",
+              "| Domain | Trials | Scale over risk | Response over risk | Doubly robust over risk | Doubly robust over scale | Doubly robust over response |",
+              "|---|---|---|---|---|---|---|"]
+        for d_, v_ in q3["by_domain"].items():
+            cells = [pooled(v_[c]) if v_[c] else "–" for c in ("scale_over_risk", "response_over_risk", "dr_over_risk", "dr_over_scale", "dr_over_response")]
+            o.append(f"| {d_.capitalize()} | {len(v_['trials'])} | " + " | ".join(cells) + " |")
+        o.append("\nOther: charity, exercise, consumer credit, education, employment, and consumer finance. Pools leave out trials in "
+                 "which the two compared rankings select the same units.\n")
     return "\n".join(o)
 
 
