@@ -1,5 +1,8 @@
 # System Three
 
+Code for the paper "When does ranking people by risk miss the people who benefit? A pre-registered test in 22 randomized trials" (Basu, Huynh, Luo, Rajpurkar). The pre-registrations are OSF registration r2vsu (first wave) and project rs7pm (second wave, prediction hashes, and scoring logs). The paper's analyses are `scripts/42_final_analyses.py` (results), `43_final_figures.py`, `44_final_tables.py`, `45_rose_interval_detail.py`, and `46_response_ranking_predictions.py`; `verify_canonical.py` re-derives every number in the manuscript from `results/final_results.json`. The calibrated ensemble in the paper is called Rose here.
+
+
 System Three is a typed contract, a benchmark, and (later) an open model for one question: what changes if we act? A System Three model takes a state, a menu of actions that includes a reference action, a named outcome, and logged context. It returns, for each action, the expected change against the reference, a 90% interval, the probability of harm, a support score, and an abstain flag. The benchmark scores rankings of cases on public randomized experiments and on agent-routing data where both potential outcomes are observed.
 
 ## What this is
@@ -11,7 +14,7 @@ System Three is a typed contract, a benchmark, and (later) an open model for one
 
 ## Reproducibility and data
 
-The repository holds code only. Data live in `data/` (gitignored), and `DATA.md` lists every source with its license, SHA-256, and reproduction status. Test-split actions and outcomes are sealed outside the repository and held by a third party; `results/seal_manifest.json` holds their hashes.
+The repository holds code only. Data live in `data/` (gitignored), and `DATA.md` lists every source with its license, SHA-256, and reproduction status. Test-split actions and outcomes are sealed outside the repository; `results/seal_manifest.json` holds their hashes. The study team ran the frozen scorer (`scripts/score_sealed.py`) on prediction files whose SHA-256 hashes were posted before scoring, and every scoring run is public on OSF (project rs7pm).
 
 ```
 make phase1      # fetch, validate against published values, split, seal, write DATA.md

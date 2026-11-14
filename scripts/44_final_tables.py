@@ -67,12 +67,11 @@ def pooled(r, d=1):
     return ci(r["mean"], r["lo95"], r["hi95"], d)
 
 
-def main_tables() -> str:
-    q2, q3 = FR["Q2"], FR["Q3"]
+def trial_table() -> list:
+    q2 = FR["Q2"]
     elig = set(q2["points"])
     gap = {t: p["x"] for t, p in q2["points"].items()}
-    fc = json.loads((R / "scale_forecast.json").read_text())
-    o = ["## Table 1. The 22 randomized trials\n",
+    o = ["## Table S1. The 22 randomized trials\n",
          "| Trial | Wave | Domain | Action vs reference | Outcome (better direction) | Individuals in the trial file (all arms) | Test units | Scale-predicted gap, per 1,000 | In forecast test |",
          "|---|---|---|---|---|---|---|---|---|"]
     for t in W1 + W2:
@@ -84,7 +83,13 @@ def main_tables() -> str:
              f"(wave 1, {n(FR['n_test_units']['wave1'])}; wave 2, {n(FR['n_test_units']['wave2'])}). GUSTO-I compares accelerated "
              "alteplase with the two streptokinase arms combined; the combination arm is not used. The International Stroke Trial "
              "compares aspirin with no aspirin; heparin allocation, randomized independently, is kept as a covariate. The "
-             "scale-predicted gap is defined only where the context effect is beneficial.\n")
+             "scale-predicted gap is defined only where the context effect is beneficial. Figure labels use short forms of these names.\n")
+    return o
+
+
+def main_tables() -> str:
+    q2, q3 = FR["Q2"], FR["Q3"]
+    o = []
     p = q2["primary"]
     io, o16 = q2["informative_only"], q2["informative_through_origin"]
     rows = [("Wave 1 (registered primary)", q2["k_wave1"], q2["wave1_only"]),
@@ -93,7 +98,7 @@ def main_tables() -> str:
             ("Both waves (registered secondary)", q2["k"], p),
             ("Both waves, without the 3 trials whose forecast is 0 by construction", io["k"], io),
             ("Same 16 trials, line through the origin (not pre-specified)", o16["k"], o16)]
-    o += ["\n## Table 2. Does the scale-predicted gap forecast the observed gain of the scale ranking over the risk ranking?\n",
+    o += ["## Table 1. Does the scale-predicted gap forecast the observed gain of the scale ranking over the risk ranking?\n",
           "| Analysis | Trials | Slope (95% CI) | P | Between-trial SD |", "|---|---|---|---|---|"]
     for name, k, r in rows:
         tau = "–" if r.get("tau2") is None else f"{r['tau2'] ** 0.5:.1f}"
@@ -106,7 +111,7 @@ def main_tables() -> str:
              f"carry {100 * q2['weight_share_zero_gap_trials_wave1']:.1f}%. In each of these trials the two rankings selected the same test units, "
              "so the observed gain was 0 with no sampling variance. SI Appendix, Table S9 gives the registered "
              "sensitivity analyses.\n")
-    o += ["\n## Table 3. Do the scale ranking, the response ranking, and learned benefit rankings select people with larger effects than the risk ranking?\n",
+    o += ["\n## Table 2. Do the scale ranking, the response ranking, and learned benefit rankings select people with larger effects than the risk ranking?\n",
           "*A. Gain over the risk ranking*\n",
           "| Ranking | Wave 1 | Wave 2 | All 22 trials | 17 trials in which scale and risk rankings differ | Wave 2 minus wave 1 | 95% prediction interval, new trial |",
           "|---|---|---|---|---|---|---|"]
@@ -374,18 +379,25 @@ RB_ORDER = ["routerbench__mistral7b_to_gpt4", "routerbench__gpt35_to_gpt4", "rou
             "routerbench__mixtral_to_gpt4"]
 
 
+def shift_si(t: str) -> str:
+    """Renumber SI table references by one: the trial table is Table S1, so the generated tables start at S2."""
+    import re
+    return re.sub(r"\bS(\d{1,2})\b", lambda m_: f"S{int(m_.group(1)) + 1}", t)
+
+
 def main() -> None:
     OUT.mkdir(parents=True, exist_ok=True)
     import re
     fix = lambda txt: re.sub(r"(?<![A-Za-z0-9])-(?=\d)", "\u2212", txt)  # noqa: E731  true minus sign
-    (OUT / "main_tables.md").write_text(fix(main_tables()) + "\n")
+    (OUT / "main_tables.md").write_text(fix(shift_si(main_tables())) + "\n")
     (OUT / "si_tables.md").write_text(fix(si_tables()) + "\n")
     ms = OUT.parent / "risk_vs_benefit_targeting_22_trials_pnas_manuscript.md"
     t = ms.read_text()
     a, b = t.index("## Tables\n"), t.index("## Figure legends")
-    ms.write_text(t[:a] + "## Tables\n\n" + fix(main_tables()).replace("## Table", "### Table") + "\n" + t[b:])
+    ms.write_text(t[:a] + "## Tables\n\n" + fix(shift_si(main_tables())).replace("## Table", "### Table") + "\n" + t[b:])
     notes = (OUT.parent / "si_appendix_notes.md").read_text()
-    early, late = fix(si_tables()).split("{{SPLIT}}")
+    early, late = fix(shift_si(si_tables())).split("{{SPLIT}}")
+    early = fix("\n".join(trial_table())) + "\n" + early
     assert "{{TABLES_LATE}}" in notes
     (OUT.parent / "risk_vs_benefit_targeting_22_trials_si_appendix.md").write_text(
         notes.replace("{{TABLES}}", early.rstrip() + "\n").replace("{{TABLES_LATE}}", late.strip() + "\n"))
