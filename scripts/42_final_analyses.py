@@ -111,6 +111,12 @@ def main() -> None:
     q2["informative_through_origin"] = {"k": int(inf.sum()), "slope": float(fo.beta[0]), "lo95": float(fo.beta[0] - c_o * se_o),
                                         "hi95": float(fo.beta[0] + c_o * se_o),
                                         "p_two_sided": float(2 * stats.t.sf(abs(fo.beta[0] / se_o), fo.df))}
+    m1i = (wv == 0) & inf
+    _, q2["wave1_informative_only"] = slope(x[m1i], y[m1i], v[m1i])
+    q2["wave1_informative_only"]["k"] = int(m1i.sum())
+    f_w1 = mr.fit_re(y[wv == 0], np.column_stack([np.ones(int((wv == 0).sum())), x[wv == 0]]), v[wv == 0])
+    w1w = 1 / (v[wv == 0] + f_w1.tau2)
+    q2["weight_share_zero_gap_trials_wave1"] = float(w1w[~inf[wv == 0]].sum() / w1w.sum())
     wts = 1 / (v + f.tau2)
     q2["weight_share_zero_gap_trials"] = float(wts[~inf].sum() / wts.sum())
     # Truncated Knapp-Hartung (registered sensitivity) for the main fits.
@@ -158,6 +164,10 @@ def main() -> None:
     vdes = np.array([post[t]["v_design"] for t in elig])
     _, q2["bootstrap_weights"] = slope(x, y, vobs)
     _, q2["design_weights"] = slope(x, y, vdes)
+    X2 = np.column_stack([np.ones_like(x), x])
+    q2["truncated_kh"]["design_weights"] = mr.slope_test(mr.fit_re(y, X2, vdes, truncate=True))
+    yb3 = np.array([cell(table("predictions", t), "scale-minus-risk", 0.3)["estimate"] for t in elig])
+    q2["truncated_kh"]["budget_0.3"] = mr.slope_test(mr.fit_re(yb3, X2, v, truncate=True))
     # Wave 1 fit forecasts each eligible wave-2 trial (out of sample); gain over intercept-only.
     m1 = wv == 0
     X = np.column_stack([np.ones_like(x), x])
@@ -225,9 +235,35 @@ def main() -> None:
         res["n_ci_above_0"] = int(sum(r["lo95"] > 0 for r in rows.values()))
         res["n_ci_below_0"] = int(sum(r["hi95"] < 0 for r in rows.values()))
         q3[k] = res
+    def wave_diff(set_name, rk, q=0.2):
+        rows = [(t, cell(table(set_name, t), rk, q)) for t in ALL]
+        rows = [(t, r) for t, r in rows if not (r["boot_sd"] < 1e-9 and abs(r["estimate"]) < 1e-9)]
+        ee = np.array([r["estimate"] for _, r in rows])
+        vv = np.maximum(np.array([r["boot_sd"] for _, r in rows]) ** 2, mr.V_FLOOR)
+        w2v = np.array([1.0 if t.startswith("w2_") else 0.0 for t, _ in rows])
+        fw = mr.fit_re(ee, np.column_stack([np.ones_like(w2v), w2v]), vv)
+        se, c = float(np.sqrt(fw.vcov[1, 1])), stats.t.ppf(0.975, fw.df)
+        return {"est": float(fw.beta[1]), "se": se, "lo95": float(fw.beta[1] - c * se), "hi95": float(fw.beta[1] + c * se),
+                "p": float(2 * stats.t.sf(abs(fw.beta[1] / se), fw.df)), "df": float(fw.df)}
+
     for rk, name in (("scale-minus-risk", "scale_over_risk"), ("benefit-minus-scale", "dr_over_scale")):
         q3[name] = {w: pool(*zip(*[(cell(table("predictions", t), rk)["estimate"], cell(table("predictions", t), rk)["boot_sd"])
                                    for t in tl])) for w, tl in (("wave1", W1), ("wave2", W2), ("all", ALL))}
+        q3[name]["wave2_minus_wave1"] = wave_diff("predictions", rk)
+    # Learned rankings on the same trials as the scale-over-risk pool (where scale and risk differ).
+    diff17 = [t for t in ALL if not (cell(table("predictions", t), "scale-minus-risk")["boot_sd"] < 1e-9
+                                     and abs(cell(table("predictions", t), "scale-minus-risk")["estimate"]) < 1e-9)]
+    q3["trials_scale_differs"] = diff17
+    q3["learned_on_scale_trials"] = {k: pool(*zip(*[(cell(table(s_, t), "benefit-minus-risk")["estimate"],
+                                                     cell(table(s_, t), "benefit-minus-risk")["boot_sd"]) for t in diff17]))
+                                     for k, s_ in SETS.items()}
+    # Budget sensitivity for the three main contrasts (all trials).
+    q3["budgets"] = {}
+    for b in (0.1, 0.2, 0.3):
+        q3["budgets"][str(b)] = {name: pool(*zip(*[(cell(table("predictions", t), rk, b)["estimate"],
+                                                    cell(table("predictions", t), rk, b)["boot_sd"]) for t in ALL]))
+                                 for rk, name in (("benefit-minus-risk", "dr_over_risk"), ("scale-minus-risk", "scale_over_risk"),
+                                                  ("benefit-minus-scale", "dr_over_scale"))}
     # Sensitivity: wave-1 trials excluded by the sign rule at enrollment (ELAIA-1, Oregon), doubly robust only.
     extra = {t: cell(table("predictions", t), "benefit-minus-risk") for t in ("elaia1", "oregon")}
     base = {t: cell(table("predictions", t), "benefit-minus-risk") for t in ALL}
@@ -239,6 +275,14 @@ def main() -> None:
     for rk in ("risk", "scale", "benefit"):
         rows = [table("predictions", t)["rate"][f"{rk}_autoc"] for t in ALL]
         au[rk] = pool([1000 * r["estimate"] for r in rows], [1000 * r["boot_sd"] for r in rows])
+    for k_, s_ in SETS.items():
+        if k_ == "dr":
+            continue
+        rows_ = [table(s_, t)["rate"]["benefit_autoc"] for t in ALL]
+        au[k_] = pool([1000 * r["estimate"] for r in rows_], [1000 * r["boot_sd"] for r in rows_])
+    for rk in ("risk", "scale", "benefit"):
+        rows_ = [table("predictions", t)["rate"][f"{rk}_qini"] for t in ALL]
+        au[f"{rk}_qini"] = pool([1000 * r["estimate"] for r in rows_], [1000 * r["boot_sd"] for r in rows_])
     au["n_risk_autoc_ci_below_0"] = int(sum(table("predictions", t)["rate"]["risk_autoc"]["hi95"] < 0 for t in ALL))
     au["n_risk_below_random_q20"] = int(sum(cell(table("predictions", t), "risk")["estimate"] < cell(table("predictions", t), "random")["estimate"]
                                             for t in ALL))
@@ -265,6 +309,26 @@ def main() -> None:
     q3["language_model_masked_wave1"] = json.loads((R / "llm_masked_compare.json").read_text())["pooled_masked"]
     dp = [cell(table("predictions_dopfn", t), "benefit-minus-risk") for t in W1]
     q3["dopfn_wave1"] = pool([r["estimate"] for r in dp], [r["boot_sd"] for r in dp])
+    # Exploratory practitioner comparator: response ranking (P(good outcome | action)); see script 46.
+    if all(table("predictions_response", t) is not None for t in ALL):
+        rsp = {}
+        for rk, name in (("risk", "response_value"), ("scale-minus-risk", "scale_over_response"),
+                         ("benefit-minus-risk", "dr_over_response")):
+            if rk == "risk":
+                continue
+            rsp[name] = {w: pool(*zip(*[(cell(table("predictions_response", t), rk)["estimate"],
+                                         cell(table("predictions_response", t), rk)["boot_sd"]) for t in tl]))
+                         for w, tl in (("wave1", W1), ("wave2", W2), ("all", ALL))}
+        # response over risk: same units; unpaired difference of values (bootstrap SDs combined), descriptive
+        ror = []
+        for t in ALL:
+            a_, b_ = cell(table("predictions_response", t), "risk"), cell(table("predictions", t), "risk")
+            ror.append((a_["estimate"] - b_["estimate"], float(np.sqrt(a_["boot_sd"] ** 2 + b_["boot_sd"] ** 2))))
+        rsp["response_over_risk_unpaired"] = pool(*zip(*ror))
+        rsp["per_trial"] = {t: {k2: {kk: cell(table("predictions_response", t), rk)[kk] for kk in ("estimate", "lo95", "hi95")}
+                                for rk, k2 in (("scale-minus-risk", "scale_over_response"), ("benefit-minus-risk", "dr_over_response"))}
+                            for t in ALL}
+        q3["response"] = rsp
     out["Q3"] = q3
     # Q4
     gc = {}
@@ -294,8 +358,8 @@ def main() -> None:
         r = q3[k]
         print(k, {w: f"{r[w]['mean']:.1f} ({r[w]['lo95']:.1f},{r[w]['hi95']:.1f})" for w in ("wave1", "wave2", "all") if w in r},
               "tau", round(r["all"]["tau"], 1), "PI", [round(z, 1) for z in r["all"]["pi95"]], "w2-w1", round(r["wave2_minus_wave1"]["est"], 1))
-    print("scale_over_risk", {w: round(v["mean"], 1) for w, v in q3["scale_over_risk"].items()}, "dr_over_scale",
-          {w: f"{v['mean']:.1f} ({v['lo95']:.1f},{v['hi95']:.1f})" for w, v in q3["dr_over_scale"].items()})
+    print("scale_over_risk", {w: round(v["mean"], 1) for w, v in q3["scale_over_risk"].items() if "mean" in v}, "dr_over_scale",
+          {w: f"{v['mean']:.1f} ({v['lo95']:.1f},{v['hi95']:.1f})" for w, v in q3["dr_over_scale"].items() if "mean" in v})
     print("Q4 full coverage", out["Q4"]["n_trials_full_coverage"], "of", len(gc))
 
 

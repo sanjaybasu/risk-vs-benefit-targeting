@@ -30,7 +30,6 @@ def main() -> None:
         s = pd.read_parquet(a.sealed / f"{t}_test.parquet")[["row_id", "y_ref", "y_act"]]
         p = pd.read_parquet(ROOT / "predictions_rose_v2" / f"{t}.parquet")[["row_id", "lo90", "hi90", "abstain"]]
         d = s.merge(p, on="row_id", how="inner")
-        d = d[~d["abstain"].astype(bool)]
         tau = (d["y_act"] - d["y_ref"]).to_numpy(float)  # higher is better for answer quality
         cov = (d["lo90"].to_numpy() <= tau) & (tau <= d["hi90"].to_numpy())
         nz = tau != 0

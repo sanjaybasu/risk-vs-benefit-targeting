@@ -81,7 +81,8 @@ def figure1(fr, th):
         w2 = t.startswith("w2_")
         b.scatter([cv], [g], s=36, color=W2C if w2 else W1C, marker="s" if w2 else "o", zorder=3)
         if cv < 0 or g > 30:
-            b.annotate(LABEL[t], (cv, g), xytext=(-14, 8) if t == "gusto" else (5, 4), textcoords="offset points", fontsize=7.5, color=INK)
+            b.annotate(LABEL[t], (cv, g), xytext={"gusto": (-6, 22), "w2_jtpa": (-10, 22)}.get(t, (5, 4)),
+                       arrowprops={"arrowstyle": "-", "color": MUTED, "linewidth": 0.6} if t in ("gusto", "w2_jtpa") else None, textcoords="offset points", fontsize=7.5, color=INK)
     b.axvline(0, color=MUTED, linewidth=0.9, linestyle=(0, (4, 3)))
     b.set_xlabel("Condition value: $u_{max} + u_q - c$ (logit units)", fontsize=9, color=INK)
     b.set_ylabel("Posted scale-predicted gap\n(per 1,000 actions)", fontsize=9, color=INK)
@@ -106,23 +107,24 @@ def figure2(fr):
     se = np.sqrt(np.einsum("ij,jk,ik->i", G, vcov, G))
     crit = stats.t.ppf(0.975, df)
     a.fill_between(grid, G @ beta - crit * se, G @ beta + crit * se, color=MUTED, alpha=0.14, linewidth=0)
-    a.plot(grid, G @ beta, color=INK, linewidth=2, label="19 trials (95% CI)")
+    a.plot(grid, G @ beta, color=INK, linewidth=2, label="19 trials: {:.2f} ({:.2f} to {:.2f})".format(q2["primary"]["slope"], q2["primary"]["lo95"], q2["primary"]["hi95"]))
     o = q2["informative_through_origin"]
     a.plot(grid, o["slope"] * grid, color=INK, linewidth=1.4, linestyle=(0, (1, 1.5)),
            label=f"16 trials, through origin: {o['slope']:.2f} ({o['lo95']:.2f} to {o['hi95']:.2f})")
     a.plot(grid, grid, color=MUTED, linewidth=1.2, linestyle=(0, (4, 3)), label="Observed equals forecast")
-    a.annotate("3 trials with gap 0 by construction\n(GUSTO-I, synbiotic, JTPA)", (0, 0), xytext=(3, 112), textcoords="data",
-               fontsize=7.5, color=MUTED, arrowprops={"arrowstyle": "-", "color": MUTED, "linewidth": 0.8})
+    w1 = q2["wave1_only"]
+    a.plot([], [], color="none", label=f"Wave 1 (registered primary): {w1['slope']:.2f} ({w1['lo95']:.2f} to {w1['hi95']:.2f})")
+    a.annotate("3 trials at 0, 0\nby construction", (0, 0), xytext=(12, -105), textcoords="data", ha="left",
+               fontsize=7.5, color=MUTED, arrowprops={"arrowstyle": "->", "color": MUTED, "linewidth": 0.8})
     for t, p in pts.items():
         w2 = t.startswith("w2_")
         col = W2C if w2 else W1C
         a.plot([p["x"], p["x"]], [p["lo95"], p["hi95"]], color=col, linewidth=1.1, alpha=0.8)
         a.scatter([p["x"]], [p["y"]], s=34, color=col, marker="s" if w2 else "o", zorder=3)
         if p["x"] > 25:
-            a.annotate(LABEL[t], (p["x"], p["y"]), xytext={"voter": (-60, -16), "sixcity": (-48, 6)}.get(t, (5, 3)), textcoords="offset points", fontsize=7.5, color=INK)
+            a.annotate(LABEL[t], (p["x"], p["y"]), xytext={"voter": (6, -12), "sixcity": (-46, -12)}.get(t, (5, 3)), textcoords="offset points", fontsize=7.5, color=INK)
     s = q2["primary"]
-    a.set_title(f"A. {q2['k']} trials: slope {s['slope']:.2f} (95% CI, {s['lo95']:.2f} to {s['hi95']:.2f})",
-                fontsize=9, loc="left", color=INK)
+    a.set_title(f"A. Forecast and observed gain, {q2['k']} trials", fontsize=9, loc="left", color=INK)
     a.set_ylim(-170, 150)
     a.set_xlabel("Scale-predicted gap, posted before scoring (per 1,000 actions)", fontsize=9, color=INK)
     a.set_ylabel("Observed gain of scale ranking over risk ranking\n(per 1,000 actions, 95% CI)", fontsize=9, color=INK)
