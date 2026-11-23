@@ -11,7 +11,7 @@ from system_three.table import DatasetInfo
 GUSTO = DatasetInfo(
     name="gusto", tier="C", outcome_name="death_30d", better="lower", reference="streptokinase",
     actions=("streptokinase", "accelerated_tpa"),
-    license="distributed with the GPL R package predtools (CRAN, 0.0.3); underlying data terms not stated by the package",
+    license="distributed with the GPL R package predtools (CRAN, 0.0.3)",
     commercial_use=False,
     citation="GUSTO Investigators. An international randomized trial comparing four thrombolytic "
     "strategies for acute myocardial infarction. N Engl J Med 1993;329:673-682. "

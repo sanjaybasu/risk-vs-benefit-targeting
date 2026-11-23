@@ -59,6 +59,15 @@ def ci(e, lo, hi, d=1):
     return f"{e:.{d}f} ({lo:.{d}f} to {hi:.{d}f})"
 
 
+def v10(x):
+    v = int(round(10.0 * x))
+    return f"{0 if v == 0 else v:,}"
+
+
+def ci10(e, lo, hi):
+    return f"{v10(e)} ({v10(lo)} to {v10(hi)})"
+
+
 def n(x):
     return f"{int(round(x)):,}"
 
@@ -67,23 +76,27 @@ def pooled(r, d=1):
     return ci(r["mean"], r["lo95"], r["hi95"], d)
 
 
+def pooled10(r):
+    return ci10(r["mean"], r["lo95"], r["hi95"])
+
+
 def trial_table() -> list:
     q2 = FR["Q2"]
     elig = set(q2["points"])
     gap = {t: p["x"] for t, p in q2["points"].items()}
     o = ["## Table S1. The 22 randomized trials\n",
-         "| Trial | Wave | Domain | Action vs reference | Outcome (better direction) | Individuals in the trial file (all arms) | Test units | Scale-predicted gap, per 1,000 | In forecast test |",
+         "| Trial | Wave | Domain | Action vs reference | Outcome (better direction) | Individuals in the trial file (all arms) | Test units | Scale-predicted gap, per 10,000 reached | In forecast test |",
          "|---|---|---|---|---|---|---|---|---|"]
     for t in W1 + W2:
         nm, dom, act, out = META[t]
-        g = f"{gap[t]:.1f}" if t in elig else "–"
+        g = v10(gap[t]) if t in elig else "–"
         o.append(f"| {nm} | {2 if t.startswith('w2_') else 1} | {dom} | {act} | {out} | {n(DT[t]['rows'])} | {n(DT[t]['test'])} | "
                  f"{g} | {'Yes' if t in elig else 'No (effect not beneficial in context data)'} |")
     o.append(f"\nTest units total {n(FR['n_test_units']['wave1'] + FR['n_test_units']['wave2'])} "
              f"(wave 1, {n(FR['n_test_units']['wave1'])}; wave 2, {n(FR['n_test_units']['wave2'])}). GUSTO-I compares accelerated "
              "alteplase with the two streptokinase arms combined; the combination arm is not used. The International Stroke Trial "
              "compares aspirin with no aspirin; heparin allocation, randomized independently, is kept as a covariate. The "
-             "scale-predicted gap is defined only where the context effect is beneficial. Figure labels use short forms of these names.\n")
+             "scale-predicted gap is in people helped per 10,000 reached and is defined only where the context effect is beneficial. Figure labels use short forms of these names.\n")
     return o
 
 
@@ -101,10 +114,10 @@ def main_tables() -> str:
     o += ["## Table 1. Does the scale-predicted gap forecast the observed gain of the scale ranking over the risk ranking?\n",
           "| Analysis | Trials | Slope (95% CI) | P | Between-trial SD |", "|---|---|---|---|---|"]
     for name, k, r in rows:
-        tau = "–" if r.get("tau2") is None else f"{r['tau2'] ** 0.5:.1f}"
+        tau = "–" if r.get("tau2") is None else v10(r["tau2"] ** 0.5)
         o.append(f"| {name} | {k} | {ci(r['slope'], r['lo95'], r['hi95'], 2)} | {r['p_two_sided']:.3f} | {tau} |")
     o.append(f"\nSlope 1 means that observed gains equal forecast gains; slope 0 means no relation. The between-trial SD is the square root "
-             "of the restricted maximum likelihood estimate of the between-trial variance, in outcomes per 1,000 actions; the trials whose forecast "
+             "of the restricted maximum likelihood estimate of the between-trial variance, in people helped per 10,000 reached; the trials whose forecast "
              "is 0 by construction have zero residual and the floor variance, so the fits that include them estimate this SD as 0 and "
              "behave as fixed-effect fits. In the 19-trial fit, the 3 trials whose "
              f"forecast is 0 by construction carry {100 * q2['weight_share_zero_gap_trials']:.1f}% of the weight; in the wave-1 fit, the 2 such trials "
@@ -117,40 +130,40 @@ def main_tables() -> str:
           "|---|---|---|---|---|---|---|"]
     def wd(r):
         w_ = r.get("wave2_minus_wave1") if isinstance(r, dict) else None
-        return ci(w_["est"], w_["lo95"], w_["hi95"]) if w_ and "lo95" in w_ else "–"
+        return ci10(w_["est"], w_["lo95"], w_["hi95"]) if w_ and "lo95" in w_ else "–"
+    pi_ = lambda r: f"{v10(r['pi95'][0])} to {v10(r['pi95'][1])}"  # noqa: E731
     sr = q3["scale_over_risk"]
     ew = sr["equal_weight_mean_22"]
-    o.append(f"| Scale ranking | {pooled(sr['wave1'])} [{sr['wave1']['k']}] | {pooled(sr['wave2'])} [{sr['wave2']['k']}] | "
-             f"{pooled(ew)}^a^ | {pooled(sr['all'])} | {wd(sr)} | {sr['all']['pi95'][0]:.1f} to {sr['all']['pi95'][1]:.1f}^b^ |")
+    o.append(f"| Scale ranking | {pooled10(sr['wave1'])} [{sr['wave1']['k']}] | {pooled10(sr['wave2'])} [{sr['wave2']['k']}] | "
+             f"{pooled10(ew)}^a^ | {pooled10(sr['all'])} | {wd(sr)} | {pi_(sr['all'])}^b^ |")
     rr = q3.get("response_over_risk_paired")
     if rr:
-        o.append(f"| Response ranking | {pooled(rr['wave1'])} [{rr['wave1']['k']}] | {pooled(rr['wave2'])} [{rr['wave2']['k']}] | "
-                 f"{pooled(rr['all'])} | – | {wd(rr)} | {rr['all']['pi95'][0]:.1f} to {rr['all']['pi95'][1]:.1f} |")
+        o.append(f"| Response ranking | {pooled10(rr['wave1'])} [{rr['wave1']['k']}] | {pooled10(rr['wave2'])} [{rr['wave2']['k']}] | "
+                 f"{pooled10(rr['all'])} | – | {wd(rr)} | {pi_(rr['all'])} |")
     for k, name in LEARNER.items():
         if k == "scale_over_risk":
             continue
         r, r17 = q3[k], q3["learned_on_scale_trials"][k]
-        o.append(f"| {name} | {pooled(r['wave1'])} [{r['wave1']['k']}] | {pooled(r['wave2'])} [{r['wave2']['k']}] | "
-                 f"{pooled(r['all'])} | {pooled(r17)} | {wd(r)} | {r['all']['pi95'][0]:.1f} to {r['all']['pi95'][1]:.1f} |")
+        o.append(f"| {name} | {pooled10(r['wave1'])} [{r['wave1']['k']}] | {pooled10(r['wave2'])} [{r['wave2']['k']}] | "
+                 f"{pooled10(r['all'])} | {pooled10(r17)} | {wd(r)} | {pi_(r['all'])} |")
     dp = q3["dopfn_wave1"]
-    o.append(f"| Do-PFN | {pooled(dp)} [{dp['k']}] | – | – | – | – | – |")
+    o.append(f"| Do-PFN | {pooled10(dp)} [{dp['k']}] | – | – | – | – | – |")
     o += ["\n*B. Gain of each learned ranking over the two simple alternatives, all 22 trials, same test units*\n",
           "| Learned ranking | Over the scale ranking | 95% prediction interval, new trial | Over the response ranking | 95% prediction interval, new trial |",
           "|---|---|---|---|---|"]
     lr_ = q3.get("learners_over_response", {})
-    pi_ = lambda r: f"{r['pi95'][0]:.1f} to {r['pi95'][1]:.1f}"  # noqa: E731
     for k, name in LEARNER.items():
         if k == "scale_over_risk":
             continue
         a_ = q3["learners_over_scale"][k]
         b_ = lr_.get(k)
-        o.append(f"| {name} | {pooled(a_)} | {pi_(a_)} | {pooled(b_) if b_ else '–'} | {pi_(b_) if b_ else '–'} |")
+        o.append(f"| {name} | {pooled10(a_)} | {pi_(a_)} | {pooled10(b_) if b_ else '–'} | {pi_(b_) if b_ else '–'} |")
     fl = sr["all_22_zero_gap_at_floor"]
     hf = q3["holm_family"]
     ho = ["risk_autoc", "scale_over_risk_17", "response_over_risk_22", "dr_over_risk_22"]
     holm_s = ", ".join(f"{hf[k]['p_holm']:.3f}" for k in ho)
     raw_s = ", ".join(f"{hf[k]['p']:.3f}" for k in ho)
-    o.append("\nValues are gains at a 20% budget, in outcomes improved per 1,000 actions (95% CI) [number of trials], pooled by random "
+    o.append("\nValues are gains at a 20% budget, in people helped per 10,000 reached (95% CI) [number of trials], pooled by random "
              "effects; panel B compares each learned ranking with the scale or response ranking on the same units. Pools leave out trials in "
              "which the two compared rankings select the same units. The wave difference is the wave coefficient of one random-effects "
              "meta-regression over all trials, with a common between-trial variance, so it is not the difference of the two wave cells. "
@@ -158,8 +171,8 @@ def main_tables() -> str:
              "registered learned ranking in both waves. Pooling over both waves was not pre-specified. The prediction interval applies to a new trial "
              "exchangeable with these trials, and the pooled values average absolute differences in outcomes that differ between trials. "
              f"^a^Equal-weighted mean over all 22 trials with the 5 trials in which the two rankings selected the same units entered as 0 "
-             f"(SE {ew['se']:.1f} from the per-trial bootstrap variances; t interval with 21 degrees of freedom). An inverse-variance pool that "
-             f"enters those 5 trials at the registered variance floor gives {pooled(fl)}, because they then carry nearly all the weight and set "
+             f"(SE {v10(ew['se'])} from the per-trial bootstrap variances; t interval with 21 degrees of freedom). An inverse-variance pool that "
+             f"enters those 5 trials at the registered variance floor gives {pooled10(fl)}, because they then carry nearly all the weight and set "
              f"the between-trial variance to 0; the 17-trial pool is conditional on the two rankings differing. ^b^From the 17-trial pool. "
              f"Where the estimated between-trial SD is 0 (the wave-2 pools of the doubly robust learner, the causal forest, and CausalPFN, "
              f"and the causal forest and CausalPFN over the scale ranking), the pool is a fixed-effect pool and the prediction interval equals "
@@ -196,12 +209,12 @@ def si_tables() -> str:
     for t, r in q2["leave_one_out"].items():
         o.append(f"| {META[t][0]} | {ci(r['slope'], r['lo95'], r['hi95'], 2)} | {r['lpd_gain'] + 0.0 if abs(r['lpd_gain']) >= 0.005 else 0.0:.2f} |")
     oos = q2["wave2_out_of_sample"]
-    o += ["\n## Table S3. Wave-1 fit as a predictor of the eligible wave-2 trials\n",
+    o += ["\n## Table S3. Wave-1 fit as a predictor of the eligible wave-2 trials (people helped per 10,000 reached)\n",
           "| Trial | Forecast (95% prediction interval) | Observed gain | Gain in log predictive density, nats |", "|---|---|---|---|"]
     for t, r in oos["per_trial"].items():
-        o.append(f"| {META[t][0]} | {ci(r['forecast'], *r['pi95'])} | {r['observed']:.1f} | {r['lpd_gain'] + 0.0 if abs(r['lpd_gain']) >= 0.005 else 0.0:.2f} |")
+        o.append(f"| {META[t][0]} | {ci10(r['forecast'], *r['pi95'])} | {v10(r['observed'])} | {r['lpd_gain'] + 0.0 if abs(r['lpd_gain']) >= 0.005 else 0.0:.2f} |")
     o.append(f"\nTotal gain {oos['lpd_gain_nats']:.2f} nats; {oos['n_inside_pi95']} of {oos['k']} observed gains inside the 95% prediction interval.\n")
-    o += ["\n## Table S4. Model routing, where each prompt's effect is known\n",
+    o += ["\n## Table S4. Model routing, where each prompt's effect is known (prompts improved per 10,000 routed)\n",
           "| Model pair (smaller to larger) | Test prompts | Scale-predicted gap | Scale over risk (95% CI) | Doubly robust over risk (95% CI) | Interaction of action with logit risk (95% CI) | Diagnostic flag |",
           "|---|---|---|---|---|---|---|"]
     for t, r in q2["routing"].items():
@@ -209,12 +222,12 @@ def si_tables() -> str:
         nm = RBL.get(t, "SWE-bench, " + t.split("__")[1].replace("_to_", " to ").replace("p", "agent percentile "))
         its = ci(it["delta"], it["delta_lo95"], it["delta_hi95"], 2) if it else "–"
         fl = "–" if r["flag"] is None else ("Yes" if r["flag"] else "No")
-        o.append(f"| {nm} | {n(r['n_test'])} | {r['forecast']:.1f} | {ci(a['estimate'], a['lo95'], a['hi95'])} | "
-                 f"{ci(b['estimate'], b['lo95'], b['hi95'])} | {its} | {fl} |")
+        o.append(f"| {nm} | {n(r['n_test'])} | {v10(r['forecast'])} | {ci10(a['estimate'], a['lo95'], a['hi95'])} | "
+                 f"{ci10(b['estimate'], b['lo95'], b['hi95'])} | {its} | {fl} |")
     o.append("\nThe three SWE-bench pairs (coding agents at three skill percentiles, 148 test tasks each) were scored but are too small to "
              "inform any comparison; in each, the scale and risk rankings selected the same test tasks. In two of them the context-split forecast was positive, but "
-             "on 148 test tasks with few distinct risk values the condition of Proposition 2 did not hold, so the selected sets coincided.\n")
-    o += ["\n## Table S5. Gain of each ranking over the risk ranking, by trial (per 1,000 actions, 95% CI)\n",
+             "on 148 test tasks with few distinct risk values the practical check (Note 1, Proposition 2) did not hold, so the selected sets coincided.\n")
+    o += ["\n## Table S5. Gain of each ranking over the risk ranking, by trial (people helped per 10,000 reached, 95% CI)\n",
           "| Trial | " + " | ".join(LEARNER.values()) + " |", "|---|" + "---|" * len(LEARNER)]
     for t in W1 + W2:
         cells = []
@@ -224,7 +237,7 @@ def si_tables() -> str:
                 r = {"estimate": c_["estimate"] + 0.0, "lo95": c_["lo95"] + 0.0, "hi95": c_["hi95"] + 0.0}
             else:
                 r = q3[k]["per_trial"].get(t)
-            cells.append(ci(r["estimate"], r["lo95"], r["hi95"]) if r else "–")
+            cells.append(ci10(r["estimate"], r["lo95"], r["hi95"]) if r else "–")
         o.append(f"| {META[t][0]} | " + " | ".join(cells) + " |")
     o += ["\n## Table S6. Uncertainty statements of the calibrated ensemble\n",
           "| Setting | Measure | Calibrated ensemble | Comparator |", "|---|---|---|---|"]
@@ -240,24 +253,24 @@ def si_tables() -> str:
     o.append(f"| 22 trials | Share of 10 predicted-effect bins whose doubly robust mean lies inside the 90% interval | "
              f"1.0 in {q4['n_trials_full_coverage']} of {len(q4['group_coverage_by_trial'])} trials | Nominal 0.9 |")
     m = json.loads((R / "llm_masked_compare.json").read_text())
-    o += ["\n## Table S7. Language model, original and masked trial descriptions (wave 1; gain over risk ranking per 1,000 actions)\n",
+    o += ["\n## Table S7. Language model, original and masked trial descriptions (wave 1; gain over risk ranking, people helped per 10,000 reached)\n",
           "| Trial | Original (95% CI) | Masked (95% CI) | Rank correlation of the two runs' effect estimates |",
           "|---|---|---|---|"]
     for t, r in m["per_trial"].items():
-        o.append(f"| {META[t][0]} | {ci(r['original'], *r['original_ci'])} | {ci(r['masked'], *r['masked_ci'])} | "
+        o.append(f"| {META[t][0]} | {ci10(r['original'], *r['original_ci'])} | {ci10(r['masked'], *r['masked_ci'])} | "
                  f"{r['spearman_effects']:.2f} |")
     lm, lmm = q3["language_model_wave1"], q3["language_model_masked_wave1"]
-    o.append(f"\nPooled: original {pooled(lm)}; masked {ci(lmm['mean'], lmm['lo95'], lmm['hi95'])}.\n")
+    o.append(f"\nPooled: original {pooled10(lm)}; masked {ci10(lmm['mean'], lmm['lo95'], lmm['hi95'])}.\n")
     d = {**json.loads((R / "proportionality_diagnostic.json").read_text()),
          **json.loads((R / "proportionality_diagnostic_w2.json").read_text())}
-    o += ["\n## Table S8. Context-only diagnostic of a constant odds ratio\n",
+    o += ["\n## Table S8. Context-only diagnostic of a constant odds ratio (gaps in people helped per 10,000 reached)\n",
           "| Trial | Interaction of action with logit risk (95% CI) | Scale-predicted gap | Gap predicted with the interaction | Flag |",
           "|---|---|---|---|---|"]
     for t in W1 + W2:
         r = d[t]
         ok = t in q2["points"]
-        g1 = f"{r['gap_scale'] + 0.0:.1f}".replace("-0.0", "0.0") if ok else "–"
-        g2 = f"{r['gap_interaction'] + 0.0:.1f}".replace("-0.0", "0.0") if ok else "–"
+        g1 = v10(r["gap_scale"]) if ok else "–"
+        g2 = v10(r["gap_interaction"]) if ok else "–"
         o.append(f"| {META[t][0]} | {ci(r['delta'], r['delta_lo95'], r['delta_hi95'], 3)} | {g1} | {g2} | "
                  f"{('Yes' if r['flag_not_applicable'] else 'No') if ok else '–'} |")
     o += ["\n## Table S9. Registered sensitivity analyses of the forecast slope\n",
@@ -286,11 +299,11 @@ def si_tables() -> str:
              "fit uses the untruncated Knapp–Hartung correction; the truncated version is the registered sensitivity analysis.\n")
     au = q3["autoc"]
     o += ["\n## Table S10. Rank-weighted average treatment effects (AUTOC and Qini) and comparison with random selection\n",
-          "| Ranking | Pooled AUTOC per 1,000 (95% CI) | Pooled Qini per 1,000 (95% CI) |", "|---|---|---|"]
+          "| Ranking | Pooled AUTOC per 10,000 reached (95% CI) | Pooled Qini per 10,000 reached (95% CI) |", "|---|---|---|"]
     for k_, nm_ in (("risk", "Risk ranking"), ("scale", "Scale ranking"), ("benefit", "Doubly robust learner"),
                     ("causal_forest", "Causal forest"), ("causalpfn", "CausalPFN"), ("rose", "Calibrated ensemble")):
         qn = au.get(f"{k_}_qini")
-        o.append(f"| {nm_} | {pooled(au[k_])} | {pooled(qn) if qn else '–'} |")
+        o.append(f"| {nm_} | {pooled10(au[k_])} | {pooled10(qn) if qn else '–'} |")
     from math import comb
     n15 = au["n_risk_q20_below_ate"]
     p_sign = min(1.0, 2 * sum(comb(22, i) for i in range(n15, 23)) / 2 ** 22)
@@ -301,31 +314,31 @@ def si_tables() -> str:
              f"rankings. The frozen scorer reports each ranking's AUTOC with its own bootstrap interval; paired AUTOC differences between "
              f"rankings would need the sealed outcomes to be read outside the frozen scorer, so they were not computed.\n")
     sr = q3["dr_with_sign_rule_trials"]
-    o += ["\n## Table S11. Sensitivity of the Question 3 comparisons (per 1,000 actions, 95% CI; not pre-specified)\n",
+    o += ["\n## Table S11. Sensitivity of the Question 3 comparisons (people helped per 10,000 reached, 95% CI; not pre-specified)\n",
           "| Analysis | Doubly robust over risk | Scale over risk | Doubly robust over scale |", "|---|---|---|---|"]
     for b_ in ("0.1", "0.2", "0.3"):
         bd = q3["budgets"][b_]
-        o.append(f"| Budget {int(float(b_) * 100)}% | {pooled(bd['dr_over_risk'])} | {pooled(bd['scale_over_risk'])} [{bd['scale_over_risk']['k']}] | "
-                 f"{pooled(bd['dr_over_scale'])} |")
-    o.append(f"| Wave 1 with ELAIA-1 and Oregon added | {pooled(sr['wave1'])} [15] | – | – |")
-    o.append(f"| All trials with ELAIA-1 and Oregon added | {pooled(sr['all'])} [24] | – | – |")
+        o.append(f"| Budget {int(float(b_) * 100)}% | {pooled10(bd['dr_over_risk'])} | {pooled10(bd['scale_over_risk'])} [{bd['scale_over_risk']['k']}] | "
+                 f"{pooled10(bd['dr_over_scale'])} |")
+    o.append(f"| Wave 1 with ELAIA-1 and Oregon added | {pooled10(sr['wave1'])} [15] | – | – |")
+    o.append(f"| All trials with ELAIA-1 and Oregon added | {pooled10(sr['all'])} [24] | – | – |")
     lr = q3["between_learner_correlation_range"]
     o.append(f"\nBracketed numbers are trials pooled where fewer than 22. Across trials, the per-trial gains of the four learned rankings "
              f"correlated at {lr[0]:.2f} to {lr[1]:.2f}.\n")
     bl = q3["budgets_learners"]
     o += ["\n*Each learned ranking over the two simple alternatives, by budget (all 22 trials, same test units)*\n",
           "| Comparison | Budget 10% | Budget 20% | Budget 30% |", "|---|---|---|---|"]
-    o.append(f"| Response ranking over the risk ranking | " + " | ".join(pooled(bl[b]["response_over_risk"]) for b in ("0.1", "0.2", "0.3")) + " |")
-    o.append(f"| Scale ranking over the response ranking | " + " | ".join(pooled(bl[b]["scale_over_response"]) for b in ("0.1", "0.2", "0.3")) + " |")
+    o.append(f"| Response ranking over the risk ranking | " + " | ".join(pooled10(bl[b]["response_over_risk"]) for b in ("0.1", "0.2", "0.3")) + " |")
+    o.append(f"| Scale ranking over the response ranking | " + " | ".join(pooled10(bl[b]["scale_over_response"]) for b in ("0.1", "0.2", "0.3")) + " |")
     for k_, nm_ in LEARNER.items():
         if k_ == "scale_over_risk":
             continue
         for src, lab in (("over_scale", "over the scale ranking"), ("over_response", "over the response ranking")):
-            o.append(f"| {nm_} {lab} | " + " | ".join(pooled(bl[b][src][k_]) for b in ("0.1", "0.2", "0.3")) + " |")
+            o.append(f"| {nm_} {lab} | " + " | ".join(pooled10(bl[b][src][k_]) for b in ("0.1", "0.2", "0.3")) + " |")
     pf = q3["wave1_pi_forecast_wave2"]
     o.append("\nThe wave-1 95% prediction interval of each learned ranking's gain over the risk ranking, taken as a forecast of the 9 wave-2 "
              "per-trial gains, contained " + "; ".join(
-                 f"{v['n_inside']} of {v['n_wave2']} for the {LEARNER[k_].lower()} ({v['pi95_wave1'][0]:.1f} to {v['pi95_wave1'][1]:.1f})"
+                 f"{v['n_inside']} of {v['n_wave2']} for the {LEARNER[k_].lower()} ({v10(v['pi95_wave1'][0])} to {v10(v['pi95_wave1'][1])})"
                  for k_, v in pf.items()) + ". The gains outside the intervals were Florida job-search assistance for three learners and "
              "Freedom from Hunger for the causal forest.\n")
     o += ["\n## Table S12. Detail on the calibrated ensemble's 90% intervals in model routing (not pre-specified)\n",
@@ -339,34 +352,34 @@ def si_tables() -> str:
     rsp, rr = q3.get("response"), q3.get("response_over_risk_paired")
     o.append("{{SPLIT}}")
     if rsp and rr:
-        o += ["\n## Table S15. Response ranking as a practitioner comparator (per 1,000 actions, 95% CI; not pre-specified)\n",
+        o += ["\n## Table S15. Response ranking as a practitioner comparator (people helped per 10,000 reached, 95% CI; not pre-specified)\n",
               "| Comparison | Wave 1 | Wave 2 | All trials |", "|---|---|---|---|"]
-        o.append(f"| Response ranking over the risk ranking | {pooled(rr['wave1'])} | {pooled(rr['wave2'])} | {pooled(rr['all'])} |")
-        o.append(f"| Response ranking over the risk ranking, trials where higher is better | – | – | {pooled(rr['higher_is_better'])} [{rr['higher_is_better']['k']}] |")
-        o.append(f"| Response ranking over the risk ranking, trials where lower is better | – | – | {pooled(rr['lower_is_better'])} [{rr['lower_is_better']['k']}] |")
+        o.append(f"| Response ranking over the risk ranking | {pooled10(rr['wave1'])} | {pooled10(rr['wave2'])} | {pooled10(rr['all'])} |")
+        o.append(f"| Response ranking over the risk ranking, trials where higher is better | – | – | {pooled10(rr['higher_is_better'])} [{rr['higher_is_better']['k']}] |")
+        o.append(f"| Response ranking over the risk ranking, trials where lower is better | – | – | {pooled10(rr['lower_is_better'])} [{rr['lower_is_better']['k']}] |")
         for k_, nm_ in (("scale_over_response", "Scale ranking over the response ranking"),
                         ("dr_over_response", "Doubly robust learner over the response ranking")):
             r = rsp[k_]
-            o.append(f"| {nm_} | {pooled(r['wave1'])} | {pooled(r['wave2'])} | {pooled(r['all'])} [{r['all']['k']}] |")
+            o.append(f"| {nm_} | {pooled10(r['wave1'])} | {pooled10(r['wave2'])} | {pooled10(r['all'])} [{r['all']['k']}] |")
         lc = q3["lenta_check"]
         o += ["\n| Trial | Response over risk | Scale over response | Doubly robust over response |", "|---|---|---|---|"]
         for t in W1 + W2:
             r = rsp["per_trial"][t]; q_ = rr["per_trial"][t]
             a_, b_ = r["scale_over_response"], r["dr_over_response"]
-            o.append(f"| {META[t][0]} | {ci(q_['estimate'], q_['lo95'], q_['hi95'])} | {ci(a_['estimate'], a_['lo95'], a_['hi95'])} | "
-                     f"{ci(b_['estimate'], b_['lo95'], b_['hi95'])} |")
+            o.append(f"| {META[t][0]} | {ci10(q_['estimate'], q_['lo95'], q_['hi95'])} | {ci10(a_['estimate'], a_['lo95'], a_['hi95'])} | "
+                     f"{ci10(b_['estimate'], b_['lo95'], b_['hi95'])} |")
         o.append("\nThe response ranking orders people by the predicted probability of the desirable outcome with the action, from the "
                  "outcome model fit to the action arm of the context split. Where the lower outcome is better, it serves the people with the "
                  "lowest predicted risk under the action first. All contrasts are paired on the same test units. In the pools against the "
                  f"response ranking, Lenta carries {100 * lc['scale_over_response']['weight']:.1f}% (scale) and "
                  f"{100 * lc['dr_over_response']['weight']:.1f}% (doubly robust) of the weight; without Lenta, the scale ranking over the "
-                 f"response ranking was {pooled(lc['scale_over_response']['without'])} and the doubly robust learner over the response ranking "
-                 f"was {pooled(lc['dr_over_response']['without'])}.\n")
-        o += ["\n## Table S16. Gains by domain (per 1,000 actions, 95% CI; not pre-specified)\n",
+                 f"response ranking was {pooled10(lc['scale_over_response']['without'])} and the doubly robust learner over the response ranking "
+                 f"was {pooled10(lc['dr_over_response']['without'])}.\n")
+        o += ["\n## Table S16. Gains by domain (people helped per 10,000 reached, 95% CI; not pre-specified)\n",
               "| Domain | Trials | Scale over risk | Response over risk | Doubly robust over risk | Doubly robust over scale | Doubly robust over response |",
               "|---|---|---|---|---|---|---|"]
         for d_, v_ in q3["by_domain"].items():
-            cells = [pooled(v_[c]) + (f" [{v_[c]['k']}]" if v_[c]["k"] != len(v_["trials"]) else "") if v_[c] else "–"
+            cells = [pooled10(v_[c]) + (f" [{v_[c]['k']}]" if v_[c]["k"] != len(v_["trials"]) else "") if v_[c] else "–"
                      for c in ("scale_over_risk", "response_over_risk", "dr_over_risk", "dr_over_scale", "dr_over_response")]
             o.append(f"| {d_.replace('_', '-').capitalize()} | {len(v_['trials'])} | " + " | ".join(cells) + " |")
         o.append("\nOther: charity, exercise, consumer credit, education, employment, and consumer finance. Non-voting pools the medicine, "

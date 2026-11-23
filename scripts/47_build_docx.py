@@ -30,13 +30,21 @@ def section_end(landscape: bool) -> str:
 BORDERS = ('<w:tblBorders><w:top w:val="single" w:sz="8" w:space="0" w:color="000000"/>'
            '<w:bottom w:val="single" w:sz="8" w:space="0" w:color="000000"/>'
            '<w:insideH w:val="single" w:sz="2" w:space="0" w:color="BFBFBF"/></w:tblBorders>')
+BOX_BORDERS = ('<w:tblBorders><w:top w:val="single" w:sz="8" w:space="0" w:color="000000"/>'
+               '<w:left w:val="single" w:sz="8" w:space="0" w:color="000000"/>'
+               '<w:bottom w:val="single" w:sz="8" w:space="0" w:color="000000"/>'
+               '<w:right w:val="single" w:sz="8" w:space="0" w:color="000000"/>'
+               '<w:insideH w:val="single" w:sz="2" w:space="0" w:color="D6D5D0"/></w:tblBorders>'
+               '<w:shd w:val="clear" w:color="auto" w:fill="F7F7F5"/>')
 
 
 def tables(xml: str) -> str:
-    """Autofit columns to content, add horizontal rules, and set table text to 9 pt."""
+    """Autofit columns to content, add horizontal rules (full border + shading for Box 1), and set table text to 9 pt."""
     def one(mt):
         t = mt.group(0)
-        t = t.replace('<w:tblLayout w:type="fixed" />', BORDERS + '<w:tblLayout w:type="autofit" />', 1)
+        is_box = ">Step<" in t and ">Action<" in t
+        bdr = BOX_BORDERS if is_box else BORDERS
+        t = t.replace('<w:tblLayout w:type="fixed" />', bdr + '<w:tblLayout w:type="autofit" />', 1)
         t = t.replace("<w:r><w:t", '<w:r><w:rPr><w:sz w:val="18"/><w:szCs w:val="18"/></w:rPr><w:t')
         t = re.sub(r"<w:r><w:rPr>((?:(?!</w:rPr>).)*?)</w:rPr>",
                    lambda m: m.group(0) if ("w:sz " in m.group(1) or "vertAlign" in m.group(1))
