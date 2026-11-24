@@ -131,61 +131,65 @@ def main_tables() -> str:
              "In each of these trials the two rankings selected the same test units, "
              "so the observed gain was 0 with no sampling variance. SI Appendix, Table S9 gives the registered "
              "sensitivity analyses, and Table S17 gives forecast accuracy against naive baselines.\n")
-    o += ["\n## Table 2. Do the scale ranking, the response ranking, and learned benefit rankings select people with larger effects than the risk ranking?\n",
-          "*A. Gain over the risk ranking*\n",
-          "| Ranking | Wave 1 | Wave 2 | All 22 trials | 17 trials in which scale and risk rankings differ | Wave 2 minus wave 1 | 95% prediction interval, new trial |",
+    w3 = json.loads((R / "wave3_results.json").read_text())
+    c28 = json.loads((R / "cluster_cf_and_28trial_summary.json").read_text())
+    p28 = c28["pooled_28"]["all28"]
+    cf = c28["cluster_cf_summary"]
+    w3p = w3["pooled"]["all6"]
+    o += ["\n## Table 2. Do the scale ranking, response ranking, and learned benefit rankings select people with larger effects than the risk ranking?\n",
+          "*A. Gain over the risk ranking across waves 1–3*\n",
+          "| Ranking | Wave 1 (13) | Wave 2 (9) | Wave 3 health (6) | Waves 1–2 (22) | All 28 trials | 95% PI, new trial |",
           "|---|---|---|---|---|---|---|"]
-    def wd(r):
-        w_ = r.get("wave2_minus_wave1") if isinstance(r, dict) else None
-        return ci10(w_["est"], w_["lo95"], w_["hi95"]) if w_ and "lo95" in w_ else "–"
     pi_ = lambda r: f"{v10(r['pi95'][0])} to {v10(r['pi95'][1])}"  # noqa: E731
     sr = q3["scale_over_risk"]
     ew = sr["equal_weight_mean_22"]
     o.append(f"| Scale ranking | {pooled10(sr['wave1'])} [{sr['wave1']['k']}] | {pooled10(sr['wave2'])} [{sr['wave2']['k']}] | "
-             f"{pooled10(ew)}^a^ | {pooled10(sr['all'])} | {wd(sr)} | {pi_(sr['all'])}^b^ |")
+             f"{pooled10(w3p['scale_minus_risk'])} [{w3p['scale_minus_risk']['k']}] | {pooled10(sr['all'])} [17]^a^ | "
+             f"{pooled10(p28['scale_over_risk'])} [{p28['scale_over_risk']['k']}] | {pi_(p28['scale_over_risk'])} |")
     rr = q3.get("response_over_risk_paired")
-    if rr:
-        o.append(f"| Response ranking | {pooled10(rr['wave1'])} [{rr['wave1']['k']}] | {pooled10(rr['wave2'])} [{rr['wave2']['k']}] | "
-                 f"{pooled10(rr['all'])} | – | {wd(rr)} | {pi_(rr['all'])} |")
-    for k, name in LEARNER.items():
-        if k == "scale_over_risk":
-            continue
-        r, r17 = q3[k], q3["learned_on_scale_trials"][k]
-        o.append(f"| {name} | {pooled10(r['wave1'])} [{r['wave1']['k']}] | {pooled10(r['wave2'])} [{r['wave2']['k']}] | "
-                 f"{pooled10(r['all'])} | {pooled10(r17)} | {wd(r)} | {pi_(r['all'])} |")
+    o.append(f"| Response ranking | {pooled10(rr['wave1'])} | {pooled10(rr['wave2'])} | "
+             f"{pooled10(w3p['response_minus_risk'])} | {pooled10(rr['all'])} | "
+             f"{pooled10(p28['response_over_risk'])} | {pi_(p28['response_over_risk'])} |")
+    o.append(f"| Doubly robust learner | {pooled10(q3['dr']['wave1'])} | {pooled10(q3['dr']['wave2'])} | "
+             f"{pooled10(w3p['benefit_minus_risk'])} | {pooled10(q3['dr']['all'])} | "
+             f"{pooled10(p28['dr_over_risk'])} | {pi_(p28['dr_over_risk'])} |")
+    o.append(f"| Cluster-respecting causal forest | – | – | {pooled10(cf['wave3_6']['cf_over_risk'])} | "
+             f"{pooled10(cf['wave12_22']['cf_over_risk'])} | {pooled10(cf['all28']['cf_over_risk'])} | {pi_(cf['all28']['cf_over_risk'])} |")
+    o.append(f"| Causal forest (registered, W1–2) | {pooled10(q3['causal_forest']['wave1'])} | {pooled10(q3['causal_forest']['wave2'])} | – | "
+             f"{pooled10(q3['causal_forest']['all'])} | – | {pi_(q3['causal_forest']['all'])} |")
+    o.append(f"| CausalPFN (W1–2) | {pooled10(q3['causalpfn']['wave1'])} | {pooled10(q3['causalpfn']['wave2'])} | – | "
+             f"{pooled10(q3['causalpfn']['all'])} | – | {pi_(q3['causalpfn']['all'])} |")
+    o.append(f"| Calibrated ensemble | {pooled10(q3['rose']['wave1'])} | {pooled10(q3['rose']['wave2'])} | "
+             f"{pooled10(w3p['rose_minus_risk'])} | {pooled10(q3['rose']['all'])} | – | {pi_(q3['rose']['all'])} |")
     dp = q3["dopfn_wave1"]
-    o.append(f"| Do-PFN | {pooled10(dp)} [{dp['k']}] | – | – | – | – | – |")
-    o += ["\n*B. Gain of each learned ranking over the two simple alternatives, all 22 trials, same test units*\n",
-          "| Learned ranking | Over the scale ranking | 95% prediction interval, new trial | Over the response ranking | 95% prediction interval, new trial |",
-          "|---|---|---|---|---|"]
+    o.append(f"| Do-PFN (W1) | {pooled10(dp)} | – | – | – | – | – |")
+    o += ["\n*B. Gain of each learned ranking over the two simple alternatives, same test units*\n",
+          "| Learned ranking | Trials | Over the scale ranking | 95% PI, new trial | Over the response ranking | 95% PI, new trial |",
+          "|---|---|---|---|---|---|"]
     lr_ = q3.get("learners_over_response", {})
-    for k, name in LEARNER.items():
-        if k == "scale_over_risk":
-            continue
+    o.append(f"| Doubly robust learner (W1–2 / all 28) | 28 | {pooled10(p28['dr_over_scale'])} | {pi_(p28['dr_over_scale'])} | "
+             f"{pooled10(lr_['dr'])} [22] | {pi_(lr_['dr'])} |")
+    o.append(f"| Cluster-respecting causal forest | 28 | {pooled10(cf['all28']['cf_over_scale'])} | {pi_(cf['all28']['cf_over_scale'])} | "
+             f"{pooled10(cf['all28']['cf_over_response'])} | {pi_(cf['all28']['cf_over_response'])} |")
+    o.append(f"| Tuned risk-augmented DR (70% train)^b^ | 28 | {pooled10(p28['dr_strong_over_scale'])} | {pi_(p28['dr_strong_over_scale'])} | "
+             f"{pooled10(w3p['dr_strong_minus_response'])} [6, W3] | {pi_(w3p['dr_strong_minus_response'])} |")
+    for k, name in (("causal_forest", "Causal forest (registered, W1–2)"), ("causalpfn", "CausalPFN (W1–2)"), ("rose", "Calibrated ensemble (W1–2)")):
         a_ = q3["learners_over_scale"][k]
         b_ = lr_.get(k)
-        o.append(f"| {name} | {pooled10(a_)} | {pi_(a_)} | {pooled10(b_) if b_ else '–'} | {pi_(b_) if b_ else '–'} |")
+        o.append(f"| {name} | 22 | {pooled10(a_)} | {pi_(a_)} | {pooled10(b_)} | {pi_(b_)} |")
     fl = sr["all_22_zero_gap_at_floor"]
     hf = q3["holm_family"]
     ho = ["risk_autoc", "scale_over_risk_17", "response_over_risk_22", "dr_over_risk_22"]
     holm_s = ", ".join(f"{hf[k]['p_holm']:.3f}" for k in ho)
     raw_s = ", ".join(f"{hf[k]['p']:.3f}" for k in ho)
-    o.append("\nValues are gains at a 20% budget, in people helped per 10,000 reached (95% CI) [number of trials], pooled by random "
-             "effects; panel B compares each learned ranking with the scale or response ranking on the same units. Pools leave out trials in "
-             "which the two compared rankings select the same units. The wave difference is the wave coefficient of one random-effects "
-             "meta-regression over all trials, with a common between-trial variance, so it is not the difference of the two wave cells. "
-             "Do-PFN was run in wave 1 only. Intervals are not adjusted for multiple comparisons; the doubly robust learner is the "
-             "registered learned ranking in both waves. Pooling over both waves was not pre-specified. The prediction interval applies to a new trial "
-             "exchangeable with these trials, and the pooled values average absolute differences in outcomes that differ between trials. "
-             f"^a^Equal-weighted mean over all 22 trials with the 5 trials in which the two rankings selected the same units entered as 0 "
-             f"(SE {v10(ew['se'])} from the per-trial bootstrap variances; t interval with 21 degrees of freedom). An inverse-variance pool that "
-             f"enters those 5 trials at the registered variance floor gives {pooled10(fl)}, because they then carry nearly all the weight and set "
-             f"the between-trial variance to 0; the 17-trial pool is conditional on the two rankings differing. ^b^From the 17-trial pool. "
-             f"Where the estimated between-trial SD is 0 (the wave-2 pools of the doubly robust learner, the causal forest, and CausalPFN, "
-             f"and the causal forest and CausalPFN over the scale ranking), the pool is a fixed-effect pool and the prediction interval equals "
-             f"the confidence interval. Holm-adjusted P values for the four pooled claims against the risk ranking in Results, question 3 (its "
-             f"rank-weighted average treatment effect, and the gains of the scale, response, and doubly robust rankings over it, in that order) were "
-             f"{holm_s} (unadjusted {raw_s}).\n")
+    o.append("\nValues are gains at a 20% budget, in people helped per 10,000 reached (95% CI) [trials pooled where fewer than column total], pooled by random "
+             "effects; panel B compares each learned ranking with the scale or response ranking on the same test units. Pools leave out trials in "
+             "which the two compared rankings select the same units. Wave 3 comprises 6 pre-registered health-care uptake and clinical trials "
+             "(Zenodo doi:10.5281/zenodo.24487742; Table S23). "
+             f"^a^Conditional on the 17 Wave 1–2 trials where scale and risk differ; equal-weighted 22-trial mean entering the 5 zero-difference trials as 0 is {pooled10(ew)} "
+             f"(SE {v10(ew['se'])}); inverse-variance floor pool is {pooled10(fl)}. "
+             "^b^Exploratory on Waves 1–2 (61, 6 to 116 over 70%-trained scale; individually significant in 1 of 22 trials, X5), pre-registered confirmatory in Wave 3 (130, −262 to 521 over 70%-trained scale; 150, −188 to 489 over response; Tables S19 and S23). "
+             f"Wave 1–2 Holm-adjusted P values for the four pooled claims against risk ranking (risk AUTOC, scale, response, doubly robust) were {holm_s} (unadjusted {raw_s}).\n")
     return "\n".join(o)
 
 
@@ -535,6 +539,75 @@ def si_tables() -> str:
                      f"{v10(v['dr_minus_fullrisk'])} | {v10(v['dr_minus_scale'])} ({sd_s}) |")
     o.append("\nSubsamples drew randomization clusters without replacement from the context split across 3 independent random seeds per sample size, "
              "fit both the 3-parameter scale model and the doubly robust learner on each subsample, and evaluated both on the sealed test split.\n")
+
+    # Table S23 -> S24: Wave 3 pre-registered health-care uptake & clinical trials (6 trials)
+    w3 = json.loads((R / "wave3_results.json").read_text())
+    cc = json.loads((R / "continuous_count_results.json").read_text())
+    c28 = json.loads((R / "cluster_cf_and_28trial_summary.json").read_text())
+
+    o += ["\n## Table S23. Wave 3 pre-registered health-care uptake and clinical trials (Zenodo doi:10.5281/zenodo.24487742; people helped per 10,000 reached)\n",
+          "| Trial (domain) | N total (test) | 20% cutoff risk (check) | Posted gap | Scale over risk | Response over risk | Doubly robust over risk | Tuned 70% DR over 70% scale | DR plug-in overstatement |",
+          "|---|---|---|---|---|---|---|---|---|"]
+    for t in w3["trials"]:
+        tr = w3["per_trial"][t]
+        mt, ci_w, sc = tr["meta"], tr["context"], tr["scored"]
+        ps = sc["pairs"]
+        gp = v10(ci_w["posted_gap"]) if ci_w["posted_gap"] is not None else "–"
+        o.append(f"| {mt['label']} ({mt['domain'].replace('_', ' ')}) | {n(mt['n_total'])} ({n(mt['n_test'])}) | "
+                 f"{100*ci_w['cutoff_risk']:.1f}% ({ci_w['check_val']:+.2f}) | {gp} | "
+                 f"{ci10(ps['scale_minus_risk']['estimate'], ps['scale_minus_risk']['lo95'], ps['scale_minus_risk']['hi95'])} | "
+                 f"{ci10(ps['response_minus_risk']['estimate'], ps['response_minus_risk']['lo95'], ps['response_minus_risk']['hi95'])} | "
+                 f"{ci10(ps['benefit_minus_risk']['estimate'], ps['benefit_minus_risk']['lo95'], ps['benefit_minus_risk']['hi95'])} | "
+                 f"{ci10(ps['dr_strong_minus_scale_70']['estimate'], ps['dr_strong_minus_scale_70']['lo95'], ps['dr_strong_minus_scale_70']['hi95'])} | "
+                 f"{v10(sc['optimism']['benefit']['overstatement'])} |")
+    w3o = w3["pooled"]["optimism_all6"]
+    o.append(f"\nAll 6 trials reproduced their published primary target before sealing (Sweden COVID vaccine +4.03 pp vs +4.2 pp; Catalonia CRC FIT N = 9,369; "
+             f"Catalonia CRC reminder N = 24,388; US COVID video +7.45 pp vs +7.6 pp; IST-3 −1.44 pp vs −1.7 pp; KAT-AKI +1.35 pp vs +1.4 pp). "
+             f"Pooled Wave-3 DR circular plug-in overstatement was {pooled10(w3o['benefit'])} (overstated in {w3o['benefit']['n_overstated']} of 6 trials), "
+             f"calibrated ensemble {pooled10(w3o['rose'])} ({w3o['rose']['n_overstated']} of 6), and tuned 70% DR {pooled10(w3o['dr_strong'])} ({w3o['dr_strong']['n_overstated']} of 6). "
+             "In IST-3, the high-risk bin ($r - r^* > 0.38$) gained 937 (95% CI, 118 to 1,756), yielding a high-minus-peak difference of 571 (−666 to 1,807).\n")
+
+    # Table S24 -> S25: Pre-registered continuous & count outcome evaluation (W3-H5)
+    o += ["\n## Table S24. Pre-registered continuous and count outcome evaluation across 7 randomized trials (W3-H5; milli-SD of control outcome unless native units noted)\n",
+          "| Trial (outcome; direction) | Test N (control zeros) | Test ATE (native) | Baseline-count minus binarized scale (mSD; native) | Continuous DR minus baseline-count (mSD) | Baseline-count minus ATE (mSD) | Continuous DR plug-in overstatement (mSD) |",
+          "|---|---|---|---|---|---|---|"]
+    c_lbl = {"stepup_visits": "StepUp (4-wk gym visits; higher)", "karlan_amount": "Karlan–List (donation USD; higher)",
+             "hillstrom_spend": "Hillstrom (2-wk spend USD; higher)", "jtpa_earnings": "JTPA (30-mo earnings USD; higher)",
+             "ffh_amount": "Freedom from Hunger (donation USD; higher)", "illinois_spend": "Illinois wellness (monthly spend USD; lower)",
+             "oregon_ed_visits": "Oregon HIE (ED visits; lower)"}
+    for t in cc["per_trial"]:
+        r = cc["per_trial"][t]
+        mt, ms, nv = r["meta"], r["milli_sd"], r["native"]
+        bm_bs = ms["pairs"]["base_mean_minus_bin_scale"]
+        dr_bm = ms["pairs"]["cont_dr_minus_base_mean"]
+        bm_a = ms["vs_ate"]["base_mean"]
+        opt_c = ms["optimism"]["cont_dr"]
+        o.append(f"| {c_lbl[t]} | {n(mt['n_test'])} ({100*mt['zero_share_ctrl']:.1f}%) | {nv['ate']['estimate']:+.2f} | "
+                 f"{ci(bm_bs['estimate'], bm_bs['lo95'], bm_bs['hi95'], 1)} ({nv['pairs']['base_mean_minus_bin_scale']['estimate']:+.2f}) | "
+                 f"{ci(dr_bm['estimate'], dr_bm['lo95'], dr_bm['hi95'], 1)} | "
+                 f"{ci(bm_a['estimate'], bm_a['lo95'], bm_a['hi95'], 1)} | "
+                 f"{ci(opt_c['overstatement'], opt_c['lo95'], opt_c['hi95'], 1)} |")
+    cp7 = cc["pooled"]["all7"]; cpb = cc["pooled"]["beneficial"]
+    o.append(f"\nOne milli-SD equals 0.001 SD of the control-arm outcome. Across all 7 trials, baseline-count minus binarized constant-OR scale pooled to "
+             f"{ci(cp7['base_mean_minus_bin_scale']['mean'], cp7['base_mean_minus_bin_scale']['lo95'], cp7['base_mean_minus_bin_scale']['hi95'], 1)} mSD "
+             f"(beneficial 5 trials: {ci(cpb['base_mean_minus_bin_scale']['mean'], cpb['base_mean_minus_bin_scale']['lo95'], cpb['base_mean_minus_bin_scale']['hi95'], 1)}), "
+             f"continuous DR minus baseline-count was {ci(cp7['cont_dr_minus_base_mean']['mean'], cp7['cont_dr_minus_base_mean']['lo95'], cp7['cont_dr_minus_base_mean']['hi95'], 1)} mSD, "
+             f"and continuous DR circular plug-in overstatement was {ci(cp7['optimism_cont_dr']['mean'], cp7['optimism_cont_dr']['lo95'], cp7['optimism_cont_dr']['hi95'], 1)} mSD (P = {cp7['optimism_cont_dr']['p_two_sided']:.3f}; overstated in 7 of 7 trials).\n")
+
+    # Table S25 -> S26: Cluster-respecting honest causal forest across all 28 trials
+    cfs = c28["cluster_cf_summary"]
+    o += ["\n## Table S25. Cluster-respecting honest causal forest across all 28 trials (people helped per 10,000 reached, 95% CI)\n",
+          "| Trial set | Trials | Over risk ranking | Over scale ranking | Over response ranking | Circular plug-in overstatement (trials overstated) |",
+          "|---|---|---|---|---|---|"]
+    for k_, lbl_ in [("wave12_22", "Waves 1–2"), ("wave3_6", "Wave 3 (health uptake & clinical)"),
+                     ("all28", "All 28 trials"), ("clinical6", "All 6 clinical trials"),
+                     ("health_uptake4", "All 4 health-care uptake trials")]:
+        v = cfs[k_]
+        op = v["optimism"]
+        o.append(f"| {lbl_} | {v['cf_over_risk']['k']} | {pooled10(v['cf_over_risk'])} | "
+                 f"{pooled10(v['cf_over_scale'])} | {pooled10(v['cf_over_response'])} | "
+                 f"{pooled10(op)} ({op['n_overstated']} of {op['n_trials']}) |")
+    o.append("\nFits used econml CausalForestDML (500 honest trees) with explicit 5-fold cluster-respecting cross-fitting and a 60,000-row cluster-subsampled context cap (all trials with 60,000 or fewer context rows used 100% of context data).\n")
 
     return "\n".join(o)
 

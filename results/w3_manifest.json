@@ -1,0 +1,26 @@
+{
+ "w3_alsan_covid": {
+  "n_test": 3706,
+  "sha256": "515f56158a0ce584203b25c3a7d6f88509e4b1b275b8191004b8e6170c612d79"
+ },
+ "w3_campos_vaccine": {
+  "n_test": 1194,
+  "sha256": "015729ef01794b32bf2ddcb537de835de1e4f1f42edeffd524fcc6a94ca833cb"
+ },
+ "w3_ist3": {
+  "n_test": 937,
+  "sha256": "9dca5d84c2b391883cfe8905e2ea95a8ea59d586379de48faeb6e3dffeffc938"
+ },
+ "w3_kat_aki": {
+  "n_test": 1217,
+  "sha256": "042bda0442064de891d38122af2a7c001a44a96243d8cf9ddcd3cd5f313b1624"
+ },
+ "w3_mtics_crc_fit": {
+  "n_test": 2832,
+  "sha256": "8901bc6f4205a1323a138a545035fc96da5f69a5ce3345b09465224d72834b8c"
+ },
+ "w3_mtics_crc_remind": {
+  "n_test": 7308,
+  "sha256": "8559686f18b161dbe89d8dd0db53a4a2f901336b120a6348bd4e367361e6141f"
+ }
+}

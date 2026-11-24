@@ -1,0 +1,86 @@
+{
+ "elaia2": {
+  "sha256": "2590b22a3cfcb9b05457b576ba5fa815a9df2faa15decceaaaed0212ea8b72ee"
+ },
+ "gusto": {
+  "sha256": "5ea637e5ad3cbaf8cda53a520276aa3893e65cd2e1752353c5074faf447d8ae3"
+ },
+ "hillstrom": {
+  "sha256": "246961018c7ed6c66b624ea30c70a976aac54dfd38321d482301c4117e3b5498"
+ },
+ "ist": {
+  "sha256": "137fb9f71b3b186e252cca3a272de27fa0704b8bf386148c483466c465553a6b"
+ },
+ "karlan_list": {
+  "sha256": "939edf670ec452b22e80eab3c56254f99b70fe53a1279c624dd031e8cb12c607"
+ },
+ "lenta": {
+  "sha256": "9cc0b05b734286c33c3cc1413a07c53c13bdd4601206e62cd43948b623f8dfc2"
+ },
+ "newhaven": {
+  "sha256": "75f9a9f5c08793b4fbd9ad4ba7fe9bd1c7bf7ece5e733d0450971bda5fd28bac"
+ },
+ "sf_email": {
+  "sha256": "e90e95909cf3b3518a1569eaa3bc1c91d9dc1dfb15b6af60ff61b6dcf26494ed"
+ },
+ "sixcity": {
+  "sha256": "4ef0687e7f0c9a8e3943b6244a15f314d06cf16899fe6cf42365a0465379936b"
+ },
+ "stepup": {
+  "sha256": "693c8b9f94d59169080acb682c784818497fe361dc404b3cd603f787606e1e7c"
+ },
+ "synbiotic": {
+  "sha256": "c80c2c5a98811fc39d512bd1021690df0137ddfc02eef850378efef52724f0e6"
+ },
+ "voter": {
+  "sha256": "a6de845a3b9b71a5597efdd95dccb8ccf16041c74307a527eec47a3eceffe785"
+ },
+ "w2_ffh_charity": {
+  "sha256": "22bf0d78a5c4a3fc08d7534b51536fe51a6c49705b6896963461b437b5ab6b17"
+ },
+ "w2_jsa_florida": {
+  "sha256": "fcf880a1e55024c0e574af83b99606cce919a22e568068b55f2e5c52fa3f1967"
+ },
+ "w2_jtpa": {
+  "sha256": "a9db07cbe1018f651b9d1afc06bf2c72e446916ebb948ea4b115d8a679819aef"
+ },
+ "w2_mooc_megastudy": {
+  "sha256": "b05ab1c352f8e31293a2db5910b833005a2bba9285d4b1a6de806896fdc8a33a"
+ },
+ "w2_robocall2008": {
+  "sha256": "268d897abe69c7b58a50f3c5e13b07cbdf47c81c03b59c8f946fb4efcb51751c"
+ },
+ "w2_sa_loan": {
+  "sha256": "e248867449a505fe33eb8258d1580a417db5083576797abed5bcb024395744c8"
+ },
+ "w2_sanmateo_email": {
+  "sha256": "b9c3c47295a292181c219edf0ac200d58f4142052415cd121beb05f2815467fd"
+ },
+ "w2_turkey_overdraft": {
+  "sha256": "a5cff5bbd41151fc7424916459442dbabb89d723418f9bd13341663928284241"
+ },
+ "w2_wisconsin_recall": {
+  "sha256": "d3cba7864935d25ad86551879178ce4c53f10614eb7f639e19af8e0d6fafc7fa"
+ },
+ "w3_alsan_covid": {
+  "sha256": "2444727e3aa3a4eecd36663e98ae8879887178577ea697bcbb1fa44ef29af223"
+ },
+ "w3_campos_vaccine": {
+  "sha256": "cfc022fb68fb90e3bcc2858ad98c5df4983db6e1760d15a5c36747e22d3bc25e"
+ },
+ "w3_ist3": {
+  "sha256": "d21ed563c0916ce2470714c4b69460352b7387510912a35a43e25d92106d918a"
+ },
+ "w3_kat_aki": {
+  "sha256": "fbf95f5e593ada279f3dd5527d611113800beaf43839c755a2727dd870da1d87"
+ },
+ "w3_mtics_crc_fit": {
+  "sha256": "0994a4805dddb13bdd76dc912dd7bf355533324bf7eca9b768aa0a316f9320af"
+ },
+ "w3_mtics_crc_remind": {
+  "sha256": "914c195fae880218f49d96f233c6a6f35afad422bfd0376622c3c0b36f51216f"
+ },
+ "x5": {
+  "sha256": "8730e6831d9f2e72cefa07ca70dbcb9ffa6ebe65c9e303b5f742d2db386e9cb8"
+ }
+}

@@ -22,6 +22,8 @@ LATEX = PAPER / "pnas_latex"
 
 def tex_escape(s: str) -> str:
     """Convert markdown inline syntax (math, italics, bold, superscripts, unicode) to safe pdflatex."""
+    # Protect currency amounts like $1,062, $344/month, or $21.71 (never touch math like $0$, $1/2$, or $10^{-4}$)
+    s = re.sub(r"\$(\d[\d,.]*)(?=(?:\s|/month|[),;]|$))(?!\s*\$)", r"ZZDOLLARZZ\1", s)
     # Preserve $...$ and $$...$$ math blocks
     parts = re.split(r"(\$\$[\s\S]*?\$\$|\$[^$\n]+?\$)", s)
     out = []
@@ -49,6 +51,7 @@ def tex_escape(s: str) -> str:
         t = escape_plain(t)
         for key, val in tokens:
             t = t.replace(key, val)
+        t = t.replace("ZZDOLLARZZ", r"\$")
         out.append(t)
     return "".join(out)
 
@@ -198,8 +201,8 @@ def build_main_pnas() -> Path:
         t2_cap,
         [(t2a_sub, t2a_hdr, t2a_body), (t2b_sub, t2b_hdr, t2b_body)],
         t2_fn,
-        [r">{\raggedright\arraybackslash}p{2.3cm} >{\raggedright\arraybackslash}p{2.05cm} >{\raggedright\arraybackslash}p{2.15cm} >{\raggedright\arraybackslash}p{2.0cm} >{\raggedright\arraybackslash}p{2.35cm} >{\raggedright\arraybackslash}p{2.1cm} >{\raggedright\arraybackslash}p{2.0cm}",
-         r">{\raggedright\arraybackslash}p{3.0cm} >{\raggedright\arraybackslash}p{2.9cm} >{\raggedright\arraybackslash}p{2.8cm} >{\raggedright\arraybackslash}p{2.9cm} >{\raggedright\arraybackslash}p{2.8cm}"]
+        [r">{\raggedright\arraybackslash}p{2.35cm} >{\raggedright\arraybackslash}p{1.85cm} >{\raggedright\arraybackslash}p{1.85cm} >{\raggedright\arraybackslash}p{2.05cm} >{\raggedright\arraybackslash}p{1.95cm} >{\raggedright\arraybackslash}p{2.0cm} >{\raggedright\arraybackslash}p{1.85cm}",
+         r">{\raggedright\arraybackslash}p{3.0cm} r >{\raggedright\arraybackslash}p{2.45cm} >{\raggedright\arraybackslash}p{2.25cm} >{\raggedright\arraybackslash}p{2.45cm} >{\raggedright\arraybackslash}p{2.25cm}"]
     )
 
     # Parse Figure legends
@@ -239,7 +242,7 @@ def build_main_pnas() -> Path:
         elif p.startswith("*Question 3."):
             res_tex_list.append(table2_tex)
             res_tex_list.append(fig_tex(3))
-        elif p.startswith("Four post-unsealing exploratory analyses"):
+        elif p.startswith("To test why prior evaluations"):
             res_tex_list.append(fig_tex(4))
     results_tex = "\n\n".join(res_tex_list)
 
@@ -342,7 +345,7 @@ def build_si_pdf() -> Path:
     authors = lines[2].strip()
 
     # Tables with >= 7 columns go on landscape pages so nothing ever overflows
-    WIDE_TABLES = {"S1", "S2", "S5", "S6", "S13", "S17", "S19", "S21"}
+    WIDE_TABLES = {"S1", "S2", "S5", "S6", "S13", "S17", "S19", "S21", "S24", "S25"}
 
     body_chunks = []
     i = 4
@@ -395,6 +398,12 @@ def build_si_pdf() -> Path:
                         spec = r">{\raggedright\arraybackslash}p{3.4cm} >{\raggedright\arraybackslash}p{2.4cm} r r >{\raggedright\arraybackslash}p{3.0cm} >{\raggedright\arraybackslash}p{3.0cm} >{\raggedright\arraybackslash}X"
                     elif tnum == "S22":
                         spec = r">{\raggedright\arraybackslash}p{3.4cm} r >{\raggedleft\arraybackslash}p{2.3cm} >{\raggedleft\arraybackslash}p{2.3cm} >{\raggedright\arraybackslash}X >{\raggedright\arraybackslash}p{1.6cm}"
+                    elif tnum == "S24":
+                        spec = r">{\raggedright\arraybackslash}p{3.1cm} r >{\raggedright\arraybackslash}p{2.0cm} r >{\raggedright\arraybackslash}p{2.3cm} >{\raggedright\arraybackslash}p{2.3cm} >{\raggedright\arraybackslash}p{2.3cm} >{\raggedright\arraybackslash}p{2.3cm} r"
+                    elif tnum == "S25":
+                        spec = r">{\raggedright\arraybackslash}p{3.6cm} >{\raggedright\arraybackslash}p{2.0cm} r >{\raggedright\arraybackslash}p{3.6cm} >{\raggedright\arraybackslash}p{2.6cm} >{\raggedright\arraybackslash}p{2.5cm} >{\raggedright\arraybackslash}X"
+                    elif tnum == "S26":
+                        spec = r">{\raggedright\arraybackslash}p{3.2cm} r >{\raggedright\arraybackslash}p{2.4cm} >{\raggedright\arraybackslash}p{2.4cm} >{\raggedright\arraybackslash}p{2.4cm} >{\raggedright\arraybackslash}X"
                     elif ncols == 2:
                         spec = r">{\raggedright\arraybackslash}X r"
                     elif ncols == 3:
@@ -453,7 +462,7 @@ def build_si_pdf() -> Path:
 \usepackage{{fancyhdr}}
 \pagestyle{{fancy}}
 \fancyhf{{}}
-\fancyhead[L]{{\footnotesize\sffamily SI Appendix: Risk vs.\ Benefit Targeting in 22 Randomized Trials}}
+\fancyhead[L]{{\footnotesize\sffamily SI Appendix: Risk vs.\ Benefit Targeting in 28 Randomized Trials}}
 \fancyhead[R]{{\footnotesize\sffamily Basu et al.}}
 \fancyfoot[C]{{\footnotesize\sffamily S\thepage}}
 \renewcommand{{\headrulewidth}}{{0.4pt}}
