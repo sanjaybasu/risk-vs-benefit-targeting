@@ -58,7 +58,7 @@ def prep(md: str) -> str:
     md = md.replace("\n## Figure legends\n", f"\n{section_end(True)}\n## Figure legends\n", 1)
     md = md.replace("\n## References\n", f"\n{BREAK}\n## References\n", 1)
     md = md.replace("## Figure legends", "## Figures")
-    for i in (1, 2, 3):
+    for i in (1, 2, 3, 4):
         md = re.sub(rf"\n\*\*Figure {i}\.\*\*",
                     f"\n![](figures/figure{i}.png){{width=6.5in}}\n\n**Figure {i}.**", md, count=1)
     return md

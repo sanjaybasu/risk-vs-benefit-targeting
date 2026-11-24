@@ -2,98 +2,116 @@
 
 | Claim | Value as reported | Source | In manuscript |
 |---|---|---|---|
-| tau_w1_inf | between-trial SD was 106 per 10,000 reached | Q2.wave1_informative_only.tau2 | True |
-| tau_inf16 | between-trial SD was 112 (Table 1) | Q2.informative_only.tau2 | True |
-| oos_voting | forecasts for the 3 voting trials (16 to 52 per 10,000 reached) were below their observed gains (344 to 417) | Q2.wave2_out_of_sample.per_trial | True |
-| routing_dr_rng | gained 395 to 1,884 per 10,000 routed over the risk ranking | Q2.routing.*.dr_minus_risk | True |
-| routing_dr_flagged | gained 423 to 1,884 prompts improved per 10,000 routed over the risk ranking in the 3 flagged pairs | Q2.routing.flagged.dr_minus_risk | True |
-| routing_dr_llama | including 1,884 (95% CI, 1,481 to 2,287) | Q2.routing.llama.dr_minus_risk | True |
-| risk_ci_below0 | lay below 0 in 4 of 22 | Q3.autoc.n_risk_autoc_ci_below_0 | True |
-| risk_below_ate | in 15 of 22 (sign test P = 0.13) | Q3.autoc.n_risk_q20_below_ate | True |
-| eqw22 | gains of 0, the equal-weighted mean over all 22 trials was 146 (95% CI, 31 to 261) | Q3.scale_over_risk.equal_weight_mean_22 | True |
-| voting_scale | largest in the 7 voting trials (327; 95% CI, 206 to 449) | Q3.by_domain.voting.scale_over_risk | True |
-| nonvoting_scale | other 10 trials in which the rankings differed (82; 95% CI, −46 to 209) | Q3.by_domain.non_voting.scale_over_risk | True |
-| resp_b10 | was 190 at a 10% budget (95% CI, 37 to 344) | Q3.budgets_learners.0.1.response_over_risk | True |
-| resp_b30 | and 100 at 30% (95% CI, 11 to 189) | Q3.budgets_learners.0.3.response_over_risk | True |
-| voting_wave_diff | wave difference was −138 (95% CI, −830 to 553) | Q3.voting_only_wave_diff.dr_over_risk | True |
-| w1pi_dr | (−285 to 706) contained 8 of the 9 wave-2 | Q3.wave1_pi_forecast_wave2.dr | True |
-| w1pi_florida | at −354, fell outside | Q3.wave1_pi_forecast_wave2.dr.outside | True |
-| med_dr | The doubly robust ranking gained 29 per 10,000 reached (95% CI, −136 to 193) and the response ranking gained 15 (95% CI, −642 to 672) | Q3.by_domain.medicine | True |
-| learn_scale_hi | upper bounds of 66 to 96 | Q3.learners_over_scale.*.hi95 | True |
-| nonvoting_dr_scale | gained 79 per 10,000 reached over the scale ranking in the 15 trials outside voting (95% CI, 11 to 147) | Q3.by_domain.non_voting.dr_over_scale | True |
-| voting_dr_scale | and −174 in the 7 voting trials (95% CI, −452 to 105) | Q3.by_domain.voting.dr_over_scale | True |
-| pi_scale | scale, −120 to 418 | Q3.scale_over_risk.all.pi95 | True |
-| pi_resp | response, −98 to 360 | Q3.response_over_risk_paired.all.pi95 | True |
-| pi_dr | doubly robust, −239 to 553 | Q3.dr.all.pi95 | True |
-| context_rng | ranged from 2,278 to 343,870 people | dataset_table.context | True |
-| w2_below_w1 | was 178 per 10,000 reached below the wave-1 mean | Q3.wave1_pi_forecast_wave2.dr.wave2_mean_minus_wave1_center | True |
-| resp_waves | (wave 1, 146; 95% CI, −4 to 296; wave 2, 110; 95% CI, −39 to 259) | Q3.response_over_risk_paired.wave1/wave2 | True |
-| med_scale | in 2 of these trials and gained 159 in them (95% CI, −986 to 1,304) | Q3.by_domain.medicine.scale_over_risk | True |
-| floor_pool | gives 5 per 10,000 reached (95% CI, −16 to 25) | Q3.scale_over_risk.all_22_zero_gap_at_floor | True |
-| resp_lower | (44 per 10,000 reached; 95% CI, −246 to 334) | Q3.response_over_risk_paired.lower_is_better | True |
 | n_trials | 22 randomized trials | len(wave1)+len(wave2) | True |
 | n_individuals | 2,157,068 | sum dataset_table rows | True |
 | n_test | 601,690 | n_test_units | True |
-| k_elig | In 19 trials, the action was beneficial | Q2.k | True |
+| ate_range | ranged from −17 to 837 people helped per 10,000 reached (median 99 | ben_additional.ate_summary | True |
+| zeros | GUSTO-I (20% cutoff risk 10.8%), the neonatal synbiotic trial (cutoff risk 9.3%), and the Job Training Partnership Act study (cutoff risk 17.3% | Q1.zero_gap_trials+theory_checks | True |
+| ist_axis | 62.8% of patients overall and reached 86.4% predicted risk at the 20% cutoff, yielding a scale-predicted gap of 141 people helped per 10,000 reached | dataset_table.ist+theory_checks.ist+Q2.points.ist | True |
+| reg_emails | (San Francisco, 91; San Mateo, 27 per 10,000 reached) | Q2.points.sf_email/w2_sanmateo_email | True |
+| elaia2_gap | ELAIA-2, 4 per 10,000 reached | Q2.points.elaia2 | True |
+| gusto_flip | highest recalibrated risk was 86.7%, a single patient above 90.8% | theory_checks.gusto | True |
+| sim | 3,000 simulated populations | theory_checks.simulation_agreement | True |
 | w1_primary | slope 0.53; 95% CI, 0.08 to 0.97 | Q2.wave1_only | True |
 | joint_w1 | P = 0.096 | Q2.registered_falsifier_wave1 | True |
 | holdout | 1.66 nats | Q2.registered_falsifier_wave1 | True |
-| w2_slope | 1.97 (95% CI, −7.03 to 10.97) | Q2.wave2_only | True |
-| k_w2 | The second wave had 6 eligible trials | Q2.k_wave2 | True |
 | all19 | 0.54 (95% CI, 0.12 to 0.95; 19 trials) | Q2.primary | True |
-| wshare | 90.6% of the weight | Q2.weight_share_zero_gap_trials | True |
-| inf16 | 0.43 (95% CI, −0.18 to 1.04; 16 trials) | Q2.informative_only | True |
-| origin | 0.66 (95% CI, 0.22 to 1.11) | Q2.informative_through_origin | True |
-| loo_hill | 0.44 (95% CI, −0.06 to 0.94) | Q2.leave_one_out.hillstrom | True |
-| b10 | 0.69 (95% CI, −0.21 to 1.59) | Q2.budget_0.1 | True |
+| w2_slope | 1.97; 95% CI, −7.03 to 10.97 | Q2.wave2_only | True |
+| w1_share | 87.5% of the weight in wave 1 | Q2.weight_share_zero_gap_trials_wave1 | True |
+| wshare | 90.6% across both waves | Q2.weight_share_zero_gap_trials | True |
+| ess_w1_all | Kish effective sample size to 2.6 in wave 1 and 3.6 across both waves | ben_exploratory.q2_power_and_baselines.ess | True |
+| w1_inf | 0.43 in wave 1 (95% CI, −0.17 to 1.03; 11 trials; between-trial SD 106 per 10,000 reached) | Q2.wave1_informative_only | True |
+| inf16 | 0.43 across both waves (95% CI, −0.18 to 1.04; 16 trials; between-trial SD 112) | Q2.informative_only | True |
+| origin | slope 0.66 (95% CI, 0.22 to 1.11) | Q2.informative_through_origin | True |
+| loo_hill | slope 0.44 (95% CI, −0.06 to 0.94; Table S3) | Q2.leave_one_out.hillstrom | True |
+| b10 | slope was 0.69 (95% CI, −0.21 to 1.59; Table S10) | Q2.budget_0.1 | True |
 | oos | 0.28 nats | Q2.wave2_out_of_sample | True |
-| oos_in | All 6 observed gains | Q2.wave2_out_of_sample | True |
+| oos_voting | forecasts for the 3 wave-2 voting trials (16 to 52 per 10,000 reached) sat below their observed gains (344 to 417) | Q2.wave2_out_of_sample.per_trial | True |
+| med_se_16 | median test SE 262 per 10,000 reached | ben_exploratory.q2_power.median_test_se | True |
+| mae_fc | mean absolute error (MAE) of 217 per 10,000 reached | ben_exploratory.q2_power.mae_forecast | True |
+| mae_zero | MAE 277; difference −60; 95% CI, −124 to −4 | ben_exploratory.q2_power.mae_predict_zero | True |
+| mae_loo | MAE 214; difference 3; 95% CI, −66 to 73 | ben_exploratory.q2_power.mae_loo_mean | True |
+| mae_oracle | expected MAE 210 | ben_exploratory.q2_power.expected_oracle_mae | True |
+| unw_obs_fc | mean observed gain (197 per 10,000 reached) slightly exceeded the mean forecast (161) | ben_exploratory.q2_power.unweighted | True |
+| bin_low | rose from 86 per 10,000 reached (95% CI, 22 to 149) | ben_exploratory.binned.< -0.35 | True |
+| bin_peak | peak of 444 (185 to 703) | ben_exploratory.binned.peak | True |
+| bin_hi | and 53 (33 to 73) above | ben_exploratory.binned.> +0.38 | True |
+| dturn_all | was −187 per 10,000 reached (95% CI, −381 to 7; P = 0.057; negative in 7 of 10) | ben_exploratory.downturn.all | True |
+| dturn_vot | voting trials (−325; 95% CI, −471 to −180; P = 0.002; negative in 5 of 6) | ben_exploratory.downturn.voting | True |
+| dturn_nv | inconclusive (−7; 95% CI, −462 to 447; P = 0.96) | ben_exploratory.downturn.non_voting | True |
+| ist_dturn | observed downturn was −94 (SE 253) versus the constant-odds-ratio prediction of −104 | ben_exploratory.ist_downturn | True |
+| ist_mult | require 46.6 times its test sample (minimum detectable difference 707 per 10,000 reached) | ben_exploratory.ist_downturn_power | True |
+| mse_or_rr | in 15 of 19 trials (4 individually significant vs 0 | ben_exploratory.paired_mse.or_minus_rr_bad | True |
+| mse_or_rd | in 14 of 19 trials (2 vs 0 | ben_exploratory.paired_mse.or_minus_rd | True |
 | llama_fc | 1,046 prompts improved per 10,000 routed | Q2.routing.llama | True |
-| llama_obs | by 2,277 per 10,000 routed (95% CI, 1,713 to 2,854) | Q2.routing.llama | True |
-| autoc_risk | −42 per 10,000 reached (95% CI, −75 to −9) | Q3.autoc.risk | True |
-| scale_all | scale ranking helped 149 more people per 10,000 reached than the risk ranking (95% CI, 45 to 253) | Q3.scale_over_risk.all | True |
-| scale_k | different people in 17 trials | Q3.scale_over_risk.all.k | True |
-| dr_w1 | helped 211 more people per 10,000 reached than the risk ranking (95% CI, 45 to 376) | Q3.dr.wave1 | True |
+| llama_obs | lost 2,277 per 10,000 routed relative to risk ranking (95% CI, 1,713 to 2,854) | Q2.routing.llama | True |
+| routing_dr_rng | gained 395 to 1,884 per 10,000 routed over risk ranking | Q2.routing.*.dr_minus_risk | True |
+| routing_dr_flagged | gained 423 to 1,884 prompts improved per 10,000 routed over risk ranking in the 3 flagged pairs | Q2.routing.flagged.dr_minus_risk | True |
+| routing_dr_llama | including 1,884 (95% CI, 1,481 to 2,287) | Q2.routing.llama.dr_minus_risk | True |
+| autoc_risk | −42 per 10,000 reached (95% CI, −75 to −9; below 0 in 4 of 22 | Q3.autoc.risk | True |
+| risk_below_ate | in 15 of 22 trials (sign test P = 0.13) | Q3.autoc.n_risk_q20_below_ate | True |
+| risk_vs_ate | risk ranking lost 74 people helped per 10,000 reached (95% CI, −129 to −19 | ben_additional.gain_over_random_ate.risk | True |
+| autoc_scale | AUTOC was 42 (95% CI, 8 to 77) | Q3.autoc.scale | True |
+| scale_all | scale ranking helped 149 more people per 10,000 reached than risk ranking (95% CI, 45 to 253) | Q3.scale_over_risk.all | True |
+| eqw22 | equal-weighted 22-trial mean of 146 (95% CI, 31 to 261) | Q3.scale_over_risk.equal_weight_mean_22 | True |
+| floor_pool | gave 5 per 10,000 reached (95% CI, −16 to 25) | Q3.scale_over_risk.all_22_zero_gap_at_floor | True |
+| voting_scale | largest in the 7 voting trials (327; 95% CI, 206 to 449) | Q3.by_domain.voting.scale_over_risk | True |
+| nonvoting_scale | other 10 differing trials (82; 95% CI, −46 to 209) | Q3.by_domain.non_voting.scale_over_risk | True |
+| resp_risk | helped 131 more people per 10,000 reached than risk ranking (95% CI, 34 to 228; wave 1, 146; 95% CI, −4 to 296; wave 2, 110; 95% CI, −39 to 259) | Q3.response_over_risk_paired | True |
+| resp_hi | 152 in the 16 trials where a higher outcome was better (95% CI, 39 to 265) | Q3.response_over_risk_paired.higher_is_better | True |
+| resp_lo | 44 in the 6 trials where a lower outcome was better (95% CI, −246 to 334) | Q3.response_over_risk_paired.lower_is_better | True |
+| resp_b10 | gained 190 at 10% (95% CI, 37 to 344) | Q3.budgets_learners.0.1.response_over_risk | True |
+| resp_b30 | and 100 at 30% (95% CI, 11 to 189) | Q3.budgets_learners.0.3.response_over_risk | True |
+| scale_resp | −22 per 10,000 reached; 95% CI, −52 to 8 | Q3.response.scale_over_response.all | True |
+| lenta_w | 73.4% of the weight | Q3.lenta_check.scale_over_response.weight | True |
+| lenta_wo | −17; 95% CI, −76 to 43 | Q3.lenta_check.scale_over_response.without | True |
+| midprop | beat risk ranking by 339 per 10,000 reached (95% CI, 252 to 426) and matched scale ranking (−4; 95% CI, −23 to 15 | ben_additional.midprop_voting7 | True |
+| dr_w1 | helped 211 more people per 10,000 reached than risk ranking (95% CI, 45 to 376) | Q3.dr.wave1 | True |
 | others_w1 | 166 to 185 | Q3.*.wave1 | True |
 | dr_w2 | 33 per 10,000 reached (95% CI, −90 to 156) | Q3.dr.wave2 | True |
 | others_w2 | −1 to 30 | Q3.*.wave2 | True |
 | wdiff | −155 per 10,000 reached; 95% CI, −383 to 73 | Q3.dr.wave2_minus_wave1 | True |
-| dr_all | helped 157 more people per 10,000 reached than the risk ranking (95% CI, 46 to 268) | Q3.dr.all | True |
-| dr_tau | SD of 183 | Q3.dr.all.tau | True |
-| dr_pi | −239 to 553 | Q3.dr.all.pi95 | True |
+| voting_wave_diff | within voting, −138; 95% CI, −830 to 553 | Q3.voting_only_wave_diff.dr_over_risk | True |
+| w1pi_dr | (−285 to 706) contained 8 of the 9 wave-2 | Q3.wave1_pi_forecast_wave2.dr | True |
+| w1pi_florida | at −354, fell outside | Q3.wave1_pi_forecast_wave2.dr.outside | True |
+| w2_below_w1 | was 178 per 10,000 reached below the wave-1 mean | Q3.wave1_pi_forecast_wave2.dr.wave2_mean_minus_wave1_center | True |
+| dr_all | helped 157 more people per 10,000 reached than risk ranking (95% CI, 46 to 268; between-trial SD 183; new-trial 95% prediction interval −239 to 553) | Q3.dr.all | True |
 | cf_all | (128; 95% CI, 38 to 218) | Q3.causal_forest.all | True |
 | pfn_all | (126; 95% CI, 26 to 226) | Q3.causalpfn.all | True |
 | ens_all | (130; 95% CI, 21 to 239) | Q3.rose.all | True |
 | corr | 0.36 to 0.90 | Q3.between_learner_correlation_range | True |
-| dr_scale | 44 per 10,000 reached at a 20% budget (95% CI, −43 to 131) | Q3.dr_over_scale.all | True |
-| llm | 90 per 10,000 reached; 95% CI, −74 to 255 | Q3.language_model_wave1 | True |
-| llm_mask | −26; 95% CI, −215 to 163 | Q3.language_model_masked_wave1 | True |
-| dopfn | Do-PFN, gained 114 per 10,000 reached (95% CI, −10 to 237) | Q3.dopfn_wave1 | True |
+| dr17 | 192 per 10,000 reached over risk ranking (95% CI, 59 to 325) | Q3.learned_on_scale_trials.dr | True |
+| dr_scale | 44 per 10,000 reached over scale ranking at a 20% budget (95% CI, −43 to 131; 13 at both 10% and 30% budgets) | Q3.dr_over_scale.all | True |
+| dr_resp | and 18 over response ranking (95% CI, −92 to 128) | Q3.learners_over_response.dr | True |
+| learn_scale_rng | 10 to 24 per 10,000 reached over scale ranking (upper bounds 66 to 96) | Q3.learners_over_scale | True |
+| learn_resp_rng | −8 to 18 over response ranking | Q3.learners_over_response | True |
+| nonvoting_dr_scale | gained 79 per 10,000 reached over scale ranking in the 15 non-voting trials (95% CI, 11 to 147) | Q3.by_domain.non_voting.dr_over_scale | True |
+| voting_dr_scale | and −174 in the 7 voting trials (95% CI, −452 to 105) | Q3.by_domain.voting.dr_over_scale | True |
+| llm | 90 per 10,000 reached over risk ranking (95% CI, −74 to 255; masked descriptions, −26; 95% CI, −215 to 163 | Q3.language_model_wave1 | True |
+| dopfn | Do-PFN gained 114 per 10,000 reached (95% CI, −10 to 237) | Q3.dopfn_wave1 | True |
+| med_dr | The doubly robust ranking gained 29 per 10,000 reached (95% CI, −136 to 193) and response ranking gained 15 (95% CI, −642 to 672) | Q3.by_domain.medicine | True |
+| med_scale | in 2 clinical trials and gained 159 in them (95% CI, −986 to 1,304) | Q3.by_domain.medicine.scale_over_risk | True |
+| mdd_med | ranged from 45 to 578 per 10,000 reached (median 235), giving a median 80%-power minimum detectable difference ($\text{MDD}_{80}$) of 657 | ben_exploratory.power_mdd80 | True |
+| mdd_clin | ranged from 474 (GUSTO-I) to 1,617 (ELAIA-2), with a pooled clinical $\text{MDD}_{80}$ of 145 | ben_exploratory.power_mdd80.clinical | True |
+| mdd_pool | was 150 for doubly robust over risk and 117 for doubly robust over scale | ben_exploratory.power_mdd80.pooled | True |
+| opt_dr | averaged 1,070 per 10,000 reached against 142 held-out, a pooled overstatement of 815 (95% CI, 567 to 1,064; overstated in 22 of 22 trials) | ben_additional.optimism.dr | True |
+| opt_cpfn | overstated CausalPFN by 559 (95% CI, 407 to 712; 21 of 22) | ben_additional.optimism.cpfn | True |
+| opt_cf | causal forest by 257 (95% CI, 101 to 413; 19 of 22) | ben_additional.optimism.cf | True |
+| opt_rose | calibrated ensemble to 92 (95% CI, −19 to 202; 15 of 22) | ben_additional.optimism.rose | True |
+| opt_scale | no optimism (−2; 95% CI, −108 to 104; 7 of 17) | ben_additional.optimism.scale | True |
+| bud_5_1 | gained 151 over risk at 5% (95% CI, 13 to 288) and 372 at 1% (95% CI, −28 to 772) | ben_exploratory.tight_budgets | True |
+| path_int | 3-parameter scale ranking (−2; 95% CI, −17 to 14) | ben_additional.path_int_minus_scale | True |
+| dr_strong_70 | gained 61 over a 70%-trained scale ranking (95% CI, 6 to 116; 71, 9 to 132 over the 50%-trained scale ranking | ben_additional.dr_strong | True |
+| dr_strong_resp | and 51 over response ranking (95% CI, −53 to 156) | ben_additional.dr_strong_minus_response | True |
+| lc_voter_x5 | Michigan mailer (ATE 769; +190 at 114,283 rows) and led across sizes in X5 (ATE 222; +293 at 99,743 rows) | ben_additional.learning_curves_big4 | True |
+| lc_lenta_robo | Lenta (ATE 48; +30 at 343,870 rows), and lost across every size in the Michigan robocall (ATE 73; −503 at 156,736 rows) | ben_additional.learning_curves_big4 | True |
 | cov | 89.6% to 90.6% | Q4.unit_coverage | True |
 | width | 1.63 to 1.89 | Q4.interval_detail.median_width | True |
 | excl | 0% to 17.3% | Q4.interval_detail.share_excluding_zero | True |
 | brier_ens | 0.0341 to 0.0495 | Q4.harm_brier.rose | True |
 | brier_const | 0.0345 to 0.0497 | Q4.harm_brier.constant | True |
-| w1_inf | 0.43 (95% CI, −0.17 to 1.03; 11 trials) | Q2.wave1_informative_only | True |
-| w1_share | 87.5% of the weight in this fit | Q2.weight_share_zero_gap_trials_wave1 | True |
-| autoc_scale | AUTOC was 42 (95% CI, 8 to 77) | Q3.autoc.scale | True |
-| dr17 | 192 per 10,000 reached over the risk ranking (95% CI, 59 to 325) | Q3.learned_on_scale_trials.dr | True |
-| bud_dr_scale | 13 at both 10% and 30% | Q3.budgets.*.dr_over_scale | True |
-| resp_risk | response ranking helped 131 more people per 10,000 reached than the risk ranking (95% CI, 34 to 228) | Q3.response_over_risk_paired.all | True |
-| resp_risk_k | (95% CI, 34 to 228; 22 trials) | Q3.response_over_risk_paired.all | True |
-| resp_hi | 152 in the 16 trials in which a higher outcome was better (95% CI, 39 to 265) | Q3.response_over_risk_paired.higher_is_better | True |
-| resp_lo | 44 in the 6 trials in which a lower outcome was better (95% CI, −246 to 334) | Q3.response_over_risk_paired.lower_is_better | True |
-| scale_resp | −22 per 10,000 reached; 95% CI, −52 to 8 | Q3.response.scale_over_response.all | True |
-| lenta_w | 73.4% of the weight | Q3.lenta_check.scale_over_response.weight | True |
-| lenta_wo | −17 (95% CI, −76 to 43) | Q3.lenta_check.scale_over_response.without | True |
-| dr_resp | (doubly robust, 18; 95% CI, −92 to 128) | Q3.learners_over_response.dr | True |
-| learn_resp_rng | −8 to 18 per 10,000 reached over the response ranking | Q3.learners_over_response | True |
-| learn_scale_rng | 10 to 24 per 10,000 reached over the scale ranking | Q3.learners_over_scale | True |
 | brier_red | reductions of 0.0002 to 0.0027 | rose_interval_detail.brier_diff_vs_constant | True |
 | brier_red_n | excluding 0 in 3 of 4 pairs | rose_interval_detail.brier_diff_vs_constant | True |
-| zeros | GUSTO-I (20% cutoff risk 10.8%), the neonatal synbiotic trial (cutoff risk 9.3%), and the Job Training Partnership Act study (cutoff risk 17.3%) | Q1.zero_gap_trials+theory_checks | True |
-| ist_axis | 62.8% of patients overall and reached 86.4% predicted risk at the 20% cutoff, the scale-predicted gap was 141 people helped per 10,000 reached | dataset_table.ist+theory_checks.ist+Q2.points.ist | True |
-| reg_emails | (San Francisco, 91; San Mateo, 27 per 10,000 reached) | Q2.points.sf_email/w2_sanmateo_email | True |
-| elaia2_gap | ELAIA-2, 4 per 10,000 reached | Q2.points.elaia2 | True |
-| gusto_flip | highest recalibrated risk was 86.7%, a single patient above 90.8% | theory_checks.gusto | True |
-| sim | 3,000 simulated populations | theory_checks.simulation_agreement | True |
+| pi_scale | scale, −120 to 418 | Q3.scale_over_risk.all.pi95 | True |
+| pi_resp | response, −98 to 360 | Q3.response_over_risk_paired.all.pi95 | True |
+| pi_dr | doubly robust, −239 to 553 | Q3.dr.all.pi95 | True |

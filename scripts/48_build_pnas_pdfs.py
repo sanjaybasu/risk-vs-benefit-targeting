@@ -74,11 +74,15 @@ def escape_plain(t: str) -> str:
         ("é", r"\'{e}"),
         ("ö", r'\"o'),
         ("ü", r'\"u'),
+        ("ł", r"\l{}"),
+        ("ı", r"\i{}"),
+        ("Ş", r"\c{S}"),
         ("’", "'"),
         ("‘", "`"),
         ("“", "``"),
         ("”", "''"),
     ]
+    t = re.sub(r'"([^"]+)"', r"``\1''", t)
     for a, b in repl:
         t = t.replace(a, b)
     return t
@@ -147,7 +151,7 @@ def build_main_pnas() -> Path:
             methods_keep.append(p)
 
     # Split Discussion around Box 1
-    box_title = "Box 1. How to choose a targeting rule in practice"
+    box_title = "Box 1. Proposed workflow for choosing a targeting rule in practice"
     before_box, rest = disc_raw.split("### " + box_title + "\n\n")
     box_block, after_box = rest.split("\n\n", 1)
     _, box_rows = parse_md_table(box_block.splitlines())
@@ -221,7 +225,7 @@ def build_main_pnas() -> Path:
     first_word, rest_first = first_p.split(" ", 1)
     intro_tex = f"\\dropcap{{{first_word[0]}}}{first_word[1:]} {rest_first}\n\n" + "\n\n".join(tex_escape(p) for p in intro_paras[1:])
 
-    # Results & Discussion paragraphs (insert Figures 1-3 and Tables 1-2 near first mention)
+    # Results & Discussion paragraphs (insert Figures 1-4 and Tables 1-2 near first mention)
     res_paras = [p.strip() for p in results.split("\n\n") if p.strip()]
     res_tex_list = []
     for p in res_paras:
@@ -230,11 +234,13 @@ def build_main_pnas() -> Path:
             res_tex_list.append(fig_tex(1))
         elif p.startswith("*Question 2."):
             res_tex_list.append(table1_tex)
-        elif p.startswith("The second wave had 6 eligible"):
+        elif p.startswith("To test the constant-odds-ratio mechanism"):
             res_tex_list.append(fig_tex(2))
         elif p.startswith("*Question 3."):
             res_tex_list.append(table2_tex)
             res_tex_list.append(fig_tex(3))
+        elif p.startswith("Four post-unsealing exploratory analyses"):
+            res_tex_list.append(fig_tex(4))
     results_tex = "\n\n".join(res_tex_list)
 
     disc_tex = (
@@ -255,20 +261,24 @@ def build_main_pnas() -> Path:
     tex = rf"""\documentclass[9pt,twocolumn,twoside,lineno]{{pnas-new}}
 \templatetype{{pnasresearcharticle}}
 \setboolean{{displaywatermark}}{{false}}
-\usepackage{{url}}
+\usepackage{{xurl}}
 \usepackage{{array}}
+\renewcommand{{\dbltopfraction}}{{0.85}}
+\renewcommand{{\dblfloatpagefraction}}{{0.75}}
+\renewcommand{{\textfraction}}{{0.12}}
 
 \title{{{tex_escape(title)}}}
 
 \author[a,b,1]{{Sanjay Basu}}
-\author[b]{{Benjamin Q. Huynh}}
-\author[c]{{Luyang Luo}}
-\author[d]{{Pranav Rajpurkar}}
+\author[b,c]{{Benjamin Q. Huynh}}
+\author[d]{{Luyang Luo}}
+\author[e]{{Pranav Rajpurkar}}
 
 \affil[a]{{Department of Medicine, University of California San Francisco, San Francisco, CA 94143}}
 \affil[b]{{Waymark, San Francisco, CA 94115}}
-\affil[c]{{Department of Biostatistics, Yale School of Public Health, New Haven, CT 06520}}
-\affil[d]{{Department of Biomedical Informatics, Harvard Medical School, Boston, MA 02115}}
+\affil[c]{{Department of Environmental Health and Engineering, Johns Hopkins Bloomberg School of Public Health, Baltimore, MD 21205}}
+\affil[d]{{Department of Biostatistics, Yale School of Public Health, New Haven, CT 06520}}
+\affil[e]{{Department of Biomedical Informatics, Harvard Medical School, Boston, MA 02115}}
 
 \leadauthor{{Basu}}
 
@@ -332,7 +342,7 @@ def build_si_pdf() -> Path:
     authors = lines[2].strip()
 
     # Tables with >= 7 columns go on landscape pages so nothing ever overflows
-    WIDE_TABLES = {"S1", "S2", "S5", "S6", "S13", "S17"}
+    WIDE_TABLES = {"S1", "S2", "S5", "S6", "S13", "S17", "S19", "S21"}
 
     body_chunks = []
     i = 4
@@ -377,6 +387,14 @@ def build_si_pdf() -> Path:
                         spec = r">{\raggedright\arraybackslash}p{7.8cm} >{\raggedright\arraybackslash}p{2.8cm} >{\raggedright\arraybackslash}X"
                     elif tnum == "S17":
                         spec = r">{\raggedright\arraybackslash}p{2.2cm} r >{\raggedright\arraybackslash}p{2.8cm} >{\raggedright\arraybackslash}p{2.8cm} >{\raggedright\arraybackslash}p{2.8cm} >{\raggedright\arraybackslash}p{2.8cm} >{\raggedright\arraybackslash}p{2.8cm}"
+                    elif tnum == "S19" and ncols == 7:
+                        spec = r">{\raggedright\arraybackslash}p{3.6cm} r r >{\raggedright\arraybackslash}p{3.0cm} >{\raggedright\arraybackslash}p{2.4cm} >{\raggedright\arraybackslash}p{2.4cm} >{\raggedright\arraybackslash}X"
+                    elif tnum == "S19" and ncols == 6:
+                        spec = r">{\raggedright\arraybackslash}p{4.6cm} >{\raggedright\arraybackslash}p{3.0cm} r >{\raggedright\arraybackslash}p{3.2cm} >{\raggedright\arraybackslash}p{3.0cm} >{\raggedright\arraybackslash}X"
+                    elif tnum == "S21":
+                        spec = r">{\raggedright\arraybackslash}p{3.4cm} >{\raggedright\arraybackslash}p{2.4cm} r r >{\raggedright\arraybackslash}p{3.0cm} >{\raggedright\arraybackslash}p{3.0cm} >{\raggedright\arraybackslash}X"
+                    elif tnum == "S22":
+                        spec = r">{\raggedright\arraybackslash}p{3.4cm} r >{\raggedleft\arraybackslash}p{2.3cm} >{\raggedleft\arraybackslash}p{2.3cm} >{\raggedright\arraybackslash}X >{\raggedright\arraybackslash}p{1.6cm}"
                     elif ncols == 2:
                         spec = r">{\raggedright\arraybackslash}X r"
                     elif ncols == 3:
@@ -384,9 +402,9 @@ def build_si_pdf() -> Path:
                     elif ncols == 4:
                         spec = r">{\raggedright\arraybackslash}X >{\raggedright\arraybackslash}p{3.4cm} >{\raggedright\arraybackslash}p{3.2cm} >{\raggedright\arraybackslash}p{3.2cm}"
                     elif ncols == 5:
-                        spec = r">{\raggedright\arraybackslash}X >{\raggedright\arraybackslash}p{3.2cm} >{\raggedright\arraybackslash}p{2.5cm} >{\raggedright\arraybackslash}p{2.5cm} c"
+                        spec = r">{\raggedright\arraybackslash}X >{\raggedright\arraybackslash}p{2.8cm} >{\raggedright\arraybackslash}p{2.5cm} >{\raggedright\arraybackslash}p{2.5cm} >{\raggedright\arraybackslash}p{2.5cm}"
                     else:
-                        spec = " ".join([r">{\raggedright\arraybackslash}X"] + ["l"] * (ncols - 1))
+                        spec = " ".join([r">{\raggedright\arraybackslash}X"] + [r">{\raggedright\arraybackslash}p{2.3cm}"] * (ncols - 1))
                     sec_out.append(r"{\scriptsize\sffamily")
                     sec_out.append(r"\begin{tabularx}{\linewidth}{" + spec + "}")
                     sec_out.append(r"\toprule")
@@ -398,7 +416,11 @@ def build_si_pdf() -> Path:
                     sec_out.append(r"\end{tabularx}}")
                     sec_out.append(r"\vspace{4pt}")
                 elif block[k].strip():
-                    sec_out.append(r"\noindent{\footnotesize " + tex_escape(block[k].strip()) + r"}\par\vspace{4pt}")
+                    ln_s = block[k].strip()
+                    if ln_s.startswith("*") and ln_s.endswith("*") and ln_s.count("*") >= 2 and not ln_s.startswith("**"):
+                        sec_out.append(r"\noindent{\footnotesize\textit{" + tex_escape(ln_s[1:-1]) + r"}}\par\vspace{4pt}")
+                    else:
+                        sec_out.append(r"\noindent{\footnotesize " + tex_escape(ln_s) + r"}\par\vspace{4pt}")
                     k += 1
                 else:
                     k += 1

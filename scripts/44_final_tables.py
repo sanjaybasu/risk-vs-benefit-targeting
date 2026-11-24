@@ -95,8 +95,11 @@ def trial_table() -> list:
     o.append(f"\nTest units total {n(FR['n_test_units']['wave1'] + FR['n_test_units']['wave2'])} "
              f"(wave 1, {n(FR['n_test_units']['wave1'])}; wave 2, {n(FR['n_test_units']['wave2'])}). GUSTO-I compares accelerated "
              "alteplase with the two streptokinase arms combined; the combination arm is not used. The International Stroke Trial "
-             "compares aspirin with no aspirin; heparin allocation, randomized independently, is kept as a covariate. The "
-             "scale-predicted gap is in people helped per 10,000 reached and is defined only where the context effect is beneficial. Figure labels use short forms of these names.\n")
+             "compares aspirin with no aspirin; heparin allocation, randomized independently, is kept as a covariate. StepUp pools "
+             "all 53 behavioral program arms against placebo control using the within-cohort randomization share; Karlan–List pools "
+             "the 1:1, 2:1, and 3:1 matching-grant arms (two-thirds of letters by design) against the standard no-match letter. The "
+             "scale-predicted gap is in people helped per 10,000 reached (meaning per 10,000 people assigned to the action under the "
+             "budget) and is defined only where the context effect is beneficial. Figure labels use short forms of these names.\n")
     return o
 
 
@@ -116,14 +119,18 @@ def main_tables() -> str:
     for name, k, r in rows:
         tau = "–" if r.get("tau2") is None else v10(r["tau2"] ** 0.5)
         o.append(f"| {name} | {k} | {ci(r['slope'], r['lo95'], r['hi95'], 2)} | {r['p_two_sided']:.3f} | {tau} |")
+    b1 = json.loads((R / "ben_exploratory_analyses.json").read_text())
+    ess_w1 = b1["q2_power_and_baselines"]["ess_wave1_13"]
+    ess_all = b1["q2_power_and_baselines"]["ess_all_19"]
     o.append(f"\nSlope 1 means that observed gains equal forecast gains; slope 0 means no relation. The between-trial SD is the square root "
              "of the restricted maximum likelihood estimate of the between-trial variance, in people helped per 10,000 reached; the trials whose forecast "
              "is 0 by construction have zero residual and the floor variance, so the fits that include them estimate this SD as 0 and "
              "behave as fixed-effect fits. In the 19-trial fit, the 3 trials whose "
-             f"forecast is 0 by construction carry {100 * q2['weight_share_zero_gap_trials']:.1f}% of the weight; in the wave-1 fit, the 2 such trials "
-             f"carry {100 * q2['weight_share_zero_gap_trials_wave1']:.1f}%. In each of these trials the two rankings selected the same test units, "
+             f"forecast is 0 by construction carry {100 * q2['weight_share_zero_gap_trials']:.1f}% of the weight (Kish effective sample size {ess_all:.1f}); "
+             f"in the wave-1 fit, the 2 such trials carry {100 * q2['weight_share_zero_gap_trials_wave1']:.1f}% (effective sample size {ess_w1:.1f}). "
+             "In each of these trials the two rankings selected the same test units, "
              "so the observed gain was 0 with no sampling variance. SI Appendix, Table S9 gives the registered "
-             "sensitivity analyses.\n")
+             "sensitivity analyses, and Table S17 gives forecast accuracy against naive baselines.\n")
     o += ["\n## Table 2. Do the scale ranking, the response ranking, and learned benefit rankings select people with larger effects than the risk ranking?\n",
           "*A. Gain over the risk ranking*\n",
           "| Ranking | Wave 1 | Wave 2 | All 22 trials | 17 trials in which scale and risk rankings differ | Wave 2 minus wave 1 | 95% prediction interval, new trial |",
@@ -385,6 +392,150 @@ def si_tables() -> str:
         o.append("\nOther: charity, exercise, consumer credit, education, employment, and consumer finance. Non-voting pools the medicine, "
                  "retail, and other trials. Pools leave out trials in which the two compared rankings select the same units; bracketed "
                  "numbers give the trials pooled where fewer than the domain's trials. Where the estimated between-trial SD is 0, the pool is a fixed-effect pool. The split by domain was not pre-specified.\n")
+
+    # Exploratory post-unsealing tables S18-S23 (written as S17-S22 before shift_si adds +1)
+    b1 = json.loads((R / "ben_exploratory_analyses.json").read_text())
+    b2 = json.loads((R / "ben_additional_exploratory.json").read_text())
+
+    # Table S17 -> S18: Trial-level forecast ESS and accuracy vs naive baselines
+    qp = b1["q2_power_and_baselines"]
+    m16, m19 = qp["metrics_inf16"], qp["metrics_all19"]
+    o += ["\n## Table S17. Trial-level forecast effective sample size and accuracy against naive baselines (exploratory, post-unsealing)\n",
+          "| Predictor | 16 informative trials MAE | 16 informative trials RMSE | All 19 eligible trials MAE | All 19 eligible trials RMSE |",
+          "|---|---|---|---|---|"]
+    o.append(f"| Scale-predicted gap (posted forecast) | {v10(m16['mae_forecast'])} | {v10(m16['rmse_forecast'])} | {v10(m19['mae_forecast'])} | {v10(m19['rmse_forecast'])} |")
+    o.append(f"| Cross-trial mean (leave one trial out) | {v10(m16['mae_loo_mean'])} | {v10(m16['rmse_loo_mean'])} | {v10(m19['mae_loo_mean'])} | {v10(m19['rmse_loo_mean'])} |")
+    o.append(f"| Predict 0 for every trial | {v10(m16['mae_predict_zero'])} | {v10(m16['rmse_predict_zero'])} | {v10(m19['mae_predict_zero'])} | {v10(m19['rmse_predict_zero'])} |")
+    o.append(f"| Perfect noiseless forecast with observed sampling error (expected) | {v10(m16['expected_oracle_mae'])} | {v10(m16['expected_oracle_rmse'])} | {v10(m19['expected_oracle_mae'])} | {v10(m19['expected_oracle_rmse'])} |")
+    o.append(f"\nValues are in people helped per 10,000 reached at a 20% budget. Kish effective sample size of the meta-regression weights "
+             f"is {qp['ess_wave1_13']:.1f} in wave 1 (13 trials; {qp['ess_wave1_inf_11']:.1f} without the 2 zero-gap trials) and "
+             f"{qp['ess_all_19']:.1f} across both waves (19 trials; {qp['ess_inf_16']:.1f} without the 3 zero-gap trials). Over the "
+             f"16 informative trials, the unweighted mean observed gain was {v10(m16['unweighted_mean_observed'])} vs unweighted mean "
+             f"forecast {v10(m16['unweighted_mean_forecast'])}, with median test-split SE {v10(m16['median_test_se'])}. Paired trial-bootstrap "
+             f"MAE difference for the forecast was {ci10(m16['mae_diff_vs_zero']['est'], m16['mae_diff_vs_zero']['lo95'], m16['mae_diff_vs_zero']['hi95'])} "
+             f"vs predicting 0 and {ci10(m16['mae_diff_vs_loo_mean']['est'], m16['mae_diff_vs_loo_mean']['lo95'], m16['mae_diff_vs_loo_mean']['hi95'])} "
+             "vs the leave-one-trial-out cross-trial mean.\n")
+
+    # Table S18 -> S19: Individual-level held-out test of benefit-vs-risk curve, downturn, and paired MSE
+    im = b1["individual_mechanism"]
+    o += ["\n## Table S18. Individual-level held-out test of the benefit-versus-risk curve and effect scale across the 19 beneficial trials (exploratory, post-unsealing)\n",
+          "*A. Held-out AIPW treatment effect across bins of risk relative to each trial's constant-OR peak (people helped per 10,000 reached)*\n",
+          "| Risk minus peak ($r - r^*$) | Trials | Test units | Held-out AIPW (95% CI) | Constant OR | Constant RR (bad) | Constant RD |",
+          "|---|---|---|---|---|---|---|"]
+    for lbl in ("< -0.35", "-0.35 to -0.15", "-0.15 to +0.05 (peak)", "+0.05 to +0.25", "+0.25 to +0.38", "> +0.38"):
+        v = im["binned_relative_to_peak"][lbl]
+        o.append(f"| {lbl} | {v['k']} | {n(v['total_test_n'])} | {pooled10(v)} | {v10(v['or_mean'])} | {v10(v['rr_bad_mean'])} | {v10(v['rd_mean'])} |")
+    o += ["\n*B. Direct within-trial downturn above peak ($r - r^* > 0.25$ minus $|r - r^*| \\le 0.15$, people helped per 10,000 reached)*\n",
+          "| Group | Trials | Held-out downturn (95% CI) | P | Trials with negative point estimate | Constant-OR predicted | Constant-RR predicted |",
+          "|---|---|---|---|---|---|---|"]
+    for grp, g_lbl in (("all", "All spanning trials"), ("voting", "Voting trials"), ("non_voting", "Non-voting trials")):
+        v = im["downturn_high_minus_peak_pooled"][grp]
+        o.append(f"| {g_lbl} | {v['k']} | {pooled10(v)} | {v['p_two_sided']:.3f} | {v['n_negative_point_est']} of {v['k']} | "
+                 f"{v10(v['mean_pred_or_diff'])} | {v10(v['mean_pred_rr_bad_diff'])} |")
+    ist_d = im["ist_downturn_power"]
+    o += ["\n*C. Unbiased individual-level paired MSE comparisons ($10^{-4}$ probability$^2$; negative favors first model)*\n",
+          "| Comparison | All 19 trials (95% CI) | P | First model lower MSE (individually significant vs second) | Voting 7 trials (95% CI) | Non-voting 12 trials (95% CI) |",
+          "|---|---|---|---|---|---|"]
+    for cmp_nm, c_lbl in (("or_minus_rr_bad", "Constant OR minus constant RR (bad)"),
+                          ("or_minus_rd", "Constant OR minus constant RD"),
+                          ("or_minus_rr_good", "Constant OR minus constant RR (good)")):
+        ga = im["paired_mse_pooled"][cmp_nm]["all19"]
+        gv = im["paired_mse_pooled"][cmp_nm]["voting"]
+        gnv = im["paired_mse_pooled"][cmp_nm]["non_voting"]
+        o.append(f"| {c_lbl} | {ci(ga['mean'], ga['lo95'], ga['hi95'], 2)} | {ga['p_two_sided']:.3f} | "
+                 f"{ga['n_first_model_better']} of 19 ({ga['n_ci_favors_first']} vs {ga['n_ci_favors_second']}) | "
+                 f"{ci(gv['mean'], gv['lo95'], gv['hi95'], 2)} | {ci(gnv['mean'], gnv['lo95'], gnv['hi95'], 2)} |")
+    o.append(f"\nEach trial's risk $r$ is the recalibrated baseline risk of the undesirable outcome from the hashed context-split model, and "
+             f"$r^* = \\sigma(c/2)$ is its constant-OR peak. In the 10 trials with at least 50 test units in both the peak zone and far above the peak, "
+             f"the International Stroke Trial showed an observed downturn of {v10(ist_d['obs_high_minus_peak'])} (SE {v10(ist_d['se_diff'])}) vs constant-OR "
+             f"prediction {v10(ist_d['pred_or_high_minus_peak'])}; detecting the constant-OR downturn at 80% power would require "
+             f"{ist_d['n_multiplier_for_80pct_power']:.1f} times IST's test sample (MDD$_{{80}}$ = {v10(ist_d['mdd80_downturn'])}). "
+             "Paired MSE differences $(g - \\hat\\tau_A)^2 - (g - \\hat\\tau_B)^2$ cancel irreducible outcome noise identically under known randomization propensities.\n")
+
+    # Table S19 -> S20: Random selection anchor, mid-propensity voting, tight budgets, PATH interaction, stronger tuned DR
+    va = b2["gain_over_random_ate"]
+    mp = b2["midprop_voting7"]
+    tb = b1["tight_budgets_pooled"]
+    ps = b2["path_and_stronger_dr_pooled"]
+    o += ["\n## Table S19. Practitioner comparators, tighter budgets, and exploratory CATE sensitivity analyses (people helped per 10,000 reached, 95% CI; exploratory, post-unsealing)\n",
+          "*A. Gain over random selection (top 20% policy value minus trial average treatment effect)*\n",
+          "| Ranking | All 22 trials | Voting (7 trials) | Medicine (4 trials) | Non-voting (15 trials) |",
+          "|---|---|---|---|---|"]
+    for nm, lbl in (("risk", "Risk ranking"), ("scale", "Scale ranking"), ("response", "Response ranking"),
+                    ("dr", "Doubly robust learner (registered)"), ("path_int", "PATH 4-parameter interaction"),
+                    ("dr_strong", "Tuned risk-augmented DR (70% train)")):
+        o.append(f"| {lbl} | {pooled10(va[nm]['all22'])} | {pooled10(va[nm]['voting7'])} | {pooled10(va[nm]['medicine4'])} | {pooled10(va[nm]['non_voting15'])} |")
+    o += ["\n*B. Mid-propensity targeting ($-|p_0 - 0.5|$) in 7 voting trials, tighter budgets (1% and 5%), PATH interaction, and tuned 70%-train DR*\n",
+          "| Comparison | Trials | Pooled gain (95% CI) |", "|---|---|---|"]
+    o.append(f"| Mid-propensity over risk ranking (voting, 20% budget) | {mp['midprop_minus_risk']['k']} | {pooled10(mp['midprop_minus_risk'])} |")
+    o.append(f"| Scale over mid-propensity ranking (voting, 20% budget) | {mp['scale_minus_midprop']['k']} | {pooled10(mp['scale_minus_midprop'])} |")
+    o.append(f"| Response over mid-propensity ranking (voting, 20% budget) | {mp['response_minus_midprop']['k']} | {pooled10(mp['response_minus_midprop'])} |")
+    o.append(f"| Doubly robust over mid-propensity ranking (voting, 20% budget) | {mp['dr_minus_midprop']['k']} | {pooled10(mp['dr_minus_midprop'])} |")
+    o.append(f"| Scale over risk ranking at 5% budget | {tb['0.05']['scale_minus_risk']['k']} | {pooled10(tb['0.05']['scale_minus_risk'])} |")
+    o.append(f"| Doubly robust over scale ranking at 5% budget | {tb['0.05']['benefit_minus_scale']['k']} | {pooled10(tb['0.05']['benefit_minus_scale'])} |")
+    o.append(f"| Scale over risk ranking at 1% budget | {tb['0.01']['scale_minus_risk']['k']} | {pooled10(tb['0.01']['scale_minus_risk'])} |")
+    o.append(f"| Doubly robust over scale ranking at 1% budget | {tb['0.01']['benefit_minus_scale']['k']} | {pooled10(tb['0.01']['benefit_minus_scale'])} |")
+    o.append(f"| PATH 4-parameter interaction over risk ranking (20% budget) | {ps['path_int_minus_risk']['all']['k']} | {pooled10(ps['path_int_minus_risk']['all'])} |")
+    o.append(f"| PATH 4-parameter interaction over 3-parameter scale ranking (20% budget) | {ps['path_int_minus_scale']['all']['k']} | {pooled10(ps['path_int_minus_scale']['all'])} |")
+    o.append(f"| Tuned risk-augmented DR (70% train) over risk ranking (20% budget) | {ps['dr_strong_minus_risk']['all']['k']} | {pooled10(ps['dr_strong_minus_risk']['all'])} |")
+    o.append(f"| Tuned risk-augmented DR (70% train) over 70%-train scale ranking (20% budget) | {b2['dr_strong_vs_scale_70pct']['k']} | {pooled10(b2['dr_strong_vs_scale_70pct'])} |")
+    o.append(f"| Tuned risk-augmented DR (70% train) over 50%-train scale ranking (20% budget) | {ps['dr_strong_minus_scale']['all']['k']} | {pooled10(ps['dr_strong_minus_scale']['all'])} |")
+    o.append(f"| 70%-train scale ranking over 50%-train scale ranking (20% budget) | {b2['scale_70pct_vs_scale_50pct']['k']} | {pooled10(b2['scale_70pct_vs_scale_50pct'])} |")
+    o.append(f"| Tuned risk-augmented DR (70% train) over response ranking (20% budget) | {ps['dr_strong_minus_response']['all']['k']} | {pooled10(ps['dr_strong_minus_response']['all'])} |")
+    o.append(f"| Tuned risk-augmented DR (70% train) over registered DR learner (20% budget) | {ps['dr_strong_minus_dr']['all']['k']} | {pooled10(ps['dr_strong_minus_dr']['all'])} |")
+    o.append("\nThe tuned risk-augmented DR learner added cross-fitted logit predicted risk as an explicit feature, selected gradient-boosting "
+             "regularization on the development split by minimizing out-of-sample DR pseudo-outcome MSE, and refit on context plus development "
+             "splits combined (70% of each trial). Against the 50%-trained scale ranking, its domain pools were "
+             f"{pooled10(ps['dr_strong_minus_scale']['non_voting15'])} outside voting, {pooled10(ps['dr_strong_minus_scale']['voting7'])} in voting, "
+             f"and {pooled10(ps['dr_strong_minus_scale']['medicine4'])} in the 4 clinical trials.\n")
+
+    # Table S20 -> S21: Statistical power (MDD_80) and trial ATEs
+    pw = b1["power_mdd80"]
+    ates = b2["ate_summary"]["per_trial"]
+    o += ["\n## Table S20. Statistical power (80% minimum detectable differences) and test-split average treatment effects by trial (people helped per 10,000 reached; exploratory, post-unsealing)\n",
+          "| Trial | Domain | Test units | Test ATE | Scale vs risk SE (MDD$_{80}$) | Doubly robust vs risk SE (MDD$_{80}$) | Doubly robust vs scale SE (MDD$_{80}$) |",
+          "|---|---|---|---|---|---|---|"]
+    for t in W1 + W2:
+        r = pw["per_trial"][t]
+        o.append(f"| {META[t][0]} | {META[t][1]} | {n(r['n_test'])} | {v10(ates[t])} | "
+                 f"{v10(r['se_scale_vs_risk'])} ({v10(r['mdd80_scale_vs_risk'])}) | "
+                 f"{v10(r['se_dr_vs_risk'])} ({v10(r['mdd80_dr_vs_risk'])}) | "
+                 f"{v10(r['se_dr_vs_scale'])} ({v10(r['mdd80_dr_vs_scale'])}) |")
+    o.append(f"\nMDD$_{{80}} = 2.80 \\times \\text{{SE}}$ is the two-sided 80%-power minimum detectable difference at $\\alpha = 0.05$ for the 20% budget contrast. "
+             f"Across all 22 trials, per-trial DR-vs-risk SE ranged from {v10(pw['per_trial_dr_se_min'])} to {v10(pw['per_trial_dr_se_max'])} "
+             f"(median {v10(pw['per_trial_dr_se_median'])}; median MDD$_{{80}}$ {v10(pw['per_trial_dr_mdd80_median'])}). Across the 4 clinical trials, "
+             f"per-trial DR-vs-risk MDD$_{{80}}$ ranged from {v10(pw['clinical_4_mdd80_range'][0])} to {v10(pw['clinical_4_mdd80_range'][1])} "
+             f"(pooled clinical MDD$_{{80}}$ {v10(pw['pooled_clinical_dr_over_risk_4']['mdd80'])}). Pooled across all 22 trials, MDD$_{{80}}$ was "
+             f"{v10(pw['pooled_dr_over_risk_22']['mdd80'])} for doubly robust over risk and {v10(pw['pooled_dr_over_scale_22']['mdd80'])} for doubly robust over scale.\n")
+
+    # Table S21 -> S22: Circular plug-in vs held-out sealed AIPW optimism across all 5 methods
+    opt = b2["optimism_all_models"]
+    o += ["\n## Table S21. Circular model-based (plug-in) versus held-out sealed AIPW gains over the risk ranking (people helped per 10,000 reached; exploratory, post-unsealing)\n",
+          "| Ranking | Trials | Unweighted mean plug-in gain | Unweighted mean held-out AIPW gain | Random-effects overstatement (95% CI) | Trials overstated |",
+          "|---|---|---|---|---|---|"]
+    for nm, lbl in (("dr", "Doubly robust learner"), ("cpfn", "CausalPFN"), ("cf", "Causal forest"),
+                    ("rose", "Calibrated ensemble"), ("scale", "Scale ranking (3-parameter)")):
+        v = opt[nm]
+        o.append(f"| {lbl} | {v['n_trials']} | {v10(v['mean_plugin'])} | {v10(v['mean_heldout'])} | {pooled10(v)} | {v['n_overstated']} of {v['n_trials']} |")
+    o.append("\nPlug-in gain evaluates each ranking's top 20% minus the risk ranking's top 20% using that model's own predicted treatment effects "
+             "on the test units. Held-out AIPW gain evaluates the exact same selections using the sealed test outcomes and known design propensities. "
+             "Random-effects overstatement pools the paired per-trial difference (plug-in minus held-out) with cluster-bootstrap variances.\n")
+
+    # Table S22 -> S23: Learning curves in the 4 largest trials
+    lc = b2["learning_curves_big4"]
+    o += ["\n## Table S22. Training-size learning curves in the four largest trials (total N > 200,000; people helped per 10,000 reached; exploratory, post-unsealing)\n",
+          "| Trial (test ATE) | Context training N | Scale over full risk | Doubly robust over full risk | Doubly robust minus scale (SD across 3 subsamples) |",
+          "|---|---|---|---|---|"]
+    for t in ("voter", "x5", "lenta", "w2_robocall2008"):
+        pts_lc = sorted(lc[t].items(), key=lambda kv: kv[1]["n_ctx"])
+        for k_sz, v in pts_lc:
+            lbl_sz = f"{n(v['n_ctx'])} (full)" if k_sz == "full" else n(v["n_ctx"])
+            sd_s = "–" if k_sz == "full" else v10(v["dr_minus_scale_sd_across_seeds"])
+            o.append(f"| {META[t][0]} ({v10(ates[t])}) | {lbl_sz} | {v10(v['scale_minus_fullrisk'])} | "
+                     f"{v10(v['dr_minus_fullrisk'])} | {v10(v['dr_minus_scale'])} ({sd_s}) |")
+    o.append("\nSubsamples drew randomization clusters without replacement from the context split across 3 independent random seeds per sample size, "
+             "fit both the 3-parameter scale model and the doubly robust learner on each subsample, and evaluated both on the sealed test split.\n")
+
     return "\n".join(o)
 
 
